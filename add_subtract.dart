@@ -77,15 +77,73 @@ add(num_p a, num_p b) {
 }
 
 
-
+// works with decimals and new num_p class properly
 add_proper(num_p a, num_p b) {
   const BASE = 15;
   var shorter = min(a.value.length, b.value.length);
   var longer = max(a.value.length, b.value.length);
+  var longer_deci = max(a.decimal.length, b.decimal.length);
+  var shorter_deci = min(a.decimal.length, b.decimal.length);
   var c = new num_p();
   var i;
   var q = longer == a.value.length ? a.value : b.value;
+  var r, s;
 
+  // probably a much better way to do this
+  if (longer_deci == a.decimal.length && longer_deci > shorter_deci) {
+    r = a.decimal;
+    s = b.decimal;
+  }
+  else if (longer_deci == b.decimal.length && longer_deci > shorter_deci) {
+    r = b.decimal;
+    s = a.decimal;
+  }
+  else {
+    if (a.decimal[a.decimal.length - 1].toString().length > b.decimal[b.decimal.length - 1].toString().length) {
+      r = a.decimal;
+      s = b.decimal;
+    }
+    else {
+      r = b.decimal;
+      s = a.decimal;
+    }
+    //print(r[r.length - 1].toString().length);
+    //print(s[s.length - 1].toString().length);
+  }
+
+  // decimal
+  for (i = 0; i < longer_deci; i++) {
+    var place = r.length - i - 1;
+    var r_place_size = r[place].toString().length;
+    if (longer_deci - i > shorter_deci) {
+      c.decimal[i] = r[place];
+      c.decimal.add(0);
+    }
+    else {
+
+      if (s[place].toString().length < r_place_size) {
+        s[place] *= pow(10, r_place_size - s[place].toString().length);
+      }
+
+      c.decimal[i] += r[place] + s[place];
+      if (c.decimal[i] >= pow(10, r_place_size)) {
+        c.decimal.add(1);
+        c.decimal[i] -= pow(10, r_place_size);
+      }
+      else {
+        c.decimal.add(0);
+      }
+    }
+    print(c.decimal);
+  }
+
+  // carry over from decimal to value
+  if (c.decimal[c.decimal.length - 1] == 1) {
+    c.value[0] = 1;
+    c.decimal[c.decimal.length - 1] = 0;
+  }
+
+  // value
   for (i = 0; i < longer; i++) {
     if (i >= shorter) {
       c.value[i] += q[q.length - i - 1];
@@ -112,59 +170,9 @@ add_proper(num_p a, num_p b) {
     //print(c.value);
   }
 
-  var longer_deci = max(a.decimal.length, b.decimal.length);
-  var shorter_deci = min(a.decimal.length, b.decimal.length);
-  var r, s;
-  i = 0;
-
-  if (longer_deci == a.decimal.length && longer_deci > shorter_deci) {
-    r = a.decimal;
-    s = b.decimal;
-  }
-  else if (longer_deci == b.decimal.length && longer_deci > shorter_deci) {
-    r = b.decimal;
-    s = a.decimal;
-  }
-  else {
-    if (a.decimal[a.decimal.length - 1].toString().length > b.decimal[b.decimal.length - 1].toString().length) {
-      r = a.decimal;
-      s = b.decimal;
-    }
-    else {
-      r = b.decimal;
-      s = a.decimal;
-    }
-    //print(r[r.length - 1].toString().length);
-    //print(s[s.length - 1].toString().length);
-  }
-
-  for (i = 0; i < longer_deci; i++) {
-    var place = r.length - i - 1;
-    var r_place_size = r[place].toString().length;
-    if (longer_deci - i > shorter_deci) {
-      c.decimal[i] = r[place];
-      c.decimal.add(0);
-    }
-    else {
-
-      if (s[place].toString().length < r_place_size) {
-        s[place] *= pow(10, r_place_size - s[place].toString().length);
-      }
-
-      c.decimal[i] += r[place] + s[place];
-      if (c.decimal[i] >= pow(10, r_place_size)) {
-        c.decimal.add(1);
-        c.decimal[i] -= pow(10, r_place_size);
-      }
-      else {
-        c.decimal.add(0);
-      }
-    }
-    print(c.decimal);
-  }
-
 
   // formatting
+  // eventually use leadingzeros.dart instead
   c.value = (c.value.reversed).toList();
   c.decimal = (c.decimal.reversed).toList();
   var k = c.value.length, l = c.decimal.length;
@@ -270,8 +278,8 @@ subtract_proper(num_p a, num_p b) {
 
 void main() {
   //var asdf = new num_p.string('18349276');
-  var hjkl = new num_p.string("123456789123456789123456789123456789.123456789123456789");
-  var qwer = new num_p.string('4503599627370496.4568423185674564512');
+  var hjkl = new num_p.string("123456789123456789123456789123456789.423456789123456789");
+  var qwer = new num_p.string('4503599627370496.6568423185674564512');
 
 
   //print(hjkl.value);

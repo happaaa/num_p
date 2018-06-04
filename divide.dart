@@ -1,12 +1,6 @@
 import 'dart:math';
 import 'num_p.dart';
 
-divide_basic(int a, int b) {
-
-
-
-}
-
 long_division(int numer, int denom) {
 
 }
@@ -80,4 +74,39 @@ List three_by_two(num a, num b) {
  }
 
  return [q_hat, r_hat];
+}
+
+List barrett(int a, int b, int mu) {
+     const BASE = 10;
+     var a_size = a.toString().length;
+     var b_size = b.toString().length;
+
+     // check the sizes of the strings
+
+     var a1 = (a * pow(BASE, -(b_size - 1))).floor();
+     var q1 = (a1 * mu * pow(BASE, -(a_size - b_size + 1))).floor();
+     var r1 = a - b * q1;
+     //int k = 1;
+     bool test = false;
+     var rk = r1;
+     var qk = q1;
+     while(!test) {
+
+       if (rk >= 0 && rk < b) {
+         test = true;
+       }
+       else if (rk < 0) {
+         rk += b;
+         qk -= 1;
+       }
+       else {
+         rk -= b;
+         qk += 1;
+       }
+       //k++;
+     }
+
+
+
+     return [qk, rk];
 }

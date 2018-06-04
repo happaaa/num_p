@@ -4,19 +4,21 @@ import 'num_p.dart';
 void main() {
 
     //var asdf = new num_p.string('18349276');
-    var hjkl = new num_p.string("123456789123456789123456789123456789.123456789123456789");
-    var qwer = new num_p.string('4503599627370496.4568423185674564512');
+    //var hjkl = new num_p.string("123456789123456789123456789123456789.123456789123456789");
+    //var qwer = new num_p.string('4503599627370496.4568423185674564512');
 
+    var qwer = new num_p.string('123456789123456789');
+    var asdf = new num_p.string('987654321987654321');
 
-    //print(hjkl.value);
-    print(hjkl.decimal);
-    //print(qwer.value);
-    print(qwer.decimal);
+    print(asdf.value);
+    //print(hjkl.decimal);
+    print(qwer.value);
+    //print(qwer.decimal);
 
-    var uiop = add_proper(hjkl, qwer);
+    var uiop = subtract_proper(asdf, qwer);
     print('uiop val: ${uiop.value}');
     print('uiop decimal: ${uiop.decimal}');
-    //print('uiop sign: ${uiop.neg}');
+    print('uiop sign: ${uiop.neg}');
   }
 
 two_by_one(num a, num b) {
@@ -125,9 +127,6 @@ List barrett(int a, int b, int mu) {
      return [qk, rk];
 }
 
-multi(num a, num, b) {
-
-}
 
 karatsuba_recursive(num a, num b) {
   var a_size = a.toString().length;
@@ -226,8 +225,6 @@ add_proper(num_p a, num_p b) {
     print(c.decimal);
   }
 
-
-
   c.value = (c.value.reversed).toList();
   c.decimal = (c.decimal.reversed).toList();
   var k = c.value.length;
@@ -239,4 +236,78 @@ add_proper(num_p a, num_p b) {
   }
   return c;
 
+}
+
+// need to add
+// decimal support
+// carry support after subtraction to consolidate num_p
+subtract_proper(num_p a, num_p b) {
+  const BASE = 15;
+  var q, w;
+  var c = new num_p();
+
+  if (a.value.length > b.value.length) {
+    q = a.value;
+    w = b.value;
+    c.neg = false;
+  }
+  else if (a.value.length < b.value.length) {
+    q = b.value;
+    w = a.value;
+    c.neg = true;
+  }
+  else {
+    if (a.value[0] >= b.value[0]) {
+      q = a.value;
+      w = b.value;
+    }
+    else {
+      q = b.value;
+      w = a.value;
+      c.neg = true;
+    }
+  }
+
+  for (int i = 0; i < q.length; i++) {
+    if (i >= q.length) {
+      //print(q[q.length - i - 1]);
+      c.value[i] = q[q.length - i - 1];
+      //print(c.value);
+      if (c.value[i] < 0) {
+        c.value.add(-1);
+        c.value[i] += pow(10, BASE);
+      }
+      else {
+        c.value.add(0);
+      }
+    }
+    else {
+      //print(q[q.length - i - 1]);
+      //print(w[w.length - i - 1]);
+      c.value[i] += q[q.length - i - 1] - w[w.length - i - 1];
+
+      if (c.value[i] < 0) {
+        c.value.add(-1);
+        c.value[i] += pow(10, BASE);
+      }
+      else {
+        c.value.add(0);
+      }
+    }
+    //print(c.value);
+  }
+
+  // formatting
+  // eventually use leadingzeros.dart instead
+  c.value = (c.value.reversed).toList();
+  c.decimal = (c.decimal.reversed).toList();
+  var k = c.value.length, l = c.decimal.length;
+  for (var u = 0; u < k && c.value[0] == 0; u++) {
+    c.value.removeAt(0);
+  }
+  for (var v = 0; v < l && c.decimal[0] == 0; v++) {
+    c.decimal.removeAt(0);
+  }
+
+  return c;
 }

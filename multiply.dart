@@ -103,7 +103,45 @@ karatsuba_int(int a, int b) {
   return ans;
 }
 
-// basic implementation
+karatsuba_recursive(num a, num b) {
+  var a_size = a.toString().length;
+  var b_size = b.toString().length;
+  var max_size = max(a_size, b_size);
+  var min_size = min(a_size, b_size);
+
+  //print(max_size);
+  print('$a $b');
+
+  if (max_size == 1) {
+    return a * b;
+  }
+
+  int i = 0;
+  for (i; i < 5; i++) {
+    if (max_size <= pow(2, i)) {
+      break;
+    }
+  }
+
+  //var a_list = [int.parse(a.toString().substring(0, pow(2, i - 1))), int.parse(a.toString().substring(pow(2, i - 1), a.toString().length))];
+  //var b_list = [int.parse(b.toString().substring(0, pow(2, i - 1))), int.parse(b.toString().substring(pow(2, i - 1), a.toString().length))];
+
+  var a_list = [a ~/ pow(10, pow(2, i - 1)), a % pow(10, pow(2, i - 1))];
+  var b_list = [b ~/ pow(10, pow(2, i - 1)), b % pow(10, pow(2, i - 1))];
+
+  print(a_list);
+  print(b_list);
+
+  var t1 = karatsuba_recursive(a_list[1], b_list[1]);
+  var t2 = karatsuba_recursive(a_list[0], b_list[0]);
+  var t3 = karatsuba_recursive(a_list[0] + a_list[1], b_list[0] + b_list[1]);
+  var t4 = t3 - t2 - t1;
+  //print("ans: ${t1 + pow(10, pow(2, i - 1)) * t4 + t2}");
+  return t1 + pow(10, pow(2, i - 1)) * t4 + t2 * pow(10, pow(2, i));
+}
+
+
+// rudimentary implementation
 toomcook_basic(int a, int b) {
   var lista = [];
   var listb = [];
