@@ -1,0 +1,5 @@
+name: num_p
+version: 1.0.0
+description: >-
+    arbitrary precision library for dart
+author: Andrew Jones
