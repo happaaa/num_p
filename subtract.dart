@@ -2,12 +2,14 @@ import 'dart:math';
 import 'num_p.dart';
 import 'format.dart';
 
+// works with decimals and new num_p class properly
+// intending to make it much more concise in the near future
 subtract_stupid(num_p a, num_p b) {
   const BASE = 10;
   const POWER = 15;
   var c = new num_p(); // new num_p
   var bk = max(a.value.length, b.value.length); // base power
-  var qk = max(a.decimal.length, b.decimal.length);
+  var qk = max(a.decimal.length, b.decimal.length); // decimal power
   var q, w, e, r; // values
 
   if (a.value.length > b.value.length) {

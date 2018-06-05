@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'num_p.dart';
+import 'format.dart';
 
 // anything smaller than 10 digits
 long_multi(num_p a, num_p b) {
@@ -22,14 +23,7 @@ long_multi(num_p a, num_p b) {
     }
   }
 
-  c.value = (c.value.reversed).toList();
-  var k = c.value.length;
-  for (int j = 0; j < k; j++) {
-    if (c.value[0] != 0) {
-      break;
-    }
-    c.value.removeAt(0);
-  }
+  c = leadingzeros(c);
 
   return c;
 }
@@ -107,10 +101,10 @@ karatsuba_recursive(num a, num b) {
   var a_size = a.toString().length;
   var b_size = b.toString().length;
   var max_size = max(a_size, b_size);
-  var min_size = min(a_size, b_size);
+  //var min_size = min(a_size, b_size);
 
   //print(max_size);
-  print('$a $b');
+  //print('$a $b');
 
   if (max_size == 1) {
     return a * b;
@@ -169,6 +163,7 @@ toomcook_basic(int a, int b) {
 // exception to be made when user inputs something smaller than 3-digits numbers
 // BASE to be made modular as numbers grow big and small
 // need to make a class that sufficiently holds large enough numbers
+// DOESN'T EVEN WORK
 toomcook3(int a, int b) {
   const BASE = 10000;
   const K = 3;
@@ -244,6 +239,6 @@ void main() {
   var num2 = new num_p.string('457');
   //print((long_multi(num1, num2)).value);
   //print(karatsuba_int(15648654 , 457));
-  karatsuba(num1, num2);
+  print(karatsuba_recursive(16548654, 457));
 
 }
