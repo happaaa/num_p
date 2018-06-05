@@ -1,6 +1,6 @@
 import 'num_p.dart';
 
-leadingzeros(num_p number) {
+num_p leadingzeros(num_p number) {
   // formatting
   number.value = (number.value.reversed).toList();
   number.decimal = (number.decimal.reversed).toList();
@@ -11,4 +11,9 @@ leadingzeros(num_p number) {
   for (var v = 0; v < l && number.decimal[0] == 0; v++) {
     number.decimal.removeAt(0);
   }
+  return number;
+}
+
+trailingzeros(num_p number) {
+  
 }

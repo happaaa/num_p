@@ -7,18 +7,25 @@ void main() {
     //var hjkl = new num_p.string("123456789123456789123456789123456789.123456789123456789");
     //var qwer = new num_p.string('4503599627370496.4568423185674564512');
 
-    var qwer = new num_p.string('123456789123456789');
-    var asdf = new num_p.string('987654321987654321');
+    /*var qwer = new num_p.string('123654321000000000');
+    var asdf = new num_p.string('987654321987654324');
+    var zxcv = new num_p.string("864000000000000000");
 
     print(asdf.value);
     //print(hjkl.decimal);
     print(qwer.value);
     //print(qwer.decimal);
+    print(zxcv.value);
 
     var uiop = subtract_proper(asdf, qwer);
     print('uiop val: ${uiop.value}');
     print('uiop decimal: ${uiop.decimal}');
-    print('uiop sign: ${uiop.neg}');
+    print('uiop sign: ${uiop.neg}');*/
+
+
+    var qwer = new num_p.string('0.5000000000');
+    print(qwer.value);
+    print(qwer.decimal);
   }
 
 two_by_one(num a, num b) {
@@ -245,6 +252,24 @@ subtract_proper(num_p a, num_p b) {
   const BASE = 15;
   var q, w;
   var c = new num_p();
+
+
+  bool carry = false;
+  var e, r;
+  if (a.decimal[0] > b.decimal[0]) {
+    e = a.decimal;
+    r = b.decimal;
+  }
+  else if (b.decimal[0] > a.decimal[0]) {
+    e = b.decimal;
+    r = a.decimal;
+    carry = true;
+  }
+  else {
+
+  }
+
+
 
   if (a.value.length > b.value.length) {
     q = a.value;
