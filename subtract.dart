@@ -2,22 +2,26 @@ import 'dart:math';
 import 'num_p.dart';
 import 'format.dart';
 
-// works with decimals and new num_p class properly
-// intending to make it much more concise in the near future
+/*
+ * to be done:
+ * make more concise
+ * work with negative numbers
+ *
+ */
 
 subtract_master(num_p a, num_p b) {
   var ans = new num_p();
   var parts = compare(a, b);
   var deci = subtract_deci(parts[2], parts[3]);
-  var carry = 0;
+  var carry_deci = 0;
   if (deci[0] == 1) {
-    carry = -1;
+    carry_deci = -1;
     deci.removeAt(0);
   }
   ans.neg = parts[4] ? true : false;
   ans.decimal = deci;
-  ans.value = subtract_int(parts[0], parts[1], carry);
-  ans = leadingzeros(ans);
+  ans.value = subtract_int(parts[0], parts[1], carry: carry_deci);
+  ans = leadingzeros_nump(ans);
   return ans;
 }
 
@@ -53,8 +57,8 @@ compare(num_p a, num_p b) {
   return [q, w, e, r, sign];
 }
 
-subtract_int(List a, List b, [int carry = 0]) {
-  final BASE = pow(10, 15);
+subtract_int(List a, List b, {int carry = 0, int power = 15}) {
+  final BASE = pow(10, power);
   var ans = [0];
   var size = a.length;
   var b_length = b.length;
@@ -71,6 +75,7 @@ subtract_int(List a, List b, [int carry = 0]) {
     ans.insert(0, 0);
     //print('ans: $ans');
   }
+  ans = leadingzeroslist(ans);
   return ans;
 }
 
@@ -103,8 +108,9 @@ subtract_deci(List a, List b) {
     ans.insert(0, 0);
     //print('ans: $ans');
   }
+  ans = leadingzeroslist(ans);
   if (carry == -1) {
-    for (int i = 1; i < ans.length - 1; i++) {
+    for (int i = 0; i < ans.length - 1; i++) {
       ans[i] = BASE - ans[i] - 1;
     }
     ans[ans.length - 1] = BASE - ans[ans.length - 1];

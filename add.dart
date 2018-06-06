@@ -2,25 +2,29 @@ import 'dart:math';
 import 'num_p.dart';
 import 'format.dart';
 
-// works with decimals and new num_p class properly
-// intending to make it simpler in the near future
-// 6.5.18 made into seperate functions for others
+/*
+ * 6.5.18 made into seperate function for other programs
+ * to be done:
+ * make more concise
+ * work with negative numbers
+ *
+ */
 add_master(num_p a, num_p b) {
   var ans = new num_p();
   var deci = add_deci(a.decimal, b.decimal);
-  var carry = 0;
+  var carry_deci = 0;
   if (deci[0] == 1) {
-    carry = 1;
+    carry_deci = 1;
     deci.removeAt(0);
   }
   ans.decimal = deci;
-  ans.value = add_int(a.value, b.value, carry);
-  ans = leadingzeros(ans);
+  ans.value = add_int(a.value, b.value, carry: carry_deci);
+  ans = leadingzeros_nump(ans);
   return ans;
 }
 
-add_int(List a, List b, [int carry = 0]) {
-  final BASE = pow(10, 15);
+add_int(List a, List b, {int carry = 0, int power = 15}) {
+  final BASE = pow(10, power);
   var ans = [0];
   var size = max(a.length, b.length);
   var c = size == a.length ? a : b;
@@ -40,6 +44,7 @@ add_int(List a, List b, [int carry = 0]) {
     ans.insert(0, 0);
     //print('ans: $ans');
   }
+  ans = leadingzeroslist(ans);
   return ans;
 }
 
@@ -73,6 +78,7 @@ add_deci(List a, List b) {
     ans.insert(0, 0);
     //print('ans: $ans');
   }
+  ans = leadingzeroslist(ans);
   if (carry == 1) {
     ans.insert(0, 1);
   }
