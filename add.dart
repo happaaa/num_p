@@ -4,101 +4,77 @@ import 'format.dart';
 
 // works with decimals and new num_p class properly
 // intending to make it simpler in the near future
-add(num_p a, num_p b) {
-  const BASE = 15;
-  var shorter = min(a.value.length, b.value.length);
-  var longer = max(a.value.length, b.value.length);
-  var longer_deci = max(a.decimal.length, b.decimal.length);
-  var shorter_deci = min(a.decimal.length, b.decimal.length);
-  var c = new num_p();
-  var i;
-  var q = longer == a.value.length ? a.value : b.value;
-  var r, s;
-
-  // probably a much better way to do this
-  if (longer_deci == a.decimal.length && longer_deci > shorter_deci) {
-    r = a.decimal;
-    s = b.decimal;
+// 6.5.18 made into seperate functions for others
+add_master(num_p a, num_p b) {
+  var ans = new num_p();
+  var deci = add_deci(a.decimal, b.decimal);
+  var carry = 0;
+  if (deci[0] == 1) {
+    carry = 1;
+    deci.removeAt(0);
   }
-  else if (longer_deci == b.decimal.length && longer_deci > shorter_deci) {
-    r = b.decimal;
-    s = a.decimal;
+  ans.decimal = deci;
+  ans.value = add_int(a.value, b.value, carry);
+  ans = leadingzeros(ans);
+  return ans;
+}
+
+add_int(List a, List b, [int carry = 0]) {
+  final BASE = pow(10, 15);
+  var ans = [0];
+  var size = max(a.length, b.length);
+  var c = size == a.length ? a : b;
+  var d = c == a ? b : a;
+  var d_length = d.length;
+  var place;
+
+  for (int i = 0; i < size - d_length; i++) {
+    d.insert(0, 0);
   }
-  else {
-    if (a.decimal[a.decimal.length - 1].toString().length > b.decimal[b.decimal.length - 1].toString().length) {
-      r = a.decimal;
-      s = b.decimal;
-    }
-    else {
-      r = b.decimal;
-      s = a.decimal;
-    }
-    //print(r[r.length - 1].toString().length);
-    //print(s[s.length - 1].toString().length);
+  //print('c: $c');
+  //print('d: $d');
+  for (int i = 0; i < size; i++) {
+    place = c.length - i - 1;
+    ans[0] = (c[place] + d[place] + carry) % BASE;
+    carry = ((c[place] + d[place] + carry) / BASE).floor();
+    ans.insert(0, 0);
+    //print('ans: $ans');
   }
+  return ans;
+}
 
-  // decimal
-  for (i = 0; i < longer_deci; i++) {
-    var place = r.length - i - 1;
-    var r_place_size = r[place].toString().length;
-    if (longer_deci - i > shorter_deci) {
-      c.decimal[i] = r[place];
-      c.decimal.add(0);
-    }
-    else {
-
-      if (s[place].toString().length < r_place_size) {
-        s[place] *= pow(10, r_place_size - s[place].toString().length);
-      }
-
-      c.decimal[i] += r[place] + s[place];
-      if (c.decimal[i] >= pow(10, r_place_size)) {
-        c.decimal.add(1);
-        c.decimal[i] -= pow(10, r_place_size);
-      }
-      else {
-        c.decimal.add(0);
-      }
-    }
-    print(c.decimal);
+add_deci(List a, List b) {
+  //final BASE = pow(10, 15);
+  var ans = [0];
+  var size = max(a.length, b.length);
+  var c = size == a.length ? a : b;
+  if (a.length == b.length) {
+    c = a[a.length - 1].toString().length > b[b.length - 1].toString().length ? a : b;
   }
+  var d = c == a ? b : a;
+  var d_length = d.length;
+  var carry = 0;
 
-  // carry over from decimal to value
-  if (c.decimal[c.decimal.length - 1] == 1) {
-    c.value[0] = 1;
-    c.decimal[c.decimal.length - 1] = 0;
+  for (int i = 0; i < size - d_length; i++) {
+    d.add(0);
   }
-
-  // value
-  for (i = 0; i < longer; i++) {
-    if (i >= shorter) {
-      c.value[i] += q[q.length - i - 1];
-      if (c.value[i] >= pow(10, BASE)) { //not sure if this is the best way about this
-        c.value.add(1);
-        c.value[i] -= pow(10, BASE);
-      }
-      else {
-        	c.value.add(0);
-      }
+  //print('c: $c');
+  //print('d: $d');
+  for (int i = 0; i < size; i++) {
+    var place = c.length - i - 1;
+    var c_place_size = c[place].toString().length;
+    var d_place_size = d[place].toString().length;
+    var POWER = pow(10, c_place_size);
+    if (d_place_size < c_place_size) {
+      d[place] *= pow(10, c_place_size - d_place_size);
     }
-    else {
-      //print(a.value[a.value.length - 1 - i]);
-    	//print(b.value[b.value.length - 1 - i]);
-    	c.value[i] += a.value[a.value.length - i - 1] + b.value[b.value.length - i - 1];
-    	if (c.value[i] >= pow(10, BASE)) {
-      	c.value.add(1);
-      	c.value[i] -= pow(10, BASE);
-    	}
-    	else {
-          c.value.add(0);
-    	}
-    }
-    //print(c.value);
+    ans[0] = (c[place] + d[place] + carry) % POWER;
+    carry = ((c[place] + d[place] + carry) / POWER).floor();
+    ans.insert(0, 0);
+    //print('ans: $ans');
   }
-
-
-  // formatting
-  c = leadingzeros(c);
-
-  return c;
+  if (carry == 1) {
+    ans.insert(0, 1);
+  }
+  return ans;
 }
