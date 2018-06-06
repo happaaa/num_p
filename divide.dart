@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'num_p.dart';
 
 long_division(int numer, int denom) {
 
