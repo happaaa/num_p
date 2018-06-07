@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'num_p.dart';
+import 'package:num_p/src/num_p.dart';
 import 'format.dart';
 import 'add.dart';
 import 'subtract.dart';
@@ -13,7 +13,6 @@ import 'subtract.dart';
 
 // long multiplication with the new num_p class
 long_multi(num_p a, num_p b) {
-  final BASE = pow(10, 15);
   var c = new num_p();
   var bk = a.value.length;
   var bm = b.value.length;
