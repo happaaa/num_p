@@ -13,7 +13,7 @@ add_master(num_p a, num_p b) {
   var ans = new num_p();
   var deci = add_deci(a.decimal, b.decimal);
   var carry_deci = 0;
-  if (deci[0] == 1) {
+  if (deci.first == 1) {
     carry_deci = 1;
     deci.removeAt(0);
   }
@@ -42,19 +42,22 @@ add_int(List a, List b, {int carry = 0, int power = 15}) {
     ans[0] = (c[place] + d[place] + carry) % BASE;
     carry = ((c[place] + d[place] + carry) / BASE).floor();
     ans.insert(0, 0);
-    //print('ans: $ans');
+    //print('carry: $carry');
+    //print('ANS: $ans');
+  }
+  if (carry == 1) {
+    ans[0] = 1;
   }
   ans = leadingzeroslist(ans);
   return ans;
 }
 
 add_deci(List a, List b) {
-  //final BASE = pow(10, 15);
   var ans = [0];
   var size = max(a.length, b.length);
   var c = size == a.length ? a : b;
   if (a.length == b.length) {
-    c = a[a.length - 1].toString().length > b[b.length - 1].toString().length ? a : b;
+    c = a.last.toString().length > b.last.toString().length ? a : b;
   }
   var d = c == a ? b : a;
   var d_length = d.length;

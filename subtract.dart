@@ -14,7 +14,7 @@ subtract_master(num_p a, num_p b) {
   var parts = compare(a, b);
   var deci = subtract_deci(parts[2], parts[3]);
   var carry_deci = 0;
-  if (deci[0] == 1) {
+  if (deci.first == 1) {
     carry_deci = -1;
     deci.removeAt(0);
   }
@@ -113,7 +113,7 @@ subtract_deci(List a, List b) {
     for (int i = 0; i < ans.length - 1; i++) {
       ans[i] = BASE - ans[i] - 1;
     }
-    ans[ans.length - 1] = BASE - ans[ans.length - 1];
+    ans.last = BASE - ans.last;
     ans.insert(0, 1);
   }
   //print('final ans: $ans');

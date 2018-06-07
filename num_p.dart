@@ -32,9 +32,9 @@ class num_p {
       j = 1;
     }
 
-    for (int i = string_list[0].length; i > j; i -= 15) {
-      value.add(int.parse((i - 15 < j) ? string_list[0].substring(j, i)
-                                       : string_list[0].substring(i - 15, i)));
+    for (int i = string_list.first.length; i > j; i -= 15) {
+      value.add(int.parse((i - 15 < j) ? string_list.first.substring(j, i)
+                                       : string_list.first.substring(i - 15, i)));
     }
     if (string_list.length == 2) {
       for (int i = 0; i < string_list[1].length; i += 15) {
@@ -74,9 +74,9 @@ class num_p {
       j = 1;
     }
 
-    for (int i = string_list[0].length; i > j; i -= 15) {
-      value.add(int.parse((i - 15 < j) ? string_list[0].substring(j, i)
-                                       : string_list[0].substring(i - 15, i)));
+    for (int i = string_list.first.length; i > j; i -= 15) {
+      value.add(int.parse((i - 15 < j) ? string_list.first.substring(j, i)
+                                       : string_list.first.substring(i - 15, i)));
     }
     if (string_list.length == 2) {
       for (int i = 0; i < string_list[1].length; i += 15) {
