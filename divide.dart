@@ -85,12 +85,13 @@ List barrett(int a, int b, int mu) {
      var a1 = (a * pow(BASE, -(b_size - 1))).floor();
      var q1 = (a1 * mu * pow(BASE, -(a_size - b_size + 1))).floor();
      var r1 = a - b * q1;
-     //int k = 1;
      bool test = false;
      var rk = r1;
      var qk = q1;
+     //print('q1: $q1');
      while(!test) {
-
+       //print('qk: $qk');
+       //print('rk: $rk');
        if (rk >= 0 && rk < b) {
          test = true;
        }
@@ -102,10 +103,29 @@ List barrett(int a, int b, int mu) {
          rk -= b;
          qk += 1;
        }
-       //k++;
      }
-
-
-
      return [qk, rk];
+}
+
+
+newton(var v, var n) {
+  var v_num = v.toString();
+  var zk = (32 / (4 * int.parse(v_num[2]) + 2 * int.parse(v_num[3]) + int.parse(v_num[4]))).floor();
+  zk /= 4;
+  var sk, tk, uk, wk;
+  for (var i = 0; i < n; i++) {
+    sk = pow(zk, 2);
+    print('sk: $sk');
+    tk = v - (v % pow(10, - (pow(2, i + 1) + 3)));
+    print('tk fake: ${(v % pow(10, - (pow(2, i + 1) + 3)))}');
+    print('tk: $tk');
+    uk = tk * sk;
+    uk = uk - (uk % pow(10, - (pow(2, i + 1) + 1)));
+    print('uk: $uk');
+    wk = 2 * zk;
+    print('wk: $wk');
+    zk = wk - uk;
+    print('zk: $zk');
+  }
+  print(zk);
 }
