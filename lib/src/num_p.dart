@@ -8,9 +8,6 @@ class num_p {
   static final SQRT1_2_string = "0.707106781186547524400844362104849039284835937688474036588";
   static final SQRT2_string = "1.414213562373095048801688724209698078569671875376948073176";
 
-  // either have two lists, one before decimal and one after
-  // 		or make it a string and parse it every time i do an operation
-  // also wondering it having more than 1 digit per position is worth it
   var value = new List();
   var decimal = new List();
   bool neg = false;
@@ -89,8 +86,4 @@ class num_p {
     }
     value = value.reversed.toList();
   }
-
-
-
-
 }
