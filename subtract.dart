@@ -75,7 +75,7 @@ subtract_int(List a, List b, {int carry = 0, int power = 15}) {
     ans.insert(0, 0);
     //print('ans: $ans');
   }
-  ans = leadingzeroslist(ans);
+  ans.removeAt(0);
   return ans;
 }
 
@@ -108,7 +108,7 @@ subtract_deci(List a, List b) {
     ans.insert(0, 0);
     //print('ans: $ans');
   }
-  ans = leadingzeroslist(ans);
+  ans.removeAt(0);
   if (carry == -1) {
     for (int i = 0; i < ans.length - 1; i++) {
       ans[i] = BASE - ans[i] - 1;
