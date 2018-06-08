@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'lib/src/num_p.dart';
+import 'package:num_p/src/num_p.dart';
 
 // to be fixed:
 // work for doubles
