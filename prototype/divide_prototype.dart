@@ -1,8 +1,5 @@
 import 'dart:math';
 
-long_division(int numer, int denom) {
-
-}
 
 List two_by_one(num a, num b) {
   const BASE = 10;
@@ -166,9 +163,8 @@ long_div_sub(num a, num b) {
   }
 
   var a_msb = int.parse(a.toString()[0]) * BASE + int.parse(a.toString()[1]);
-  var b_msb = b.toString()[0];
 
-  var q = (a_msb) ~/ int.parse(b_msb);
+  var q = (a_msb) ~/ int.parse(b.toString()[0]);
   var t = q * b;
   if (t > a) {
     q -= 1;
@@ -203,39 +199,4 @@ newton_better(num v, num n) {
     print('zk: $zk');
   }
   print(zk);
-}
-
-
-barrett_proper(num a, num b) {
-  const BASE = 10;
-  var a_size = a.toString().length;
-  var b_size = b.toString().length;
-
-  var mu = (pow(BASE, a_size) / b).floor();
-
-  // check the sizes of the strings
-
-  var a1 = (a * pow(BASE, -(b_size - 1))).floor();
-  var q1 = (a1 * mu * pow(BASE, -(a_size - b_size + 1))).floor();
-  var r1 = a - b * q1;
-  bool test = false;
-  var rk = r1;
-  var qk = q1;
-  print('q1: $q1');
-  while(!test) {
-    print('qk: $qk');
-    print('rk: $rk');
-    if (rk >= 0 && rk < b) {
-      test = true;
-    }
-    else if (rk < 0) {
-      rk += b;
-      qk -= 1;
-    }
-    else {
-      rk -= b;
-      qk += 1;
-    }
-  }
-  return [qk, rk];
 }
