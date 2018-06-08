@@ -1,1 +1,1 @@
-import 'package:num_p/src/num_p.dart';
+import 'lib/src/num_p.dart';

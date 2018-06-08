@@ -1,4 +1,4 @@
-import 'package:num_p/src/num_p.dart';
+import 'lib/src/num_p.dart';
 
 // formatting
 num_p leadingzeros_nump(num_p number) {
