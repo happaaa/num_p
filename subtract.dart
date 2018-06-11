@@ -20,7 +20,7 @@ subtract_master(num_p a, num_p b) {
   }
   ans.neg = parts[4] ? true : false;
   ans.decimal = deci;
-  ans.value = subtract_int(parts[0], parts[1], carry: carry_deci);
+  ans.integer = subtract_int(parts[0], parts[1], carry: carry_deci);
   ans = leadingzeros_nump(ans);
   return ans;
 }
@@ -28,32 +28,32 @@ subtract_master(num_p a, num_p b) {
 compare(num_p a, num_p b) {
   var q;
   var sign = false;
-  if (a.value.length > b.value.length) {
-    q = a.value;
+  if (a.integer.length > b.integer.length) {
+    q = a.integer;
   }
-  else if (a.value.length < b.value.length) {
-    q = b.value;
+  else if (a.integer.length < b.integer.length) {
+    q = b.integer;
     sign = true;
   }
   else {
-    for (int i = 0; i < a.value.length; i++) {
-      if (a.value[i] > b.value[i]) {
-        q = a.value;
+    for (int i = 0; i < a.integer.length; i++) {
+      if (a.integer[i] > b.integer[i]) {
+        q = a.integer;
         break;
       }
-      else if (b.value[i] > a.value[i]) {
-        q = b.value;
+      else if (b.integer[i] > a.integer[i]) {
+        q = b.integer;
         sign = true;
         break;
       }
-      else if (i == a.value.length - 1) {
-        q = a.value;
+      else if (i == a.integer.length - 1) {
+        q = a.integer;
       }
     }
   }
-  var w = q == a.value ? b.value : a.value;
-  var e = q == a.value ? a.decimal : b.decimal;
-  var r = q == a.value ? b.decimal : a.decimal;
+  var w = q == a.integer ? b.integer : a.integer;
+  var e = q == a.integer ? a.decimal : b.decimal;
+  var r = q == a.integer ? b.decimal : a.decimal;
   return [q, w, e, r, sign];
 }
 
@@ -68,14 +68,13 @@ subtract_int(List a, List b, {int carry = 0, int power = 15}) {
   }
   //print('a: $a');
   //print('b: $b');
-  for (int i = 0; i < size; i++) {
-    var place = a.length - i - 1;
-    ans[0] = (a[place] - b[place] + carry) % BASE;
-    carry = ((a[place] - b[place] + carry) / BASE).floor();
+  for (int i = size - 1; i >= 0; i--) {
+    ans[0] = (a[i] - b[i] + carry) % BASE;
+    carry = ((a[i] - b[i] + carry) / BASE).floor();
     ans.insert(0, 0);
     //print('ans: $ans');
   }
-  ans.removeAt(0);
+  ans = leadingzeroslist(ans);
   return ans;
 }
 
@@ -88,23 +87,22 @@ subtract_deci(List a, List b) {
   var b_length = b.length;
 
   if (a_length == size) {
-    for (int i = 0; i < size - b_length; i++) {
+    for (var i = b_length; i < size; i++) {
       b.add(0);
     }
   }
   else if (b_length == size) {
-    for (int i = 0; i < size - a_length; i++) {
+    for (var i = a_length; i < size; i++) {
       a.add(0);
     }
   }
   //print('a: $a');
   //print('b: $b');
-  for (int i = 0; i < size; i++) {
-    var place = a.length - i - 1;
-    a[place] *= BASE ~/ pow(10, a[place].toString().length);
-    b[place] *= BASE ~/ pow(10, b[place].toString().length);
-    ans[0] = (a[place] - b[place] + carry) % BASE;
-    carry = ((a[place] - b[place] + carry) / BASE).floor();
+  for (var i = size; i >= 0; i--) {
+    a[i] *= BASE ~/ pow(10, a[i].toString().length);
+    b[i] *= BASE ~/ pow(10, b[i].toString().length);
+    ans[0] = (a[i] - b[i] + carry) % BASE;
+    carry = ((a[i] - b[i] + carry) / BASE).floor();
     ans.insert(0, 0);
     //print('ans: $ans');
   }

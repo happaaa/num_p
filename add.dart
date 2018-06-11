@@ -18,7 +18,7 @@ add_master(num_p a, num_p b) {
     deci.removeAt(0);
   }
   ans.decimal = deci;
-  ans.value = add_int(a.value, b.value, carry: carry_deci);
+  ans.integer = add_int(a.integer, b.integer, carry: carry_deci);
   ans = leadingzeros_nump(ans);
   return ans;
 }
@@ -30,17 +30,15 @@ add_int(List a, List b, {int carry = 0, int power = 15}) {
   var c = size == a.length ? a : b;
   var d = c == a ? b : a;
   var d_length = d.length;
-  var place;
 
-  for (int i = 0; i < size - d_length; i++) {
+  for (var i = 0; i < size - d_length; i++) {
     d.insert(0, 0);
   }
   //print('c: $c');
   //print('d: $d');
-  for (int i = 0; i < size; i++) {
-    place = c.length - i - 1;
-    ans[0] = (c[place] + d[place] + carry) % BASE;
-    carry = ((c[place] + d[place] + carry) / BASE).floor();
+  for (var i = size - 1; i >= 0; i--) {
+    ans[0] = (c[i] + d[i] + carry) % BASE;
+    carry = ((c[i] + d[i] + carry) / BASE).floor();
     ans.insert(0, 0);
     //print('carry: $carry');
     //print('ANS: $ans');
@@ -68,16 +66,15 @@ add_deci(List a, List b) {
   }
   //print('c: $c');
   //print('d: $d');
-  for (int i = 0; i < size; i++) {
-    var place = c.length - i - 1;
-    var c_place_size = c[place].toString().length;
-    var d_place_size = d[place].toString().length;
+  for (int i = size - 1; i >= 0; i--) {
+    var c_place_size = c[i].toString().length;
+    var d_place_size = d[i].toString().length;
     var POWER = pow(10, c_place_size);
     if (d_place_size < c_place_size) {
-      d[place] *= pow(10, c_place_size - d_place_size);
+      d[i] *= pow(10, c_place_size - d_place_size);
     }
-    ans[0] = (c[place] + d[place] + carry) % POWER;
-    carry = ((c[place] + d[place] + carry) / POWER).floor();
+    ans[0] = (c[i] + d[i] + carry) % POWER;
+    carry = ((c[i] + d[i] + carry) / POWER).floor();
     ans.insert(0, 0);
     //print('ans: $ans');
   }

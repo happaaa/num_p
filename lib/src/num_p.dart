@@ -8,13 +8,13 @@ class num_p {
   static final SQRT1_2_string = "0.707106781186547524400844362104849039284835937688474036588";
   static final SQRT2_string = "1.414213562373095048801688724209698078569671875376948073176";
 
-  var value = new List();
+  var integer = new List();
   var decimal = new List();
   bool neg = false;
 
   // default constructor (don't really need this)
   num_p() {
-    value = [0];
+    integer = [0];
     decimal = [0];
     neg = false;
   }
@@ -30,7 +30,7 @@ class num_p {
     }
 
     for (int i = string_list.first.length; i > j; i -= 15) {
-      value.add(int.parse((i - 15 < j) ? string_list.first.substring(j, i)
+      integer.add(int.parse((i - 15 < j) ? string_list.first.substring(j, i)
                                        : string_list.first.substring(i - 15, i)));
     }
     if (string_list.length == 2) {
@@ -42,7 +42,7 @@ class num_p {
     else {
       decimal.add(0);
     }
-    value = value.reversed.toList();
+    integer = integer.reversed.toList();
   }
 
   // constructor from num
@@ -54,12 +54,12 @@ class num_p {
     }
     var string_list = (number.toString()).split('.');
     string_list.length == 2 ? decimal.add(int.parse(string_list[1])) : decimal.add(0);
-    value.add(number.floor());
+    integer.add(number.floor());
   }
 
   // setter from string
   set string(String string) {
-    value.clear();
+    integer.clear();
     decimal.clear();
     neg = false;
 
@@ -72,7 +72,7 @@ class num_p {
     }
 
     for (int i = string_list.first.length; i > j; i -= 15) {
-      value.add(int.parse((i - 15 < j) ? string_list.first.substring(j, i)
+      integer.add(int.parse((i - 15 < j) ? string_list.first.substring(j, i)
                                        : string_list.first.substring(i - 15, i)));
     }
     if (string_list.length == 2) {
@@ -84,6 +84,6 @@ class num_p {
     else {
       decimal.add(0);
     }
-    value = value.reversed.toList();
+    integer = integer.reversed.toList();
   }
 }

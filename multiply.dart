@@ -14,36 +14,36 @@ import 'subtract.dart';
 // long multiplication with the new num_p class
 long_multi(num_p a, num_p b) {
   var c = new num_p();
-  var bk = a.value.length;
-  var bm = b.value.length;
+  var bk = a.integer.length;
+  var bm = b.integer.length;
   var q = [0];
   for (int i  = 0; i < bk; i++) {
     for (int j = 0; j < bm; j++) {
       //print('q: $q');
-      //print('cval: ${c.value[i + j]}');
-      //print('aval: ${a.value[bk - i - 1]}');
-      //print('bval: ${b.value[bm - j - 1]}');
-      var t = add_int(add_int([c.value[i + j]], q), multi(a.value[bk - i - 1], b.value[bm - j - 1]));
+      //print('cval: ${c.integer[i + j]}');
+      //print('aval: ${a.integer[bk - i - 1]}');
+      //print('bval: ${b.integer[bm - j - 1]}');
+      var t = add_int(add_int([c.integer[i + j]], q), multi(a.integer[bk - i - 1], b.integer[bm - j - 1]));
       //print('t: $t');
-      c.value[i + j] = t.last;
-      //print('cval: ${[c.value[i + j]]}');
+      c.integer[i + j] = t.last;
+      //print('cval: ${[c.integer[i + j]]}');
       q = t.sublist(0, t.length - 1);
-      c.value.add(0);
+      c.integer.add(0);
     }
-    c.value[i + bm] = q.first;
+    c.integer[i + bm] = q.first;
     q = [0];
   }
-  c.value = c.value.reversed.toList();
+  c.integer = c.integer.reversed.toList();
   c = leadingzeros_nump(c);
-  //print(c.value);
+  //print(c.integer);
   return c;
 }
 
 
 
-karatsuba(num_p a, num_p b) => karatsuba_int(a.value, b.value);
+karatsuba(num_p a, num_p b) => karatsuba_int(a.integer, b.integer);
 
-karatsuba_int(List a, List b, {int power = 15}) {
+karatsuba_int(List a, List b, [int power = 15]) {
   var a_size = a.length;
   var b_size = b.length;
   var max_size = max(a_size, b_size);
@@ -74,9 +74,9 @@ karatsuba_int(List a, List b, {int power = 15}) {
   //print(c1);
   //print(d0);
   //print(d1);
-  var t1 = karatsuba_int(c1, d1, power: power);
-  var t2 = karatsuba_int(c0, d0, power: power);
-  var t3 = karatsuba_int(add_int(c0, c1, power: power), add_int(d0, d1, power: power), power: power);
+  var t1 = karatsuba_int(c1, d1, power);
+  var t2 = karatsuba_int(c0, d0, power);
+  var t3 = karatsuba_int(add_int(c0, c1, power: power), add_int(d0, d1, power: power), power);
   //print('t3: $t3');
   var t4 = subtract_int(subtract_int(t3, t2, power: power), t1, power: power);
   //print("ans: $t1 $t4 $t2");
