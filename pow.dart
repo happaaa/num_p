@@ -9,5 +9,5 @@ power(num_p a, num power) {
 }
 
 power_list(List number, List power) {
-  
+
 }
