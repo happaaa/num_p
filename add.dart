@@ -47,6 +47,7 @@ add_int(List a, List b, {int carry = 0, int power = 15}) {
     ans[0] = 1;
   }
   ans.removeAt(0);
+  d = leadingzeroslist(d);
   return ans;
 }
 

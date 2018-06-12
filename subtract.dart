@@ -75,6 +75,7 @@ subtract_int(List a, List b, {int carry = 0, int power = 15}) {
     //print('ans: $ans');
   }
   ans = leadingzeroslist(ans);
+  b = leadingzeroslist(b);
   return ans;
 }
 

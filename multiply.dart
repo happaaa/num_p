@@ -105,7 +105,7 @@ multi(num a, num b) {
     blist[0] = b ~/ BASE_2;
     //print(alist);
     //print(blist);
-    var newlist = multi_list(alist, blist, power: 7);
+    var newlist = multi_int(alist, blist, power: 7);
     //print('newlist: $newlist');
     var ans = [0, 0];
     newlist = newlist.reversed.toList();
@@ -130,7 +130,7 @@ multi(num a, num b) {
   }
 }
 
-multi_list(List a, List b, {int power = 15}) {
+multi_int(List a, List b, {int power = 15}) {
   final BASE = pow(10, power);
   var c = [0];
   var bk = a.length;
