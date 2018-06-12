@@ -1,7 +1,3 @@
-import 'dart:math';
-import 'lib/src/num_p.dart';
-import 'format.dart';
-
 /*
  * 6.5.18 made into seperate function for other programs
  * to be done:
@@ -9,6 +5,11 @@ import 'format.dart';
  * work with negative numbers
  *
  */
+
+import 'dart:math';
+import 'class/num_p.dart';
+import 'format.dart';
+
 add_master(num_p a, num_p b) {
   var ans = new num_p();
   var deci = add_deci(a.decimal, b.decimal);

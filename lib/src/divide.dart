@@ -1,9 +1,21 @@
+/*
+ * division function for num_p
+ *
+ * wip:
+ * burnikel-ziegler division (dependent on +/- negative numbers)
+ * clean up
+ * decimal division
+ */
+
 import 'dart:math';
+import 'class/num_p.dart';
 import 'add.dart';
 import 'subtract.dart';
 import 'multiply.dart';
 import 'compare.dart';
 import 'format.dart';
+
+long_divv(num_p a, num_p b) => long_div(a.integer, b.integer);
 
 long_div(List a, List b, [int power = 15]) {
   //print('a: $a');
@@ -94,7 +106,7 @@ long_div_sub(List a, List b, [int power = 15]) {
 
 
 two_by_one(List a, List b, [int power = 15]) {
-  final BASE = pow(10, power);
+  //final BASE = pow(10, power);
   print('2_1');
   a = leadingzeroslist(a);
 
@@ -143,7 +155,7 @@ two_by_one(List a, List b, [int power = 15]) {
 }
 
 three_by_two(List a, List b, [int power = 15]) {
-  final BASE = pow(10, power);
+  //final BASE = pow(10, power);
   print('3_2');
   a = leadingzeroslist(a);
 

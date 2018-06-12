@@ -1,15 +1,15 @@
-import 'dart:math';
-import 'lib/src/num_p.dart';
-import 'format.dart';
-import 'add.dart';
-import 'subtract.dart';
-
 /*
- * to be fixed:
+ * wip:
  * work with decimals (not sure)
  * work with negative numbers
  * clean up code
  */
+
+import 'dart:math';
+import 'class/num_p.dart';
+import 'format.dart';
+import 'add.dart';
+import 'subtract.dart';
 
 // long multiplication with the new num_p class
 long_multi(num_p a, num_p b) {

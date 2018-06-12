@@ -1,4 +1,4 @@
-import 'lib/src/num_p.dart';
+import 'class/num_p.dart';
 
 
 num compare_list(List a, List b) {
