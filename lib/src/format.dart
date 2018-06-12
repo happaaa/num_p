@@ -1,3 +1,7 @@
+/*
+ * formatting functions for other routines
+ */
+
 import 'class/num_p.dart';
 
 // formatting

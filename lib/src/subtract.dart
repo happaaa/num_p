@@ -1,7 +1,3 @@
-import 'dart:math';
-import 'class/num_p.dart';
-import 'format.dart';
-
 /*
  * to be done:
  * make more concise
@@ -9,52 +5,29 @@ import 'format.dart';
  *
  */
 
+import 'dart:math';
+import 'class/num_p.dart';
+import 'format.dart';
+import 'compare.dart';
+
 subtract_master(num_p a, num_p b) {
   var ans = new num_p();
-  var parts = compare(a, b);
-  var deci = subtract_deci(parts[2], parts[3]);
+  var q = maximum(a.integer, b.integer);
+  var w = q == a.integer ? b.integer : a.integer;
+  var e = q == a.integer ? a.decimal : b.decimal;
+  var r = q == a.integer ? b.decimal : a.decimal;
+  var sign = q == a.integer ? true : false;
+  var deci = subtract_deci(e, r);
   var carry_deci = 0;
   if (deci.first == 1) {
     carry_deci = -1;
     deci.removeAt(0);
   }
-  ans.neg = parts[4] ? true : false;
+  ans.neg = sign;
   ans.decimal = deci;
-  ans.integer = subtract_int(parts[0], parts[1], carry: carry_deci);
+  ans.integer = subtract_int(q, w, carry: carry_deci);
   ans = leadingzeros_nump(ans);
   return ans;
-}
-
-compare(num_p a, num_p b) {
-  var q;
-  var sign = false;
-  if (a.integer.length > b.integer.length) {
-    q = a.integer;
-  }
-  else if (a.integer.length < b.integer.length) {
-    q = b.integer;
-    sign = true;
-  }
-  else {
-    for (int i = 0; i < a.integer.length; i++) {
-      if (a.integer[i] > b.integer[i]) {
-        q = a.integer;
-        break;
-      }
-      else if (b.integer[i] > a.integer[i]) {
-        q = b.integer;
-        sign = true;
-        break;
-      }
-      else if (i == a.integer.length - 1) {
-        q = a.integer;
-      }
-    }
-  }
-  var w = q == a.integer ? b.integer : a.integer;
-  var e = q == a.integer ? a.decimal : b.decimal;
-  var r = q == a.integer ? b.decimal : a.decimal;
-  return [q, w, e, r, sign];
 }
 
 subtract_int(List a, List b, {int carry = 0, int power = 15}) {
