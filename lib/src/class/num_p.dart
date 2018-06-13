@@ -1,3 +1,7 @@
+import 'dart:math';
+import 'package:num_p/src/add.dart';
+import 'package:num_p/src/subtract.dart';
+
 class num_p {
   static final E_string = "2.718281828459045235360287471352662497757247093699959574966";
   static final PI_string = "3.141592653589793238462643383279502884197169399375105820974";
@@ -8,10 +12,13 @@ class num_p {
   static final SQRT1_2_string = "0.707106781186547524400844362104849039284835937688474036588";
   static final SQRT2_string = "1.414213562373095048801688724209698078569671875376948073176";
 
-  var integer = new List();
-  var decimal = new List();
+  List integer = new List();
+  List decimal = new List();
   bool neg = false;
 
+  /*
+   * constructors
+   */
   // default constructor (don't really need this)
   num_p() {
     integer = [0];
@@ -57,7 +64,9 @@ class num_p {
     integer.add(number.floor());
   }
 
-  // setter from string
+  /*
+   * setters
+   */
   set string(String string) {
     integer.clear();
     decimal.clear();
@@ -86,4 +95,103 @@ class num_p {
     }
     integer = integer.reversed.toList();
   }
+
+  /*
+   * getters
+   */
+  List get value => [neg, integer, decimal];
+
+  int get hashCode { // hashcode for == operator
+    int hash = 45;
+    hash = 37 * hash + integer.length + integer[0];
+    hash = 2 * decimal.length * hash + decimal[0];
+    return hash;
+  }
+
+
+  /*
+   * overloaded operators
+   *  - eventually have to integrate functions into here
+   *    because recursion importing doesn't work
+   */
+  num_p operator+ (num_p operand) {
+    var ans = new num_p();
+    if (!neg && !operand.neg) {
+      ans = add_master(this, operand);
+    }
+    else if (!neg && operand.neg) {
+      ans = subtract_master(this, operand);
+    }
+    else if (neg && !operand.neg) {
+      ans = subtract_master(operand, this);
+    }
+    else {
+      ans = add_master(this, operand);
+      ans.neg = true;
+    }
+    return ans;
+  }
+
+  num_p operator- (num_p operand) {
+    var ans = new num_p();
+    if (!neg && !operand.neg) {
+      ans = subtract_master(this, operand);
+    }
+    else if (!neg && operand.neg) {
+      ans = add_master(this, operand);
+    }
+    else if (neg && !operand.neg) {
+      ans = add_master(this, operand);
+      ans.neg = true;
+    }
+    else {
+      ans = subtract_master(operand, this);
+    }
+    return ans;
+  }
+
+  /*
+   * left to go: *, /, ~/
+   *
+   */
+
+  bool operator> (num_p operand) => compare(this, operand) == 1 ? true : false;
+  bool operator>= (num_p operand) => compare(this, operand) == 0 ? false : true;
+  bool operator< (num_p operand) => compare(this, operand) == 0 ? true : false;
+  bool operator<= (num_p operand) => compare(this, operand) == 1 ? false : true;
+  bool operator== (num_p operand) => compare(this, operand) == 2 ? true : false;
+
+
+
+  /*
+   * helper functions for overloaded operators
+   */
+  num compare(num_p a, num_p b) {
+    if (!a.neg && b.neg) return 1;
+    else if (a.neg && !b.neg) return 0;
+    else if (a.neg && b.neg) {
+      // reverse the values if both are negative
+    }
+    if (a.integer.length > b.integer.length) return 1;
+    else if (a.integer.length > b.integer.length) return 0;
+    else {
+      for (var i = 0; i < a.integer.length; i++) {
+        if (a.integer[i] > b.integer[i]) return 1;
+        if (a.integer[i] < b.integer[i]) return 0;
+      }
+    }
+    var maxi = max(a.decimal.length, b.decimal.length);
+    var mini = min(a.decimal.length, b.decimal.length);
+    for (var i = 0; i < mini; i++) {
+      if (a.decimal[i] > b.decimal[i]) return 1;
+      if (a.decimal[i] < b.decimal[i]) return 0;
+    }
+    if (maxi > mini) {
+      return a.decimal.length == maxi ? 1 : 0;
+    }
+    else return 2;
+  }
+
+
+
 }
