@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'longnum.dart';
+import 'package:longnum/longnum.dart';
 
 void main() {
 
@@ -100,7 +100,6 @@ List barrett(int a, int b, int mu) {
      var a1 = (a * pow(BASE, -(b_size - 1))).floor();
      var q1 = (a1 * mu * pow(BASE, -(a_size - b_size + 1))).floor();
      var r1 = a - b * q1;
-     int k = 1;
      bool test = false;
      var rk = r1;
      var qk = q1;
@@ -117,7 +116,6 @@ List barrett(int a, int b, int mu) {
          rk -= b;
          qk += 1;
        }
-       k++;
      }
 
 
@@ -133,7 +131,6 @@ karatsuba_recursive(num a, num b) {
   var a_size = a.toString().length;
   var b_size = b.toString().length;
   var max_size = max(a_size, b_size);
-  var min_size = min(a_size, b_size);
 
   //print(max_size);
   print('$a $b');

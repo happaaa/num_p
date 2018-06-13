@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'longnum.dart';
+import 'package:longnum/longnum.dart';
 
 // anything smaller than 10 digits
 long_multi(longnum a, longnum b) {
@@ -35,14 +35,8 @@ long_multi(longnum a, longnum b) {
 }
 
 karatsuba(longnum a, longnum b) {
-  const BASE = 10;
-  const MUL = 3;
-  const K = 2;
-
-  //var size = (a.value.length > b.value.length) ? a.value.length : b.value.length;
 
   var num_a = [[], []], num_b = [[],[]];
-  var num_c = new List(3);
 
   num_a[0] = (a.value.getRange(0, a.value.length ~/ 2)).toList();
   num_a[1] = (a.value.getRange(a.value.length ~/ 2, a.value.length)).toList();

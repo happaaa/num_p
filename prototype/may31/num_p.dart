@@ -54,14 +54,14 @@ class longnum {
   }
 
   asdjfklasdjfkl(String string) {
-    int i = 0;
+    //int i = 0;
     var dec = string.indexOf('.');
     if (string.startsWith('-')) {
       neg = true;
     }
     dec = string.indexOf('.');
     if (dec == -1) {
-      var string_list = string.splitMapJoin('.');
+      //var string_list = string.splitMapJoin('.');
     }
 
 

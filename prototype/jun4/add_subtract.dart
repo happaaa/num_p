@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'longnum.dart';
+import 'package:longnum/longnum.dart';
 
 // to be fixed:
 // work for doubles

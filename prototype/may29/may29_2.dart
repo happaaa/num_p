@@ -66,12 +66,8 @@ divide(var a, var b) {
 
 void main() {
   print(E);
-
-  var nu_E = new List();
   var string_E = E.toString();
 
   print(string_E.length);
-
-  var really = new longnum('1234');
   print(longnum.E.length);
 }
