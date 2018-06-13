@@ -1,5 +1,5 @@
 /*
- * trigonometric functions for num_p
+ * trigonometric functions for longnum
  * sin()
  * cos()
  * tan()

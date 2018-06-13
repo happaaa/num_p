@@ -1,6 +1,6 @@
-import 'num_p.dart';
+import 'longnum.dart';
 
-leadingzeros(num_p number) {
+leadingzeros(longnum number) {
   // formatting
   number.value = (number.value.reversed).toList();
   number.decimal = (number.decimal.reversed).toList();

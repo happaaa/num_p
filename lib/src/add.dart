@@ -7,11 +7,11 @@
  */
 
 import 'dart:math';
-import 'class/num_p.dart';
+import 'longnum/longnumclass.dart';
 import 'format.dart';
 
-add_master(num_p a, num_p b) {
-  var ans = new num_p();
+add_master(longnum a, longnum b) {
+  var ans = new longnum();
   var deci = add_deci(a.decimal, b.decimal);
   var carry_deci = 0;
   if (deci.first == 1) {

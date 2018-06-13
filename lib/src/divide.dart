@@ -1,5 +1,5 @@
 /*
- * division function for num_p
+ * division function for longnum
  *
  * wip:
  * burnikel-ziegler division (dependent on +/- negative numbers)
@@ -10,14 +10,14 @@
  */
 
 import 'dart:math';
-import 'class/num_p.dart';
+import 'longnum/longnumclass.dart';
 import 'add.dart';
 import 'subtract.dart';
 import 'multiply.dart';
 import 'compare.dart';
 import 'format.dart';
 
-long_divv(num_p a, num_p b) => long_div(a.integer, b.integer);
+long_divv(longnum a, longnum b) => long_div(a.integer, b.integer);
 
 
 /*

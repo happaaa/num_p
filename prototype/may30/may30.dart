@@ -1,6 +1,6 @@
 import 'dart:math';
 
-class num_p {
+class longnum {
   //static final E = [2, '.', 7, 1, 8, 2, 8, 1, 8, 2, 8, 4, 5, 9, 0 ,4, 5, 2, 3, 5, 3, 6, 0, 2, 8, 7, 4, 7,
   //                      1, 3, 5, 2, 6, 6, 2, 4, 9, 7, 7, 5, 7, 2, 4, 7, 0, 9, 3, 6, 9, 9, 9, 5, 9, 5, 7, 4, 9, 6, 6];
   static final E_string = "2.718281828459045235360287471352662497757247093699959574966";
@@ -20,14 +20,14 @@ class num_p {
   bool neg = false;
 
   // default constructor (don't really need this)
-  num_p() {
+  longnum() {
     value = [];
     decimal = [];
     neg = false;
   }
 
   // constructor from string
-  num_p.string(String string) {
+  longnum.string(String string) {
     int i = 0;
     if (string.startsWith('-')) {
       neg = true;
@@ -50,14 +50,14 @@ class num_p {
 
   // not sure how to implement with negation and decimals
   // constructor from list
-  /*num_p.list(List list) {
+  /*longnum.list(List list) {
     for (int i = 0; i < list.length; i++) {
       value.add(list[i]);
     }
   }*/
 
   // constructor from num
-  num_p.number(num number) {
+  longnum.number(num number) {
  		if (number.isNegative) {
       neg = true;
       number = number.abs();
@@ -113,10 +113,10 @@ class num_p {
 // work for negative numbers
 // very messy
 // overload '+' operator
-add(num_p a, num_p b) {
+add(longnum a, longnum b) {
   var shorter = min(a.value.length, b.value.length);
   var longer = max(a.value.length, b.value.length);
-  var c = new num_p();
+  var c = new longnum();
 
   c.value.add(0);
   int i;
@@ -166,10 +166,10 @@ add(num_p a, num_p b) {
 // work with decimals
 // work with negative numbers
 // very messy
-subtract(num_p a, num_p b) {
+subtract(longnum a, longnum b) {
   var shorter = min(a.value.length, b.value.length);
   var longer = max(a.value.length, b.value.length);
-  var c = new num_p();
+  var c = new longnum();
 
   c.value.add(0);
   int i;
@@ -243,11 +243,11 @@ subtract(num_p a, num_p b) {
 
 }
 
-multiply(num_p a, num_p b) {
+multiply(longnum a, longnum b) {
 
 }
 
-divide(num_p a, num_p b) {
+divide(longnum a, longnum b) {
 
 }
 
@@ -259,11 +259,11 @@ void main() {
 
   print(string_E.length);
 
-  var really = new num_p('1234');
-  print(num_p.E.length);*/
+  var really = new longnum('1234');
+  print(longnum.E.length);*/
 
-  var realnum = new num_p.string('1004');
-  var fakenum = new num_p.string('12');
+  var realnum = new longnum.string('1004');
+  var fakenum = new longnum.string('12');
   print(realnum.value);
   //print(realnum.decimal);
   //print(realnum.neg);

@@ -6,12 +6,12 @@
  */
 
 import 'dart:math';
-import 'class/num_p.dart';
+import 'longnum/longnumclass.dart';
 import 'format.dart';
 import 'compare.dart';
 
-subtract_master(num_p a, num_p b) {
-  var ans = new num_p();
+subtract_master(longnum a, longnum b) {
+  var ans = new longnum();
   if (a == b) return ans;
   var q = a > b ? a.integer : b.integer;
   var w = q == a.integer ? b.integer : a.integer;

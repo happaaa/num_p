@@ -1,6 +1,6 @@
 import 'dart:math';
 
-class num_p {
+class longnum {
   static final E = [2, '.', 7, 1, 8, 2, 8, 1, 8, 2, 8, 4, 5, 9, 0 ,4, 5, 2, 3, 5, 3, 6, 0, 2, 8, 7, 4, 7,
                         1, 3, 5, 2, 6, 6, 2, 4, 9, 7, 7, 5, 7, 2, 4, 7, 0, 9, 3, 6, 9, 9, 9, 5, 9, 5, 7, 4, 9, 6, 6];
   static final E_string = "2.718281828459045235360287471352662497757247093699959574966";
@@ -15,7 +15,7 @@ class num_p {
  	var number = new List();
 
   // constructor from string
-  num_p(String string) {
+  longnum(String string) {
     for (int i = 0; i < string.length; i++) {
       number.add(int.parse(string[i]));
     }
@@ -72,6 +72,6 @@ void main() {
 
   print(string_E.length);
 
-  var really = new num_p('1234');
-  print(num_p.E.length);
+  var really = new longnum('1234');
+  print(longnum.E.length);
 }

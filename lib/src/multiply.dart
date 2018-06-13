@@ -6,14 +6,14 @@
  */
 
 import 'dart:math';
-import 'class/num_p.dart';
+import 'longnum/longnumclass.dart';
 import 'format.dart';
 import 'add.dart';
 import 'subtract.dart';
 
-// long multiplication with the new num_p class
-long_multi(num_p a, num_p b) {
-  var c = new num_p();
+// long multiplication with the new longnum class
+long_multi(longnum a, longnum b) {
+  var c = new longnum();
   var bk = a.integer.length;
   var bm = b.integer.length;
   var q = [0];
@@ -46,7 +46,7 @@ long_multi(num_p a, num_p b) {
 
 
 
-karatsuba(num_p a, num_p b) => karatsuba_int(a.integer, b.integer);
+karatsuba(longnum a, longnum b) => karatsuba_int(a.integer, b.integer);
 
 karatsuba_int(List a, List b, [int power = 15]) {
   var a_size = a.length;

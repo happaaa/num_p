@@ -1,4 +1,4 @@
-name: num_p
+name: longnum
 version: 1.0.0
 description: >-
     arbitrary precision library for dart

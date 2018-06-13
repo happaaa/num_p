@@ -1,15 +1,15 @@
 import 'dart:math';
-import 'num_p.dart';
+import 'longnum.dart';
 
 // to be fixed:
 // work for doubles
 // work for negative numbers
 // very messy
 // overload '+' operator
-add(num_p a, num_p b) {
+add(longnum a, longnum b) {
   var shorter = min(a.value.length, b.value.length);
   var longer = max(a.value.length, b.value.length);
-  var c = new num_p();
+  var c = new longnum();
   int i;
   var r = longer == a.value.length ? a.value : b.value;
 
@@ -85,10 +85,10 @@ add(num_p a, num_p b) {
 // work with negative numbers
 // very messy
 // need better variable names
-subtract(num_p a, num_p b) {
+subtract(longnum a, longnum b) {
   var shorter = min(a.value.length, b.value.length);
   var longer = max(a.value.length, b.value.length);
-  var c = new num_p();
+  var c = new longnum();
 
   int i;
   var r;
@@ -162,8 +162,8 @@ subtract(num_p a, num_p b) {
 
 
 void main() {
-  var num1 = new num_p.string('54.5647');
-  var num2 = new num_p.string('128.128');
+  var num1 = new longnum.string('54.5647');
+  var num2 = new longnum.string('128.128');
   //print(num1.value);
   //print(realnum.decimal);
   //print(realnum.neg);

@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'package:num_p/src/add.dart';
-import 'package:num_p/src/subtract.dart';
+import 'package:longnum/src/add.dart';
+import 'package:longnum/src/subtract.dart';
 
-class num_p {
+class longnum {
   static final E_string = "2.718281828459045235360287471352662497757247093699959574966";
   static final PI_string = "3.141592653589793238462643383279502884197169399375105820974";
   static final LN2_string = "0.693147180559945309417232121458176568075500134360255254120";
@@ -20,14 +20,14 @@ class num_p {
    * constructors
    */
   // default constructor (don't really need this)
-  num_p() {
+  longnum() {
     integer = [0];
     decimal = [0];
     neg = false;
   }
 
   // constructor from string
-  num_p.string(String string) {
+  longnum.string(String string) {
     int j = 0;
     var string_list = string.split('.');
 
@@ -54,7 +54,7 @@ class num_p {
 
   // constructor from num
   // might have to change from convert to string and back to int
-  num_p.number(num number) {
+  longnum.number(num number) {
     if (number.isNegative) {
       neg = true;
       number = number.abs();
@@ -114,8 +114,8 @@ class num_p {
    *  - eventually have to integrate functions into here
    *    because recursion importing doesn't work
    */
-  num_p operator+ (num_p operand) {
-    var ans = new num_p();
+  longnum operator+ (longnum operand) {
+    var ans = new longnum();
     if (!neg && !operand.neg) {
       ans = add_master(this, operand);
     }
@@ -132,8 +132,8 @@ class num_p {
     return ans;
   }
 
-  num_p operator- (num_p operand) {
-    var ans = new num_p();
+  longnum operator- (longnum operand) {
+    var ans = new longnum();
     if (!neg && !operand.neg) {
       ans = subtract_master(this, operand);
     }
@@ -155,18 +155,18 @@ class num_p {
    *
    */
 
-  bool operator> (num_p operand) => compare(this, operand) == 1;
-  bool operator>= (num_p operand) => compare(this, operand) != 0;
-  bool operator< (num_p operand) => compare(this, operand) == 0;
-  bool operator<= (num_p operand) => compare(this, operand) != 1;
-  bool operator== (num_p operand) => compare(this, operand) == 2;
+  bool operator> (longnum operand) => compare(this, operand) == 1;
+  bool operator>= (longnum operand) => compare(this, operand) != 0;
+  bool operator< (longnum operand) => compare(this, operand) == 0;
+  bool operator<= (longnum operand) => compare(this, operand) != 1;
+  bool operator== (longnum operand) => compare(this, operand) == 2;
 
 
 
   /*
    * helper functions for overloaded operators
    */
-  num compare(num_p a, num_p b) {
+  num compare(longnum a, longnum b) {
     if (!a.neg && b.neg) return 1;
     else if (a.neg && !b.neg) return 0;
     else if (a.neg && b.neg) {

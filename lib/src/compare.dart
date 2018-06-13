@@ -5,7 +5,7 @@
  * max()
  */
 
-import 'class/num_p.dart';
+import 'longnum/longnumclass.dart';
 
 num compare_list(List a, List b) {
   if (a.length > b.length) return 1;

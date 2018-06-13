@@ -1,4 +1,4 @@
-export 'src/class/num_p.dart';
+export 'src/longnum/longnumclass.dart';
 export 'src/add.dart';
 export 'src/subtract.dart';
 export 'src/multiply.dart';

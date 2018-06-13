@@ -1,15 +1,15 @@
 /*
- * power functions for num_p
+ * power functions for longnum
  * pow()
  * exp()
  * sqrt()
  * log()
  */
 
-import 'class/num_p.dart';
+import 'longnum/longnumclass.dart';
 import 'multiply.dart';
 
-power(num_p a, num power) {
+power(longnum a, num power) {
 
 }
 

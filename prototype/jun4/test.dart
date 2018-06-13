@@ -1,11 +1,11 @@
 import 'dart:math';
-import 'num_p.dart';
+import 'longnum.dart';
 
 void main() {
 
-    //var asdf = new num_p.string('18349276');
-    var hjkl = new num_p.string("123456789123456789123456789123456789.123456789123456789");
-    var qwer = new num_p.string('4503599627370496.4568423185674564512');
+    //var asdf = new longnum.string('18349276');
+    var hjkl = new longnum.string("123456789123456789123456789123456789.123456789123456789");
+    var qwer = new longnum.string('4503599627370496.4568423185674564512');
 
 
     //print(hjkl.value);
@@ -167,11 +167,11 @@ karatsuba_recursive(num a, num b) {
 }
 
 
-add_proper(num_p a, num_p b) {
+add_proper(longnum a, longnum b) {
   const BASE = 15;
   var shorter = min(a.value.length, b.value.length);
   var longer = max(a.value.length, b.value.length);
-  var c = new num_p();
+  var c = new longnum();
   var i;
   var r = longer == a.value.length ? a.value : b.value;
 

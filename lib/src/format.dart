@@ -2,10 +2,10 @@
  * formatting functions for other routines
  */
 
-import 'class/num_p.dart';
+import 'longnum/longnumclass.dart';
 
 // formatting
-num_p leadingzeros_nump(num_p number) {
+longnum leadingzeros_nump(longnum number) {
   //number.integer = (number.integer.reversed).toList();
   //number.decimal = (number.decimal.reversed).toList();
   var k = number.integer.length, l = number.decimal.length;
@@ -31,6 +31,6 @@ List leadingzeroslist(List number) {
   return number;
 }
 
-trailingzeros(num_p number) {
+trailingzeros(longnum number) {
 
 }

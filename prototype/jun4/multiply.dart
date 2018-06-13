@@ -1,9 +1,9 @@
 import 'dart:math';
-import 'num_p.dart';
+import 'longnum.dart';
 
 // anything smaller than 10 digits
-long_multi(num_p a, num_p b) {
-  var c = new num_p();
+long_multi(longnum a, longnum b) {
+  var c = new longnum();
 
   for (int i  = 0; i < a.value.length; i++) {
     for (int j = 0; j < b.value.length; j++) {
@@ -34,7 +34,7 @@ long_multi(num_p a, num_p b) {
   return c;
 }
 
-karatsuba(num_p a, num_p b) {
+karatsuba(longnum a, longnum b) {
   const BASE = 10;
   const MUL = 3;
   const K = 2;
@@ -202,8 +202,8 @@ toomcook3(int a, int b) {
 
 
 void main() {
-  var num1 = new num_p.string('15648654');
-  var num2 = new num_p.string('457');
+  var num1 = new longnum.string('15648654');
+  var num2 = new longnum.string('457');
   //print((long_multi(num1, num2)).value);
   //print(karatsuba_int(15648654 , 457));
   karatsuba(num1, num2);
