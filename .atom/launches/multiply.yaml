@@ -1,6 +1,6 @@
-# Cli launch configuration for test.dart.
+# Cli launch configuration for multiply.dart.
 type: cli
-path: test.dart
+path: multiply.dart
 
 cli:
   # Additional args for the application.

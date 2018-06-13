@@ -1,6 +1,6 @@
-# Cli launch configuration for test.dart.
+# Cli launch configuration for subtract.dart.
 type: cli
-path: test.dart
+path: subtract.dart
 
 cli:
   # Additional args for the application.
