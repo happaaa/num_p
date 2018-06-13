@@ -10,9 +10,11 @@ num_p leadingzeros_nump(num_p number) {
   //number.decimal = (number.decimal.reversed).toList();
   var k = number.integer.length, l = number.decimal.length;
   for (var u = 0; u < k && number.integer.first == 0; u++) {
+    if (number.integer.length == 1) break;
     number.integer.removeAt(0);
   }
   for (var v = 0; v < l && number.decimal.first == 0; v++) {
+    if (number.decimal.length == 1) break;
     number.decimal.removeAt(0);
   }
   return number;

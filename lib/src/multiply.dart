@@ -28,8 +28,13 @@ long_multi(num_p a, num_p b) {
       c.integer[i + j] = t.last;
       //print('cval: ${[c.integer[i + j]]}');
       q = t.sublist(0, t.length - 1);
+      if (q.isEmpty) {
+        q.add(0);
+      }
+      //print('new q: $q');
       c.integer.add(0);
     }
+    print(q);
     c.integer[i + bm] = q.first;
     q = [0];
   }
