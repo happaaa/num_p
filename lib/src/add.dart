@@ -20,7 +20,7 @@ add_master(num_p a, num_p b) {
   }
   ans.decimal = deci;
   ans.integer = add_int(a.integer, b.integer, carry: carry_deci);
-  ans = leadingzeros_nump(ans);
+  //ans = leadingzeros_nump(ans);
   return ans;
 }
 

@@ -12,7 +12,8 @@ import 'compare.dart';
 
 subtract_master(num_p a, num_p b) {
   var ans = new num_p();
-  var q = maximum(a.integer, b.integer);
+  if (a == b) return ans;
+  var q = a > b ? a.integer : b.integer;
   var w = q == a.integer ? b.integer : a.integer;
   var e = q == a.integer ? a.decimal : b.decimal;
   var r = q == a.integer ? b.decimal : a.decimal;
@@ -26,7 +27,7 @@ subtract_master(num_p a, num_p b) {
   ans.neg = sign;
   ans.decimal = deci;
   ans.integer = subtract_int(q, w, carry: carry_deci);
-  ans = leadingzeros_nump(ans);
+  //ans = leadingzeros_nump(ans);
   return ans;
 }
 
@@ -39,13 +40,13 @@ subtract_int(List a, List b, {int carry = 0, int power = 15}) {
   for (int i = 0; i < size - b_length; i++) {
     b.insert(0, 0);
   }
-  //print('a: $a');
-  //print('b: $b');
+  //print('int a: $a');
+  //print('int b: $b');
   for (int i = size - 1; i >= 0; i--) {
     ans[0] = (a[i] - b[i] + carry) % BASE;
     carry = ((a[i] - b[i] + carry) / BASE).floor();
     ans.insert(0, 0);
-    //print('ans: $ans');
+    //print('int ans: $ans');
   }
   ans = leadingzeroslist(ans);
   b = leadingzeroslist(b);
@@ -72,7 +73,7 @@ subtract_deci(List a, List b) {
   }
   //print('a: $a');
   //print('b: $b');
-  for (var i = size; i >= 0; i--) {
+  for (var i = size - 1; i >= 0; i--) {
     a[i] *= BASE ~/ pow(10, a[i].toString().length);
     b[i] *= BASE ~/ pow(10, b[i].toString().length);
     ans[0] = (a[i] - b[i] + carry) % BASE;
@@ -85,7 +86,7 @@ subtract_deci(List a, List b) {
     for (int i = 0; i < ans.length - 1; i++) {
       ans[i] = BASE - ans[i] - 1;
     }
-    ans.last = BASE - ans.last;
+    ans[ans.length - 1] = BASE - ans.last;
     ans.insert(0, 1);
   }
   //print('final ans: $ans');

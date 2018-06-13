@@ -22,6 +22,8 @@ List leadingzeroslist(List number) {
   //number.integer = (number.integer.reversed).toList();
   var k = number.length;
   for (var u = 0; u < k && number.first == 0; u++) {
+    //print(number.length);
+    if (number.length == 1) break;
     number.removeAt(0);
   }
   return number;
