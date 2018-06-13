@@ -67,7 +67,7 @@ class longnum {
   /*
    * setters
    */
-  set string(String string) {
+  set value(String string) {
     integer.clear();
     decimal.clear();
     neg = false;
@@ -99,7 +99,7 @@ class longnum {
   /*
    * getters
    */
-  List get value => [neg, integer, decimal];
+  List get val => [neg, integer, decimal];
 
   int get hashCode { // hashcode for == operator
     int hash = 45;

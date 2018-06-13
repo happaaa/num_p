@@ -8,7 +8,6 @@
 import 'dart:math';
 import 'longnum/longnumclass.dart';
 import 'format.dart';
-import 'compare.dart';
 
 subtract_master(longnum a, longnum b) {
   var ans = new longnum();

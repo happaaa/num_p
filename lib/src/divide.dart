@@ -54,7 +54,6 @@ long_div(List a, List b, [int power = 15]) {
 }
 
 long_div_sub(List a, List b, [int power = 15]) {
-  final BASE = pow(10, power);
   //print('a: $a');
   //print('new b: $b');
   //print('constant: $constant');
