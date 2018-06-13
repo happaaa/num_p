@@ -5,6 +5,8 @@
  * burnikel-ziegler division (dependent on +/- negative numbers)
  * clean up
  * decimal division
+ *
+ * division only works when divisor is half of 10^power
  */
 
 import 'dart:math';
@@ -17,13 +19,19 @@ import 'format.dart';
 
 long_divv(num_p a, num_p b) => long_div(a.integer, b.integer);
 
+
+/*
+ * limitations:
+ * integer only
+ * denominator has to be at least half of 10^power
+ */
 long_div(List a, List b, [int power = 15]) {
   //print('a: $a');
   //print('b: $b');
   if (a.length < b.length) return [[0], a];
   if (a.length == b.length) {
     if (a[0] < b[0]) return [[0], a];
-    else return [[1], subtract_int(a, b, power: power)];
+    else return [[1], [subtract_int(a, b, power: power)]];
   }
   if (a.length == b.length + 1) return long_div_sub(a, b, power);
   var bm = a.length - b.length - 1;
@@ -47,11 +55,6 @@ long_div(List a, List b, [int power = 15]) {
 
 long_div_sub(List a, List b, [int power = 15]) {
   final BASE = pow(10, power);
-  var constant = 1;
-  if (b[0] < BASE / 2) {
-    constant = ((BASE / 2) / b[0]).ceil();
-    b = multi_int(b, [constant], power: power);
-  }
   //print('a: $a');
   //print('new b: $b');
   //print('constant: $constant');
@@ -98,7 +101,14 @@ long_div_sub(List a, List b, [int power = 15]) {
   return [q, t];
 }
 
-
+match(List b, [int power = 15]) {
+  final BASE = pow(10, power);
+  var constant = 1;
+  if (b[0] < BASE / 2) {
+    constant = ((BASE / 2) / b[0]).ceil();
+    b = multi_int(b, [constant], power: power);
+  }
+}
 
 
 

@@ -155,11 +155,11 @@ class num_p {
    *
    */
 
-  bool operator> (num_p operand) => compare(this, operand) == 1 ? true : false;
-  bool operator>= (num_p operand) => compare(this, operand) == 0 ? false : true;
-  bool operator< (num_p operand) => compare(this, operand) == 0 ? true : false;
-  bool operator<= (num_p operand) => compare(this, operand) == 1 ? false : true;
-  bool operator== (num_p operand) => compare(this, operand) == 2 ? true : false;
+  bool operator> (num_p operand) => compare(this, operand) == 1;
+  bool operator>= (num_p operand) => compare(this, operand) != 0;
+  bool operator< (num_p operand) => compare(this, operand) == 0;
+  bool operator<= (num_p operand) => compare(this, operand) != 1;
+  bool operator== (num_p operand) => compare(this, operand) == 2;
 
 
 

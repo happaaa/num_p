@@ -156,3 +156,7 @@ multi_int(List a, List b, {int power = 15}) {
   c = leadingzeroslist(c);
   return c;
 }
+
+squaring(List a, List b) {
+  
+}
