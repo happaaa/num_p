@@ -1,4 +1,4 @@
-class longnum {
+class num_p {
   static final E_string =
       "2.718281828459045235360287471352662497757247093699959574966";
   static final PI_string =
@@ -24,14 +24,14 @@ class longnum {
   bool neg = false;
 
   // default constructor (don't really need this)
-  longnum() {
+  num_p() {
     value = [0];
     decimal = [0];
     neg = false;
   }
 
   // constructor from string
-  longnum.string(String string) {
+  num_p.string(String string) {
     int i = 0;
     if (string.startsWith('-')) {
       neg = true;
@@ -69,7 +69,7 @@ class longnum {
 
   // constructor from num
   // might have to change from convert to string and back to int
-  longnum.number(num number) {
+  num_p.number(num number) {
     if (number.isNegative) {
       neg = true;
       number = number.abs();

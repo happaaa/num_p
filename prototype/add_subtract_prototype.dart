@@ -1,15 +1,15 @@
 import 'dart:math';
-import 'package:longnum/src/longnum/longnumclass.dart';
+import 'package:longnum/longnum.dart';
 
 // to be fixed:
 // work for doubles
 // work for negative numbers
 // very messy
 // overload '+' operator
-add(longnum a, longnum b) {
+add(Longnum a, Longnum b) {
   var shorter = min(a.integer.length, b.integer.length);
   var longer = max(a.integer.length, b.integer.length);
-  var c = new longnum();
+  var c = new Longnum();
   int i;
   var r = longer == a.integer.length ? a.integer : b.integer;
 
@@ -77,14 +77,14 @@ add(longnum a, longnum b) {
 }
 
 
-// works with decimals and new longnum class properly
-add_proper(longnum a, longnum b) {
+// works with decimals and new Longnum class properly
+add_proper(Longnum a, Longnum b) {
   const BASE = 15;
   var shorter = min(a.integer.length, b.integer.length);
   var longer = max(a.integer.length, b.integer.length);
   var longer_deci = max(a.decimal.length, b.decimal.length);
   var shorter_deci = min(a.decimal.length, b.decimal.length);
-  var c = new longnum();
+  var c = new Longnum();
   var i;
   var q = longer == a.integer.length ? a.integer : b.integer;
   var r, s;
@@ -194,10 +194,10 @@ add_proper(longnum a, longnum b) {
 // work with negative numbers
 // very messy
 // need better variable names
-subtract(longnum a, longnum b) {
+subtract(Longnum a, Longnum b) {
   var shorter = min(a.integer.length, b.integer.length);
   var longer = max(a.integer.length, b.integer.length);
-  var c = new longnum();
+  var c = new Longnum();
 
   int i;
   var r;
@@ -268,7 +268,7 @@ subtract(longnum a, longnum b) {
   return c;
 }
 
-subtract_proper(longnum a, longnum b) {
+subtract_proper(Longnum a, Longnum b) {
 
 }
 
@@ -277,9 +277,9 @@ subtract_proper(longnum a, longnum b) {
 
 
 void main() {
-  //var asdf = new longnum.string('18349276');
-  var hjkl = new longnum.string("123456789123456789123456789123456789.423456789123456789");
-  var qwer = new longnum.string('4503599627370496.6568423185674564512');
+  //var asdf = new Longnum.string('18349276');
+  var hjkl = new Longnum.string("123456789123456789123456789123456789.423456789123456789");
+  var qwer = new Longnum.string('4503599627370496.6568423185674564512');
 
 
   //print(hjkl.integer);
