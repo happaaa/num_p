@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'package:longnum/src/add.dart';
 import 'package:longnum/src/subtract.dart';
+import 'package:longnum/src/multiply.dart';
 
-class longnum {
+class Longnum {
   static final E_string = "2.718281828459045235360287471352662497757247093699959574966";
   static final PI_string = "3.141592653589793238462643383279502884197169399375105820974";
   static final LN2_string = "0.693147180559945309417232121458176568075500134360255254120";
@@ -20,14 +21,14 @@ class longnum {
    * constructors
    */
   // default constructor (don't really need this)
-  longnum() {
+  Longnum() {
     integer = [0];
     decimal = [0];
     neg = false;
   }
 
   // constructor from string
-  longnum.string(String string) {
+  Longnum.string(String string) {
     int j = 0;
     var string_list = string.split('.');
 
@@ -38,12 +39,18 @@ class longnum {
 
     for (int i = string_list.first.length; i > j; i -= 15) {
       integer.add(int.parse((i - 15 < j) ? string_list.first.substring(j, i)
-                                       : string_list.first.substring(i - 15, i)));
+                                         : string_list.first.substring(i - 15, i)));
     }
     if (string_list.length == 2) {
       for (int i = 0; i < string_list[1].length; i += 15) {
-        decimal.add(int.parse((i + 15 > string_list[1].length) ? string_list[1].substring(i, string_list[1].length)
-                                                               : string_list[1].substring(i, i + 15)));
+        if (i + 15 > string_list[1].length) {
+          decimal.add(int.parse(string_list[1].substring(i, string_list[1].length)));
+          var dec_len = string_list[1].substring(i, string_list[1].length).length;
+          decimal[decimal.length - 1] *= pow(10, 15 - dec_len);
+        }
+        else {
+          decimal.add(int.parse(string_list[1].substring(i, i + 15)));
+        }
       }
     }
     else {
@@ -53,14 +60,19 @@ class longnum {
   }
 
   // constructor from num
-  // might have to change from convert to string and back to int
-  longnum.number(num number) {
+  Longnum.number(num number) {
     if (number.isNegative) {
       neg = true;
       number = number.abs();
     }
     var string_list = (number.toString()).split('.');
-    string_list.length == 2 ? decimal.add(int.parse(string_list[1])) : decimal.add(0);
+    if (string_list.length == 2) {
+      var dec_len = string_list[1].length;
+      decimal.add(int.parse(string_list[1]) * pow(10, 15 - dec_len));
+    }
+    else {
+      decimal.add(0);
+    }
     integer.add(number.floor());
   }
 
@@ -114,8 +126,8 @@ class longnum {
    *  - eventually have to integrate functions into here
    *    because recursion importing doesn't work
    */
-  longnum operator+ (longnum operand) {
-    var ans = new longnum();
+  Longnum operator+ (Longnum operand) {
+    var ans = new Longnum();
     if (!neg && !operand.neg) {
       ans = add_master(this, operand);
     }
@@ -132,8 +144,8 @@ class longnum {
     return ans;
   }
 
-  longnum operator- (longnum operand) {
-    var ans = new longnum();
+  Longnum operator- (Longnum operand) {
+    var ans = new Longnum();
     if (!neg && !operand.neg) {
       ans = subtract_master(this, operand);
     }
@@ -147,26 +159,32 @@ class longnum {
     else {
       ans = subtract_master(operand, this);
     }
+    return ans;
+  }
+
+  Longnum operator* (Longnum operand) {
+    Longnum ans = multimaster(this, operand);
+    ans.neg = (!neg && operand.neg) || (!neg && operand.neg);
     return ans;
   }
 
   /*
-   * left to go: *, /, ~/
+   * left to go: /, ~/
    *
    */
 
-  bool operator> (longnum operand) => compare(this, operand) == 1;
-  bool operator>= (longnum operand) => compare(this, operand) != 0;
-  bool operator< (longnum operand) => compare(this, operand) == 0;
-  bool operator<= (longnum operand) => compare(this, operand) != 1;
-  bool operator== (longnum operand) => compare(this, operand) == 2;
+  bool operator> (Longnum operand) => compare(this, operand) == 1;
+  bool operator>= (Longnum operand) => compare(this, operand) != 0;
+  bool operator< (Longnum operand) => compare(this, operand) == 0;
+  bool operator<= (Longnum operand) => compare(this, operand) != 1;
+  bool operator== (Longnum operand) => compare(this, operand) == 2;
 
 
 
   /*
    * helper functions for overloaded operators
    */
-  num compare(longnum a, longnum b) {
+  num compare(Longnum a, Longnum b) {
     if (!a.neg && b.neg) return 1;
     else if (a.neg && !b.neg) return 0;
     else if (a.neg && b.neg) {
