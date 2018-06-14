@@ -11,92 +11,57 @@ import 'format.dart';
 import 'add.dart';
 import 'subtract.dart';
 
-// long multiplication with the new longnum class
-long_multi(longnum a, longnum b) {
-  var c = new longnum();
-  var bk = a.integer.length;
-  var bm = b.integer.length;
+// long multiplication with the new Longnum class
+Longnum multimaster(Longnum a, Longnum b) {
+  var ans = new Longnum();
+  var a_list = new List.from(a.integer)..addAll(a.decimal);
+  var b_list = new List.from(b.integer)..addAll(b.decimal);
+  var dec_len = a.decimal.length + b.decimal.length;
+
+  if (max(a_list.length, b_list.length) > 1000) {
+    var product = multifull(a_list, b_list);
+    ans.integer = product.sublist(0, product.length - dec_len);
+    ans.decimal = product.sublist(product.length - dec_len, product.length);
+    trailingzeroslist(ans.decimal);
+  }
+  else {
+    var product = karatsuba(a_list, b_list);
+    print('product: $product');
+    product = multifull(a_list, b_list);
+    print('long multi product: $product');
+  }
+
+  return ans;
+}
+
+List multifull(List a, List b, [int power = 15]) {
+  //final BASE = pow(10, power);
+  var ans = [0];
+  var bk = a.length;
+  var bm = b.length;
   var q = [0];
   for (int i  = 0; i < bk; i++) {
     for (int j = 0; j < bm; j++) {
-      //print('q: $q');
-      //print('cval: ${c.integer[i + j]}');
-      //print('aval: ${a.integer[bk - i - 1]}');
-      //print('bval: ${b.integer[bm - j - 1]}');
-      var t = add_int(add_int([c.integer[i + j]], q), multi(a.integer[bk - i - 1], b.integer[bm - j - 1]));
-      //print('t: $t');
-      c.integer[i + j] = t.last;
-      //print('cval: ${[c.integer[i + j]]}');
+      //print('Q: $q');
+      //print('a[${bk - 1 - i}]: ${a[bk - i - 1]}');
+      //print('b[${bm - 1 - j}]: ${b[bm - j - 1]}');
+      var t = add_int(add_int([ans[i + j]], q), timesNum(a[bk - i - 1], b[bm - j - 1]));
+      ans[i + j] = t.last;
       q = t.sublist(0, t.length - 1);
       if (q.isEmpty) {
         q.add(0);
       }
-      //print('new q: $q');
-      c.integer.add(0);
+      ans.add(0);
     }
-    print(q);
-    c.integer[i + bm] = q.first;
+    ans[i + bm] = q.first;
     q = [0];
   }
-  c.integer = c.integer.reversed.toList();
-  c = leadingzeros_nump(c);
-  //print(c.integer);
-  return c;
-}
-
-
-
-karatsuba(longnum a, longnum b) => karatsuba_int(a.integer, b.integer);
-
-karatsuba_int(List a, List b, [int power = 15]) {
-  var a_size = a.length;
-  var b_size = b.length;
-  var max_size = max(a_size, b_size);
-  int i = 0;
-
-  if (max_size == 1) {
-    return multi(a.first, b.first);
-  }
-
-  var c = max_size == a.length ? a : b;
-  var d = c == a ? b : a;
-  var d_length = d.length;
-
-  for (var i = 0; i < max_size - d_length; i++) {
-    d.insert(0, 0);
-  }
-
-  while (max_size > pow(2, i)) {
-    i++;
-  }
-
-  int power_2 = pow(2, i - 1).toInt();
-  var c0 = c.sublist(0, power_2);
-  var c1 = c.sublist(power_2, a.length);
-  var d0 = d.sublist(0, power_2);
-  var d1 = d.sublist(power_2, b.length);
-  //print(c0);
-  //print(c1);
-  //print(d0);
-  //print(d1);
-  var t1 = karatsuba_int(c1, d1, power);
-  var t2 = karatsuba_int(c0, d0, power);
-  var t3 = karatsuba_int(add_int(c0, c1, power: power), add_int(d0, d1, power: power), power);
-  //print('t3: $t3');
-  var t4 = subtract_int(subtract_int(t3, t2, power: power), t1, power: power);
-  //print("ans: $t1 $t4 $t2");
-
-  for (int i = 0; i < power_2; i++) {
-    t4.add(0);
-  }
-  for (int i = 0; i < power_2 * 2; i++) {
-    t2.add(0);
-  }
-  var ans = add_int(add_int(t1, t4, power: power), t2, power: power);
+  ans = ans.reversed.toList();
+  ans = leadingzeroslist(ans);
   return ans;
 }
 
-multi(num a, num b) {
+List timesNum(num a, num b) {
   final BASE = pow(10, 7);
   final BASE_2 = pow(10, 14);
   if (a.toString().length + b.toString().length > 15) {
@@ -110,22 +75,35 @@ multi(num a, num b) {
     blist[0] = b ~/ BASE_2;
     //print(alist);
     //print(blist);
-    var newlist = multi_int(alist, blist, power: 7);
-    //print('newlist: $newlist');
+    var newlist = [0];
+    var bk = alist.length;
+    var bm = blist.length;
+    var q = 0;
+    for (int i  = 0; i < bk; i++) {
+      for (int j = 0; j < bm; j++) {
+        var t = newlist[i + j] + q + alist[bk - i - 1] * blist[bm - j - 1];
+        newlist[i + j] = t % BASE;
+        q = (t / BASE).floor();
+        newlist.add(0);
+      }
+      newlist[i + bm] = q;
+      q = 0;
+    }
+    newlist = trailingzeroslist(newlist);
     var ans = [0, 0];
-    newlist = newlist.reversed.toList();
+    //print('newlist: $newlist');
     switch (newlist.length) {
-        case 5:
-          ans[0] = newlist[4] * pow(10, 13);
-          continue case4;
-        case4:
-        case 4:
-          ans[0] += newlist[3] * pow(10, 6);
-          continue case3;
-        case3:
-        case 3:
-          ans[0] += newlist[2] ~/ 10;
-          ans[1] = newlist[0] + newlist[1] * BASE + (newlist[2] % 10) * BASE_2;
+      case 5:
+      ans[0] = newlist[4] * pow(10, 13);
+      continue case4;
+      case4:
+      case 4:
+      ans[0] += newlist[3] * pow(10, 6);
+      continue case3;
+      case3:
+      case 3:
+      ans[0] += newlist[2] ~/ 10;
+      ans[1] = newlist[0] + newlist[1] * BASE + (newlist[2] % 10) * BASE_2;
     }
     ans = leadingzeroslist(ans);
     return ans;
@@ -134,6 +112,9 @@ multi(num a, num b) {
     return [a * b];
   }
 }
+
+
+
 
 multi_int(List a, List b, {int power = 15}) {
   final BASE = pow(10, power);
@@ -157,6 +138,60 @@ multi_int(List a, List b, {int power = 15}) {
   return c;
 }
 
+
+List karatsuba(List a, List b, [int power = 15]) {
+  var max_size = max(a.length, b.length);
+  int i = 0;
+  if (max_size == 1) {
+    return timesNum(a.first, b.first);
+  }
+
+  var c = max_size == a.length ? a : b;
+  var d = c == a ? b : a;
+  var d_length = d.length;
+
+  for (var i = 0; i < max_size - d_length; i++) {
+    d.insert(0, 0);
+  }
+  //print('c? $c');
+  //print('d: $d');
+
+  while (max_size > pow(2, i)) {
+    i++;
+  }
+  //print('IIIIIII: $i');
+
+  int power_2 = pow(2, i - 1).toInt();
+  var c0 = c.sublist(0, power_2);
+  var c1 = c.sublist(power_2, a.length);
+  var d0 = d.sublist(0, power_2);
+  var d1 = d.sublist(power_2, b.length);
+  //print('c0-d1');
+  //print(c0);
+  //print(c1);
+  //print(d0);
+  //print(d1);
+  var t1 = karatsuba(c1, d1, power);
+  var t2 = karatsuba(c0, d0, power);
+  var t3 = karatsuba(add_int(c0, c1, power: power), add_int(d0, d1, power: power), power);
+  var t4 = subtract_int(subtract_int(t3, t2, power: power), t1, power: power);
+  print("ans: $t2 $t4 $t1");
+
+  for (int i = 0; i < power_2; i++) { // something weird happening here depending on the number of limbs
+    t4.add(0);
+  }
+  for (int i = 0; i < power_2 * 2; i++) {
+    t2.add(0);
+  }
+  var ans = add_int(add_int(t1, t4, power: power), t2, power: power);
+  return ans;
+}
+
+
+
+
+
+
 squaring(List a, List b) {
-  
+
 }
