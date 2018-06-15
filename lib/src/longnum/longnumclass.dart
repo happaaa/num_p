@@ -94,12 +94,18 @@ class Longnum {
 
     for (int i = string_list.first.length; i > j; i -= 15) {
       integer.add(int.parse((i - 15 < j) ? string_list.first.substring(j, i)
-                                       : string_list.first.substring(i - 15, i)));
+                                         : string_list.first.substring(i - 15, i)));
     }
     if (string_list.length == 2) {
       for (int i = 0; i < string_list[1].length; i += 15) {
-        decimal.add(int.parse((i + 15 > string_list[1].length) ? string_list[1].substring(i, string_list[1].length)
-                                                               : string_list[1].substring(i, i + 15)));
+        if (i + 15 > string_list[1].length) {
+          decimal.add(int.parse(string_list[1].substring(i, string_list[1].length)));
+          var dec_len = string_list[1].substring(i, string_list[1].length).length;
+          decimal[decimal.length - 1] *= pow(10, 15 - dec_len);
+        }
+        else {
+          decimal.add(int.parse(string_list[1].substring(i, i + 15)));
+        }
       }
     }
     else {
@@ -126,7 +132,7 @@ class Longnum {
    *  - eventually have to integrate functions into here
    *    because recursion importing doesn't work
    */
-  Longnum operator+ (Longnum operand) {
+  Longnum operator+(Longnum operand) {
     var ans = new Longnum();
     if (!neg && !operand.neg) {
       ans = add_master(this, operand);
@@ -144,7 +150,7 @@ class Longnum {
     return ans;
   }
 
-  Longnum operator- (Longnum operand) {
+  Longnum operator-(Longnum operand) {
     var ans = new Longnum();
     if (!neg && !operand.neg) {
       ans = subtract_master(this, operand);
@@ -162,7 +168,7 @@ class Longnum {
     return ans;
   }
 
-  Longnum operator* (Longnum operand) {
+  Longnum operator*(Longnum operand) {
     Longnum ans = multimaster(this, operand);
     ans.neg = (!neg && operand.neg) || (!neg && operand.neg);
     return ans;
@@ -173,11 +179,11 @@ class Longnum {
    *
    */
 
-  bool operator> (Longnum operand) => compare(this, operand) == 1;
-  bool operator>= (Longnum operand) => compare(this, operand) != 0;
-  bool operator< (Longnum operand) => compare(this, operand) == 0;
-  bool operator<= (Longnum operand) => compare(this, operand) != 1;
-  bool operator== (Longnum operand) => compare(this, operand) == 2;
+  bool operator>(Longnum operand) => compare(this, operand) == 1;
+  bool operator>=(Longnum operand) => compare(this, operand) != 0;
+  bool operator<(Longnum operand) => compare(this, operand) == 0;
+  bool operator<=(Longnum operand) => compare(this, operand) != 1;
+  bool operator==(Longnum operand) => compare(this, operand) == 2;
 
 
 
@@ -189,6 +195,10 @@ class Longnum {
     else if (a.neg && !b.neg) return 0;
     else if (a.neg && b.neg) {
       // reverse the values if both are negative
+      var c = new Longnum();
+      c = a;
+      a = b;
+      b = c;
     }
     if (a.integer.length > b.integer.length) return 1;
     else if (a.integer.length > b.integer.length) return 0;

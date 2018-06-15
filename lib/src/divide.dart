@@ -92,19 +92,6 @@ long_div_sub(List a, List b, [int power = 15]) {
   t = subtract_int(a, t, power: power);
   //print(q);
   //print('t: $t');
-  /*if (constant != 1) {
-    q = multi_int(q, [constant], power: power);
-    t = subtract_int(a, t, power: power);
-    print('new q: $q');
-    print('new t: $t');
-    var i = 0;
-    while (compare_list(t, add_int(t, b, power: power)) != 0) {
-      b_msb = add_int(b_msb, [b[0]], power: power)
-    }
-
-    q = add_int(q, [t[0] ~/ (b[0] / constant)], power: power);
-    t = [t[0] % (b[0] ~/ constant)];
-  }*/
   return [q, t];
 }
 

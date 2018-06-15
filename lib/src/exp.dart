@@ -35,6 +35,11 @@ powerlist(List number, num exponent, [int power = 15]) {
 }
 
 /*
+ * exponential exp() function
+ */
+exponential(Longnum number) => multimaster(E, number); // fix
+
+/*
  * squareroot function
  */
 

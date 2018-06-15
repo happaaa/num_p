@@ -2,6 +2,7 @@ import 'longnum.dart';
 
 void test() {
 
+  // constructor assertion
   var emptyLongnum = new Longnum();
   assert(emptyLongnum.neg == false);
   assert(emptyLongnum.integer.length == 1 && emptyLongnum.integer[0] == 0);
@@ -20,6 +21,7 @@ void test() {
   assert(intLongnum.neg == true && intLongnum.integer.length == 1 && intLongnum.integer[0] == 927618345926405);
   assert(intLongnum.decimal.length == 1 && intLongnum.decimal[0] == 0);
 
+  //comparison operator assertion
   assert(emptyLongnum == stringLongnum);
   assert(emptyLongnum >= stringLongnum);
   assert(emptyLongnum <= stringLongnum);
@@ -38,6 +40,9 @@ void test() {
   assert(stringLongnum <= intLongnum);
 
 
+  //arithmetic operation assertion
+  var addA = new Longnum.string('12');
+  var addB = new Longnum.string('18349276.34178895');
 
 
 
@@ -46,5 +51,5 @@ void test() {
 
 
 
-  print('All tests passed successfully');
+  print('ALL TESTS PASSED SUCCESSFULLY');
 }
