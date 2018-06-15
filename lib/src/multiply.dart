@@ -26,7 +26,7 @@ Longnum multimaster(Longnum a, Longnum b) {
   }
   else {
     var product = karatsuba(a_list, b_list);
-    print('product: $product');
+    print('karatsubaa product: $product');
     product = multifull(a_list, b_list);
     print('long multi product: $product');
   }
@@ -113,6 +113,45 @@ List timesNum(num a, num b) {
   }
 }
 
+squaring(List a) {
+  var ans = [0, 0];
+  var q = [0];
+  for (var i = 0; i < a.length - 1; i++) {
+    for (var j = i + 1; j < a.length; j++) {
+      //print('a: ${a[a.length - i - 1]} and other a: ${a[a.length - j - 1]}');
+      var product = timesNum(a[a.length - i - 1], a[a.length - j - 1]); //change to
+      product = multifull(product, [2]); //change to multifull
+      //print('product: $product');
+      var t = add_int(add_int([ans[i + j]], q), product);
+      ans[i + j] = t.last;
+      q = t.sublist(0, t.length - 1);
+      if (q.isEmpty) {
+        q.add(0);
+      }
+      ans.add(0);
+      //print('product ans: $ans');
+      //print('q: $q');
+    }
+    ans[i + a.length] = q.first;
+    q = [0];
+  }
+  ans = ans.reversed.toList();
+  leadingzeroslist(ans);
+  //print('ans before squares: $ans');
+  for (var i = 0; i < a.length; i++) {
+    var square = timesNum(a[a.length - i - 1], a[a.length - i -1]);
+    for (var j = 0; j < i * 2; j++) {
+      square.add(0);
+    }
+    //print('square: $square');
+    ans = add_int(ans, square);
+    //print('square ans: $ans');
+  }
+  //print(ans);
+  return ans;
+}
+
+
 
 
 
@@ -138,7 +177,9 @@ multi_int(List a, List b, {int power = 15}) {
   return c;
 }
 
-
+/*
+ * to be fixed
+ */
 List karatsuba(List a, List b, [int power = 15]) {
   var max_size = max(a.length, b.length);
   int i = 0;
@@ -175,23 +216,15 @@ List karatsuba(List a, List b, [int power = 15]) {
   var t2 = karatsuba(c0, d0, power);
   var t3 = karatsuba(add_int(c0, c1, power: power), add_int(d0, d1, power: power), power);
   var t4 = subtract_int(subtract_int(t3, t2, power: power), t1, power: power);
-  print("ans: $t2 $t4 $t1");
+  //print("ans: $t2 $t4 $t1");
 
-  for (int i = 0; i < power_2; i++) { // something weird happening here depending on the number of limbs
+  for (int i = 0; i < c1.length; i++) { // something weird happening here depending on the number of limbs
     t4.add(0);
   }
-  for (int i = 0; i < power_2 * 2; i++) {
+  for (int i = 0; i < c1.length * 2; i++) {
     t2.add(0);
   }
+
   var ans = add_int(add_int(t1, t4, power: power), t2, power: power);
   return ans;
-}
-
-
-
-
-
-
-squaring(List a) {
-  
 }
