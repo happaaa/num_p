@@ -1,3 +1,4 @@
+export 'dart:math';
 export 'src/longnum/longnumclass.dart';
 export 'src/add.dart';
 export 'src/subtract.dart';

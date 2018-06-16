@@ -8,25 +8,21 @@
 import 'dart:math';
 import 'longnum/longnumclass.dart';
 import 'format.dart';
-import 'compare.dart';
 
-subtract_master(longnum a, longnum b) {
-  var ans = new longnum();
+subtract_master(Longnum a, Longnum b) {
+  var ans = new Longnum();
   if (a == b) return ans;
   var q = a > b ? a.integer : b.integer;
   var w = q == a.integer ? b.integer : a.integer;
   var e = q == a.integer ? a.decimal : b.decimal;
   var r = q == a.integer ? b.decimal : a.decimal;
-  var sign = q == a.integer ? true : false;
-  var deci = subtract_deci(e, r);
-  var carry_deci = 0;
-  if (deci.first == 1) {
-    carry_deci = -1;
-    deci.removeAt(0);
-  }
+  var sign = q == b.integer;
+  var dec = subtract_deci(e, r);
+  var carry_dec = dec.first;
+  dec.removeAt(0);
   ans.neg = sign;
-  ans.decimal = deci;
-  ans.integer = subtract_int(q, w, carry: carry_deci);
+  ans.decimal = dec;
+  ans.integer = subtract_int(q, w, carry: carry_dec);
   //ans = leadingzeros_nump(ans);
   return ans;
 }
@@ -74,21 +70,15 @@ subtract_deci(List a, List b) {
   //print('a: $a');
   //print('b: $b');
   for (var i = size - 1; i >= 0; i--) {
-    a[i] *= BASE ~/ pow(10, a[i].toString().length);
-    b[i] *= BASE ~/ pow(10, b[i].toString().length);
     ans[0] = (a[i] - b[i] + carry) % BASE;
     carry = ((a[i] - b[i] + carry) / BASE).floor();
     ans.insert(0, 0);
     //print('ans: $ans');
   }
   ans.removeAt(0);
-  if (carry == -1) {
-    for (int i = 0; i < ans.length - 1; i++) {
-      ans[i] = BASE - ans[i] - 1;
-    }
-    ans[ans.length - 1] = BASE - ans.last;
-    ans.insert(0, 1);
-  }
-  //print('final ans: $ans');
+  //if (carry == -1) {
+  //  ans.insert(0, -1);
+  //}
+  carry == -1 ? ans.insert(0, -1) : ans.insert(0, 0);
   return ans;
 }

@@ -1,10 +1,10 @@
 import "dart:math";
 
-class longnum {
+class num_p {
  	var number = new List();
 
 
-  longnum(String string) {
+  num_p(String string) {
     for (int i = 0; i < string.length; i++) {
       number.add(int.parse(string[i]));
     }
@@ -29,7 +29,7 @@ void main() {
 
   print(E);
 
-  var really = new longnum("1234");
+  var really = new num_p("1234");
   print(really.get_number());
 
   /*var letters = "123456789";

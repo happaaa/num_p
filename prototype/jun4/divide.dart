@@ -1,5 +1,5 @@
 import 'dart:math';
-//import 'package:longnum/longnum.dart';
+//import 'package:num_p/num_p.dart';
 
 divide_basic(int a, int b) {
 

@@ -1,15 +1,15 @@
 import 'dart:math';
-import 'package:longnum/longnum.dart';
+import 'num_p.dart';
 
 // to be fixed:
 // work for doubles
 // work for negative numbers
 // very messy
 // overload '+' operator
-add(longnum a, longnum b) {
+add(num_p a, num_p b) {
   var shorter = min(a.value.length, b.value.length);
   var longer = max(a.value.length, b.value.length);
-  var c = new longnum();
+  var c = new num_p();
   int i;
   var r = longer == a.value.length ? a.value : b.value;
 
@@ -78,11 +78,11 @@ add(longnum a, longnum b) {
 
 
 
-add_proper(longnum a, longnum b) {
+add_proper(num_p a, num_p b) {
   const BASE = 15;
   var shorter = min(a.value.length, b.value.length);
   var longer = max(a.value.length, b.value.length);
-  var c = new longnum();
+  var c = new num_p();
   var i;
   var q = longer == a.value.length ? a.value : b.value;
 
@@ -186,10 +186,10 @@ add_proper(longnum a, longnum b) {
 // work with negative numbers
 // very messy
 // need better variable names
-subtract(longnum a, longnum b) {
+subtract(num_p a, num_p b) {
   var shorter = min(a.value.length, b.value.length);
   var longer = max(a.value.length, b.value.length);
-  var c = new longnum();
+  var c = new num_p();
 
   int i;
   var r;
@@ -260,7 +260,7 @@ subtract(longnum a, longnum b) {
   return c;
 }
 
-subtract_proper(longnum a, longnum b) {
+subtract_proper(num_p a, num_p b) {
 
 }
 
@@ -269,9 +269,9 @@ subtract_proper(longnum a, longnum b) {
 
 
 void main() {
-  //var asdf = new longnum.string('18349276');
-  var hjkl = new longnum.string("123456789123456789123456789123456789.123456789123456789");
-  var qwer = new longnum.string('4503599627370496.4568423185674564512');
+  //var asdf = new num_p.string('18349276');
+  var hjkl = new num_p.string("123456789123456789123456789123456789.123456789123456789");
+  var qwer = new num_p.string('4503599627370496.4568423185674564512');
 
 
   //print(hjkl.value);

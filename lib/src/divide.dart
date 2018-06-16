@@ -17,15 +17,23 @@ import 'multiply.dart';
 import 'compare.dart';
 import 'format.dart';
 
-long_divv(longnum a, longnum b) => long_div(a.integer, b.integer);
+long_divv(Longnum a, Longnum b) => long_div(a.integer, b.integer);
 
 
 /*
  * limitations:
  * integer only
- * denominator has to be at least half of 10^power
+ * denominator has to be at least half of 10^power - FIXED
+ * remainder is too large, is a remainder of the modified divisor
  */
 long_div(List a, List b, [int power = 15]) {
+  final BASE = pow(10, power);
+  var constant = 1; // regulating divisor to be half of 10^power
+  if (b[0] < BASE / 2) {
+    constant = ((BASE / 2) / b[0]).ceil();
+    b = multi_int(b, [constant], power: power);
+    a = multi_int(a, [constant], power: power);
+  }
   //print('a: $a');
   //print('b: $b');
   if (a.length < b.length) return [[0], a];
@@ -54,7 +62,6 @@ long_div(List a, List b, [int power = 15]) {
 }
 
 long_div_sub(List a, List b, [int power = 15]) {
-  final BASE = pow(10, power);
   //print('a: $a');
   //print('new b: $b');
   //print('constant: $constant');
@@ -85,31 +92,8 @@ long_div_sub(List a, List b, [int power = 15]) {
   t = subtract_int(a, t, power: power);
   //print(q);
   //print('t: $t');
-  /*if (constant != 1) {
-    q = multi_int(q, [constant], power: power);
-    t = subtract_int(a, t, power: power);
-    print('new q: $q');
-    print('new t: $t');
-    var i = 0;
-    while (compare_list(t, add_int(t, b, power: power)) != 0) {
-      b_msb = add_int(b_msb, [b[0]], power: power)
-    }
-
-    q = add_int(q, [t[0] ~/ (b[0] / constant)], power: power);
-    t = [t[0] % (b[0] ~/ constant)];
-  }*/
   return [q, t];
 }
-
-match(List b, [int power = 15]) {
-  final BASE = pow(10, power);
-  var constant = 1;
-  if (b[0] < BASE / 2) {
-    constant = ((BASE / 2) / b[0]).ceil();
-    b = multi_int(b, [constant], power: power);
-  }
-}
-
 
 
 
@@ -149,12 +133,12 @@ two_by_one(List a, List b, [int power = 15]) {
 
   print('num_a: $num_a');
   print('num_b: $num_b');
-  var divisorq1 = new List.from(num_a[3])..addAll(num_a[2])..addAll(num_a[1]);
-  print('divisorq1: $divisorq1');
-  var q1 = three_by_two(divisorq1, b, power);
-  var divisorq2 = new List.from(q1[1])..addAll(num_a[0]);
-  print('divisorq2: $divisorq2');
-  var q2 = three_by_two(divisorq2, b, power);
+  var dividendq1 = new List.from(num_a[3])..addAll(num_a[2])..addAll(num_a[1]);
+  print('dividendq1: $dividendq1');
+  var q1 = three_by_two(dividendq1, b, power);
+  var dividendq2 = new List.from(q1[1])..addAll(num_a[0]);
+  print('dividendq2: $dividendq2');
+  var q2 = three_by_two(dividendq2, b, power);
   print('q1: $q1');
   print('q2: $q2');
   var quotient = new List.from(q1[0])..addAll(q2[0]);
@@ -189,9 +173,9 @@ three_by_two(List a, List b, [int power = 15]) {
 
   var q_hat, r_one;
   if (compare_list(num_a[2], num_b[1]) == 0) {
-    var divisor2_1 = new List.from(num_a[2])..addAll(num_a[1]);
-    print('2_1 input: $divisor2_1 and ${num_b[1]}');
-    var result = two_by_one(divisor2_1, num_b[1], power);
+    var dividend2_1 = new List.from(num_a[2])..addAll(num_a[1]);
+    print('2_1 input: $dividend2_1 and ${num_b[1]}');
+    var result = two_by_one(dividend2_1, num_b[1], power);
     print('results: $result');
     q_hat = result[0];
     r_one = result[1];

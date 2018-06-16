@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:longnum/longnum.dart';
+import 'num_p.dart';
 
-divide_basic(longnum a, longnum b) {
+divide_basic(num_p a, num_p b) {
   pow(2, 3);
 }

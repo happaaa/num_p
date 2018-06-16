@@ -10,8 +10,8 @@ import 'dart:math';
 import 'longnum/longnumclass.dart';
 import 'format.dart';
 
-add_master(longnum a, longnum b) {
-  var ans = new longnum();
+add_master(Longnum a, Longnum b) {
+  var ans = new Longnum();
   var deci = add_deci(a.decimal, b.decimal);
   var carry_deci = 0;
   if (deci.first == 1) {
@@ -53,6 +53,7 @@ add_int(List a, List b, {int carry = 0, int power = 15}) {
 }
 
 add_deci(List a, List b) {
+  final BASE = pow(10, 15);
   var ans = [0];
   var size = max(a.length, b.length);
   var c = size == a.length ? a : b;
@@ -69,14 +70,8 @@ add_deci(List a, List b) {
   //print('c: $c');
   //print('d: $d');
   for (int i = size - 1; i >= 0; i--) {
-    var c_place_size = c[i].toString().length;
-    var d_place_size = d[i].toString().length;
-    var POWER = pow(10, c_place_size);
-    if (d_place_size < c_place_size) {
-      d[i] *= pow(10, c_place_size - d_place_size);
-    }
-    ans[0] = (c[i] + d[i] + carry) % POWER;
-    carry = ((c[i] + d[i] + carry) / POWER).floor();
+    ans[0] = (c[i] + d[i] + carry) % BASE;
+    carry = ((c[i] + d[i] + carry) / BASE).floor();
     ans.insert(0, 0);
     //print('ans: $ans');
   }
