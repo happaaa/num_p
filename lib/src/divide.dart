@@ -73,26 +73,33 @@ long_div_sub(List a, List b, [int power = 15]) {
   }
   var a_msb = [a[0], a[1]];
   var b_msb = [b[0]];
-  var two_multi = 0, adding = 0;
-  for (two_multi; compare_list(a_msb, multi_int(b_msb, [2], power: power)) != 0; two_multi++) {
-    b_msb = multi_int(b_msb, [2], power: power);
-    //print('b multiple ${two_multi + 1}: $b_msb');
+
+  var array = [];
+  var b_msb_master = b_msb;
+  while (compare_list(a_msb, b_msb_master) != 0) {
+    var multiple;
+    for (multiple = 0; compare_list(a_msb, multi_int(b_msb_master, [2], power: power)) != 0; multiple++) {
+      b_msb_master = multi_int(b_msb_master, [2], power: power);
+      //print('b multiple ${multiple + 1}: $b_msb_master');
+    }
+    a_msb = subtract_int(a_msb, b_msb_master, power: power);
+    b_msb_master = b_msb;
+    array.add(multiple);
   }
-  for (adding; compare_list(a_msb, add_int(b_msb, [b[0]], power: power)) != 0; adding++) {
-    b_msb = add_int(b_msb, [b[0]], power: power);
-    //print('b adding ${adding + 1}: $b_msb');
+  var q = 0;
+  for (var i = 0; i < array.length; i++) {
+    q += pow(2, array[i]);
   }
-  //print('final multi: $two_multi and final adding: $adding');
-  var q = add_int([pow(2, two_multi)], [adding]);
-  var t = multi_int(q, b, power: power);
+  print(q);
+  var t = multi_int([q], b, power: power);
   while (compare_list(t, a) == 1) {
-    q = subtract_int(q, [1]);
+    q -= 1;
     t = subtract_int(t, b, power: power);
   }
   t = subtract_int(a, t, power: power);
   //print(q);
   //print('t: $t');
-  return [q, t];
+  return [[q], t];
 }
 
 
@@ -166,6 +173,111 @@ three_by_two(List a, List b, [int power = 15]) {
   num_a[1] = a.sublist(size, size * 2);
   num_a[0] = a.sublist(size * 2, size * 3);
 
+  num_b[0] = b.sublist(size, size * 2);
+  num_b[1] = b.sublist(0, size);
+  print('num_a: $num_a');
+  print('num_b: $num_b');
+
+  var q_hat, r_one;
+  if (compare_list(num_a[2], num_b[1]) == 0) {
+    var dividend2_1 = new List.from(num_a[2])..addAll(num_a[1]);
+    print('2_1 input: $dividend2_1 and ${num_b[1]}');
+    var result = two_by_one(dividend2_1, num_b[1], power);
+    print('results: $result');
+    q_hat = result[0];
+    r_one = result[1];
+  }
+  else {
+    q_hat = [1];
+    for (var i = 0; i < size; i++) {
+      q_hat.add(0);
+    }
+    q_hat = subtract_int(q_hat, [1], power: power);
+    r_one = subtract_int(num_a[2], num_b[1], power: power);
+    r_one.addAll(add_int(num_a[1], num_b[1], power: power));
+  }
+  print('r_one: $r_one');
+  var r_hat = new List.from(r_one)..addAll(num_a[0]);
+  print('r_hat proto: $r_hat');
+  r_hat = div_sub_helper(r_hat, multi_int(q_hat, num_b[0], power: power), power);
+  print('r_hat final: $r_hat');
+  if (r_hat[0] == -1) {
+    r_hat.removeAt(0);
+    r_hat = div_sub_helper(r_hat, b, power);
+    q_hat = subtract_int(q_hat, [1], power: power);
+    if (r_hat[0] != -1) {
+      r_hat = div_sub_helper(r_hat, b, power);
+      q_hat = subtract_int(q_hat, [1], power: power);
+      if (r_hat[0] == -1) {
+        r_hat.removeAt(0);
+      }
+    }
+  }
+  print('final 3_2: $q_hat and remainder $r_hat');
+  return [q_hat, r_hat];
+}
+
+div_sub_helper(List a, List b, [int power = 15]) {
+  final BASE = pow(10, power);
+  var ans = [0];
+  var size = max(a.length, b.length);
+  var a_len = a.length;
+  var b_len = b.length;
+  var carry = 0;
+
+  if (a_len == size) {
+    for (var i = b_len; i < size; i++) {
+      b.insert(0, 0);
+    }
+  }
+  else if (b_len == size) {
+    for (var i = a_len; i < size; i++) {
+      a.insert(0, 0);
+    }
+  }
+  //print('int a: $a');
+  //print('int b: $b');
+  for (int i = size - 1; i >= 0; i--) {
+    ans[0] = (a[i] - b[i] + carry) % BASE;
+    carry = ((a[i] - b[i] + carry) / BASE).floor();
+    ans.insert(0, 0);
+    //print('int ans: $ans');
+  }
+  ans = leadingzeroslist(ans);
+  b = leadingzeroslist(b);
+  if (carry == -1) {
+    for (var i = 0; i < ans.length - 1; i++) {
+      ans[i] = BASE - ans[i] - 1;
+    }
+    ans[ans.length - 1] = BASE - ans[ans.length - 1];
+
+
+    ans.insert(0, -1);
+  }
+  return ans;
+}
+
+
+
+
+/*three_by_two(List a, List b, [int power = 15]) {
+  //final BASE = pow(10, power);
+  print('3_2');
+  a = leadingzeroslist(a);
+
+  var a_size = a.length;
+  var size = b.length ~/ 2;
+  var num_a = new List(3);
+  var num_b = new List(2);
+
+  for (var i = a_size; i < size * 3; i++) {
+    a.insert(0, 0);
+  }
+
+  num_a[2] = a.sublist(0, size);
+  num_a[1] = a.sublist(size, size * 2);
+  num_a[0] = a.sublist(size * 2, size * 3);
+
   num_b[1] = b.sublist(size, size * 2);
   num_b[0] = b.sublist(0, size);
   print('num_a: $num_a');
@@ -204,4 +316,4 @@ three_by_two(List a, List b, [int power = 15]) {
   }
   print('final 3_2: $q_hat and remainder $r_hat');
   return [q_hat, r_hat];
-}
+}*/
