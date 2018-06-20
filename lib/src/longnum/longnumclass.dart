@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:quiver_hashcode/hashcode.dart';
 import 'package:longnum/src/add.dart';
 import 'package:longnum/src/subtract.dart';
 import 'package:longnum/src/multiply.dart';
@@ -11,7 +12,6 @@ final longLOG2E = new Longnum.string("1.4426950408889634073599246810018921374266
 final longLOG10E = new Longnum.string("0.434294481903251827651128918916605082294397005803666566114");
 final longSQRT1_2 = new Longnum.string("0.707106781186547524400844362104849039284835937688474036588");
 final longSQRT2 = new Longnum.string("1.414213562373095048801688724209698078569671875376948073176");
-
 
 class Longnum {
   List integer = new List();
@@ -120,12 +120,7 @@ class Longnum {
    */
   List get val => [neg, integer, decimal];
 
-  int get hashCode { // hashcode for == operator
-    int hash = 45;
-    hash = 37 * hash + integer.length + integer[0];
-    hash = 2 * decimal.length * hash + decimal[0];
-    return hash;
-  }
+  int get hashCode => hash3(neg, hashObjects(integer), hashObjects(decimal));
 
   num get doub {
       var number = integer[0] + decimal[0] * pow(10, -15);

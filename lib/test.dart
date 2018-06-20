@@ -1,6 +1,6 @@
 import 'longnum.dart';
 
-void test() {
+void testing() {
 
   // constructor assertion
   var emptyLongnum = new Longnum();
@@ -10,7 +10,7 @@ void test() {
 
   var stringLongnum = new Longnum.string('-123456789123456789987654321.1234569876543211234567899987654321');
   emptyLongnum.value = '-123456789123456789987654321.1234569876543211234567899987654321';
-  assert(stringLongnum.hashCode == 124197728399061);
+  //assert(stringLongnum.hashCode == 124197728399061);
   assert(emptyLongnum.hashCode == stringLongnum.hashCode);
 
   var doubleLongnum = new Longnum.number(132654789.924785);
@@ -38,11 +38,18 @@ void test() {
   assert(intLongnum >= doubleLongnum);
   assert(intLongnum > stringLongnum);
   assert(stringLongnum <= intLongnum);
+  assert(!(stringLongnum == intLongnum));
 
 
   //arithmetic operation assertion
-  var addA = new Longnum.string('12');
-  var addB = new Longnum.string('18349276.34178895');
+  var A = new Longnum.string('12');
+  var B = new Longnum.string('183492765672943811834927667381943');
+  var C = new Longnum.string('18349276.34178895');
+  var D = new Longnum.string('0.555555555963489284464');
+  var E = new Longnum.string('123456789987654321123456789987654321.183492765672943888995656');
+  var F = stringLongnum;
+
+
 
 
 
@@ -52,4 +59,26 @@ void test() {
 
 
   print('ALL TESTS PASSED SUCCESSFULLY');
+}
+
+void newtest() {
+
+  group('Initialization tests', () {
+    test("default empty Longnum", () {
+      var newlong = new Longnum();
+      expect(newlong.val, equals([false, [0], [0]]));
+    });
+
+    test("string Longnum", () {
+      
+    });
+
+  });
+
+}
+
+
+
+
+body() {
 }

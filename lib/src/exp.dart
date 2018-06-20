@@ -14,8 +14,18 @@ import 'multiply.dart';
  * power function
  */
 
-power(Longnum a, num power) {
-
+power(Longnum number, num exponent) {
+  if (exponent == 0) return new Longnum();
+  var i = 2;
+  var number_image = number;
+  for (i; i <= exponent; i *= 2) {
+    number = multimaster(number, number);
+  }
+  i ~/= 2;
+  for (i; i < exponent; i++) {
+    number = multimaster(number, number_image);
+  }
+  return number;
 }
 
 powerlist(List number, num exponent, [int power = 15]) {
@@ -30,14 +40,14 @@ powerlist(List number, num exponent, [int power = 15]) {
   for (i; i < exponent; i++) {
     number = multifull(number, number_image);
   }
-  print(number);
+  //print(number);
   return number;
 }
 
 /*
  * exponential exp() function
  */
-//exponential(num number) => multimaster(longE, number); // fix
+exponential(num exponent) => power(longE, exponent);
 
 /*
  * squareroot function
@@ -45,12 +55,24 @@ powerlist(List number, num exponent, [int power = 15]) {
 
 //prototype
  babylon(var number) {
-   var len = (number.toString().length + 1) ~/ 2;
-   var guess = pow(10, len - 1) * (number.toString().length.isEven ? 7 : 2);
-   print(guess);
-   while ((pow(guess, 2) - number).abs() > 0.001) {
+   final PRECISION = pow(10, -3);
+   var len = (number.toString().length + 1) ~/ 2 - 1;
+   var guess = pow(10, len) * (number.toString().length.isEven ? 7 : 2);
+   while ((pow(guess, 2) - number).abs() > PRECISION) {
      guess = (guess + number / guess) / 2;
      print('guess: $guess');
    }
    return guess;
  }
+
+ /*
+  * natural logarithm function log()
+  */
+
+natural_log(Longnum number, num precision) {
+
+}
+
+ln_list(List number, num precision) {
+
+}
