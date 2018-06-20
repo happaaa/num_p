@@ -3,3 +3,6 @@ version: 1.0.0
 description: >-
     arbitrary precision library for dart
 author: Andrew Jones
+dependencies:
+  test: "^1.0.0"
+  quiver_hashcode: "^1.0.0"
