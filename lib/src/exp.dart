@@ -58,6 +58,7 @@ exponential(num exponent) => power(longE, exponent);
    final PRECISION = pow(10, -3);
    var len = (number.toString().length + 1) ~/ 2 - 1;
    var guess = pow(10, len) * (number.toString().length.isEven ? 7 : 2);
+   print('start: $guess');
    while ((pow(guess, 2) - number).abs() > PRECISION) {
      guess = (guess + number / guess) / 2;
      print('guess: $guess');

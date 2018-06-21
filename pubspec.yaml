@@ -4,5 +4,5 @@ description: >-
     arbitrary precision library for dart
 author: Andrew Jones
 dependencies:
-  test: "^1.0.0"
+  test: 
   quiver_hashcode: "^1.0.0"

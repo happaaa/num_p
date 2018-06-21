@@ -36,8 +36,8 @@ long_div(List a, List b, [int power = 15]) {
   var constant = 1; // regulating divisor to be half of 10^power
   if (b[0] < BASE / 2) {
     constant = ((BASE / 2) / b[0]).ceil();
-    b = multifull(b, [constant]);
     a = multifull(a, [constant]);
+    b = multifull(b, [constant]);
   }
   //print('div a: $a');
   //print('div b: $b');
@@ -72,7 +72,7 @@ long_div(List a, List b, [int power = 15]) {
 }
 
 long_div_sub(List a, List b, [int power = 15]) {
-
+  const BASE = 5;
   //print('a: $a');
   //print('new b: $b');
   //print('constant: $constant');
@@ -89,19 +89,22 @@ long_div_sub(List a, List b, [int power = 15]) {
   var b_msb_master = b_msb;
   while (compare_list(a_msb, b_msb_master) != 0) {
     var multiple;
-    for (multiple = 0; compare_list(a_msb, multifull(b_msb_master, [2])) != 0; multiple++) {
-      b_msb_master = multifull(b_msb_master, [2]);
+    for (multiple = 0; compare_list(a_msb, multifull(b_msb_master, [BASE])) != 0; multiple++) {
+      b_msb_master = multifull(b_msb_master, [BASE]);
       //print('b multiple ${multiple + 1}: $b_msb_master');
     }
     a_msb = subtract_int(a_msb, b_msb_master, power: power);
     b_msb_master = b_msb;
     array.add(multiple);
   }
-  //print(array);
+  //print('array: $array');
+  //var iteration = 0;
   var q = 0;
   for (var i = 0; i < array.length; i++) {
-    q += pow(2, array[i]);
+    q += pow(BASE, array[i]);
+    //iteration += array[i];
   }
+  //print(iteration);
   //print(q);
   var t = multifull([q], b);
   while (compare_list(t, a) == 1) {
@@ -265,4 +268,46 @@ div_sub_helper(List a, List b, [int power = 15]) {
     ans.insert(0, -1);
   }
   return ans;
+}
+
+
+
+
+exactdiv(List a, List b) {
+  var ans = [0];
+
+  for (var i = 0; i < b.length - 1; i++) {
+
+  }
+
+
+}
+
+
+barrettlist(List a, List b, List mu) {
+  var a1 = a.sublist(0, a.length - (b.length - 1));
+  print('a1: $a1');
+  var qk = multifull(a1, mu).sublist(0, b.length - 1);
+  print('first qk: $qk');
+  var rk = div_sub_helper(a, multifull(b, qk));
+  print('first rk: $rk');
+  while (true) {
+    print('q: $qk and r: $rk');
+    if (rk[0] != -1 && compare_list(rk, b) == 0) {
+      return [qk, rk];
+    }
+    else if (rk[0] == -1) {
+      rk.remove(-1);
+      while (rk[0] != -1) {
+        rk = div_sub_helper(rk, b);
+        qk = subtract_int(qk, [1]);
+      }
+      rk.remove(-1);
+    }
+    else {
+      rk = div_sub_helper(rk, b);
+      qk = add_int(qk, [1]);
+    }
+  }
+
 }
