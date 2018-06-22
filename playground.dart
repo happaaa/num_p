@@ -4,25 +4,25 @@ import 'lib/longnum.dart';
 
 void main() {
 
-  //var c = new Longnum.string('1834927612.987665432198765');
+  //var c = new Longnum.string('451011121834927612.987665432198765');
   //var b = new Longnum.string('1234567891011121218646999999992.666665');
   //var a = new Longnum.string('12.0000083648');
   //var z = new Longnum.number(12.005);
   //var t = new Longnum.number(1834927658456);
   //var u = new Longnum.number(49);
 
-  //var res = long_div(t.integer, u.integer);
-  //print('res: $res');
-  //res[1].add(0);
-  //var rem = long_div(res[1], u.integer);
-  //print('rem: $rem');
+  //var a = 18349276, z = 92997;
+  //var x = newton_better(z * pow(10, -5), 6);
+  //print((x * pow(10, 3)).floor());
+  //var ans = barrett(a, z, (x * pow(10, 3)).floor());
+  //print(ans);
 
-  //newton_better(0.00486, 7);
-
-  //babylon(18349276);
-  print(barrettlist([1008465, 0], [4544, 0], [200000000000]));
-  //print(squaring([0, 99500]));
+  babylon(12345678998765);
+  babylon(133334687);
+  babylon(0.5);
+  print(ln_list_approx([123456789, 0], 4));
 }
+
 
 
 List barrett(int a, int b, int mu) { // mu ~~ pow(BASE, a_size) / b
@@ -56,7 +56,6 @@ List barrett(int a, int b, int mu) { // mu ~~ pow(BASE, a_size) / b
   return [qk, rk];
 }
 
-
 newton_better(num v, num n) {
   //var v_num = v.toString();
   var i = 1;
@@ -66,7 +65,7 @@ newton_better(num v, num n) {
   for (i; i < n; i++) {
     sk = pow(zk, 2);
     //print('sk $i: $sk');
-    tk = v - (v % pow(10, - (2 * i + 3)));
+    tk = v; //- (v % pow(10, - (2 * i + 3)));
     //print('tk: $tk');
     uk = tk * sk;
     uk = uk - (uk % pow(10, - (2 * i + 1)));
@@ -77,14 +76,5 @@ newton_better(num v, num n) {
     print('zk: $zk');
   }
   print(zk);
-}
-
-newtonlist(List number, num iteration) {
-  var i = 1;
-  var zk = long_div([1, 0], number)[0];
-  var sk, tk, uk, wk;
-  for (i; i < iteration; i++) {
-    sk = squaring(zk);
-
-  }
+  return zk;
 }

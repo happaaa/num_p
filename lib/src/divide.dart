@@ -20,7 +20,51 @@ import 'format.dart';
 
 
 divmaster(Longnum a, Longnum b) {
+  var ans = new Longnum();
+  var a_list = new List.from(a.integer)..addAll(a.decimal);
+  var b_list = new List.from(b.integer)..addAll(b.decimal);
+  var dec_len = a.decimal.length + b.decimal.length;
 
+  var size = max(a.decimal.length, b.decimal.length);
+  var a_length = a.decimal.length;
+  var b_length = b.decimal.length;
+  if (a_length == size) {
+    for (var i = b_length; i < size; i++) {
+      a.decimal.add(0);
+    }
+  }
+  else if (b_length == size) {
+    for (var i = a_length; i < size; i++) {
+      a.decimal.add(0);
+    }
+  }
+
+
+  if (a == b) {
+    ans.integer = [1];
+  }
+  else if (max(a_list.length, b_list.length) < 1000) {
+    var quotient = long_div(a_list, b_list);
+    ans.integer = quotient[0];
+
+    for (var i = 0; i < dec_len; i++) {
+      quotient[1].add(0);
+      quotient = long_div(quotient[1], b_list);
+      ans.decimal.add(quotient[0][0]);
+    }
+    //ans.decimal = quotient.sublist(quotient.length - dec_len, quotient.length);
+    trailingzeroslist(ans.decimal);
+    ans.decimal.removeAt(0);
+    leadingzeroslist(ans.integer);
+  }
+  else {
+    var quotient = two_by_one(a_list, b_list);
+    print('zieglerr quotient: $quotient');
+    quotient = long_div(a_list, b_list);
+    print('long div quotient: $quotient');
+  }
+
+  return ans;
 }
 
 
@@ -34,6 +78,8 @@ divmaster(Longnum a, Longnum b) {
 long_div(List a, List b, [int power = 15]) {
   final BASE = pow(10, power);
   var constant = 1; // regulating divisor to be half of 10^power
+  var c = a;
+  var d = b;
   if (b[0] < BASE / 2) {
     constant = ((BASE / 2) / b[0]).ceil();
     a = multifull(a, [constant]);
@@ -41,10 +87,10 @@ long_div(List a, List b, [int power = 15]) {
   }
   //print('div a: $a');
   //print('div b: $b');
-  if (a.length < b.length) return [[0], a];
+  if (a.length < b.length) return [[0], c];
   if (a.length == b.length) {
-    if (a[0] < b[0]) return [[0], a];
-    else return [[1], [subtract_int(a, b, power: power)]];
+    if (a[0] < b[0]) return [[0], c];
+    else return [[1], subtract_int(c, d, power: power)];
   }
   if (a.length == b.length + 1) {
     var result = long_div_sub(a, b, power);
@@ -75,7 +121,6 @@ long_div_sub(List a, List b, [int power = 15]) {
   const BASE = 5;
   //print('a: $a');
   //print('new b: $b');
-  //print('constant: $constant');
   if (a[0] > b[0]) {
     a = subtract_int(a, multifull(b, [1, 0]), power: power);
     var ans = long_div_sub(a, b, power);
@@ -259,12 +304,24 @@ div_sub_helper(List a, List b, [int power = 15]) {
   ans = leadingzeroslist(ans);
   b = leadingzeroslist(b);
   if (carry == -1) {
-    for (var i = 0; i < ans.length - 1; i++) {
+    for (var i = 0; i < ans.length; i++) {
       ans[i] = BASE - ans[i] - 1;
+      if (ans[i] == 0) {
+        ans[i] = 0;
+        ans[i - 1] += 1;
+      }
+      else {
+        ans[i] = BASE - ans[i] - 1;
+      }
     }
-    ans[ans.length - 1] = BASE - ans[ans.length - 1];
-
-
+    //print(ans);
+    //if (ans.last == BASE - 1) {
+    //  ans[ans.length - 1] = 0;
+    //  ans[ans.length - 2] += 1;
+    //}
+    //else {
+    //  ans[ans.length - 1] += 1;
+    //}
     ans.insert(0, -1);
   }
   return ans;
@@ -273,41 +330,50 @@ div_sub_helper(List a, List b, [int power = 15]) {
 
 
 
+// Jebelean exact division  algorithm (can't find anything on how exactly to do it)
 exactdiv(List a, List b) {
-  var ans = [0];
-
-  for (var i = 0; i < b.length - 1; i++) {
-
-  }
 
 
 }
 
 
-barrettlist(List a, List b, List mu) {
-  var a1 = a.sublist(0, a.length - (b.length - 1));
+barrettlist(List a, List b, List mu) { //  mu ~~ pow(BASE, a_size) / b
+  var a1 = a.sublist(0, a.length - b.length + 1);
   print('a1: $a1');
   var qk = multifull(a1, mu).sublist(0, b.length - 1);
   print('first qk: $qk');
   var rk = div_sub_helper(a, multifull(b, qk));
   print('first rk: $rk');
-  while (true) {
-    print('q: $qk and r: $rk');
-    if (rk[0] != -1 && compare_list(rk, b) == 0) {
-      return [qk, rk];
+  if (rk[0] == -1) {
+    rk.remove(-1);
+    while (rk[0] != -1) {
+      rk = div_sub_helper(rk, b);
+      qk = subtract_int(qk, [1]);
+      print('lq: $qk and r: $rk');
     }
-    else if (rk[0] == -1) {
-      rk.remove(-1);
-      while (rk[0] != -1) {
-        rk = div_sub_helper(rk, b);
-        qk = subtract_int(qk, [1]);
-      }
-      rk.remove(-1);
-    }
-    else {
+    rk.remove(-1);
+  }
+  while (compare_list(rk, b) != 0) {
       rk = div_sub_helper(rk, b);
       qk = add_int(qk, [1]);
-    }
+      print('q: $qk and r: $rk');
   }
+  return [qk, rk];
 
+}
+
+
+newtonlist(List number, num iteration) {
+  var i = 1;
+  var zk = long_div([1, 0], number)[0];
+  var sk, tk, uk, wk;
+  for (i; i < iteration; i++) {
+    sk = squaring(zk);
+    tk = number; // truncate
+    uk = multifull(tk, sk); // truncate
+    wk = multifull(zk, [2]);
+    zk = subtract_int(wk, uk);
+    print('zk: $zk');
+  }
+  return zk;
 }

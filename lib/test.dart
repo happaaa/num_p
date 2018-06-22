@@ -59,7 +59,7 @@ void newtest() {
       expect(doublelong >= doublong, equals(true));
     });
   });
-  
+
   group("Arithmetic operations:", () {
     var A = new Longnum.string('12');
     var B = new Longnum.string('183492765672943811834927667381943');
@@ -69,7 +69,7 @@ void newtest() {
     var F = new Longnum.string('-123456789123456789987654321.1234569876543211234567899987654321');
     group("Addition:", () {
       test("A + B", () {
-
+        
       });
 
     });

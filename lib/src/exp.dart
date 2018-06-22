@@ -8,12 +8,13 @@
 
 import 'dart:math';
 import 'longnum/longnumclass.dart';
+import 'add.dart';
 import 'multiply.dart';
+import 'divide.dart';
 
 /*
  * power function
  */
-
 power(Longnum number, num exponent) {
   if (exponent == 0) return new Longnum();
   var i = 2;
@@ -28,6 +29,7 @@ power(Longnum number, num exponent) {
   return number;
 }
 
+// list power function
 powerlist(List number, num exponent, [int power = 15]) {
   if (exponent == 0) return new Longnum();
   var i = 2;
@@ -52,6 +54,21 @@ exponential(num exponent) => power(longE, exponent);
 /*
  * squareroot function
  */
+babylonlist(List number) {
+  var len = (number.length + 1) ~/ 2 - 1;
+  var guess = number.length.isEven ? [7] : [2];
+  for (var i = 0; i < len; i++) {
+    guess.add(0);
+  }
+  print('start: $guess');
+  var test = div_sub_helper(squaring(guess), number).remove(-1);
+  while (test > [1]) {
+    guess = long_div(add_int(guess, long_div(number, guess)), [2]);
+    print('guess: $guess');
+  }
+  return guess;
+}
+
 
 //prototype
  babylon(var number) {
@@ -70,10 +87,17 @@ exponential(num exponent) => power(longE, exponent);
   * natural logarithm function log()
   */
 
-natural_log(Longnum number, num precision) {
+ln(Longnum number, num precision) {
+  var a = new Longnum.number(-0.6296735);
+  var b = new Longnum.number(2.726314);
+  var c = new Longnum.number(-2.096641);
 
+  // need to find largest power of 2 smaller than num
 }
 
-ln_list(List number, num precision) {
+// very very rough approximation
+ln_list_approx(List number, num precision, [int power = 15]) {
+  var len = number.length - 1;
+  return log(number[0]) + len * log(pow(10, power));
 
 }
