@@ -1,18 +1,19 @@
 import 'dart:math';
+import 'package:quiver_hashcode/hashcode.dart';
 import 'package:longnum/src/add.dart';
 import 'package:longnum/src/subtract.dart';
 import 'package:longnum/src/multiply.dart';
 
-class Longnum {
-  static final E_string = "2.718281828459045235360287471352662497757247093699959574966";
-  static final PI_string = "3.141592653589793238462643383279502884197169399375105820974";
-  static final LN2_string = "0.693147180559945309417232121458176568075500134360255254120";
-  static final LN10_string = "2.302585092994045684017991454684364207601101488628772976033";
-  static final LOG2E_string = "1.442695040888963407359924681001892137426645954152985934135";
-  static final LOG10E_string = "0.434294481903251827651128918916605082294397005803666566114";
-  static final SQRT1_2_string = "0.707106781186547524400844362104849039284835937688474036588";
-  static final SQRT2_string = "1.414213562373095048801688724209698078569671875376948073176";
+final longE = new Longnum.string("2.718281828459045235360287471352662497757247093699959574966");
+final longPI = new Longnum.string("3.141592653589793238462643383279502884197169399375105820974");
+final longLN2 = new Longnum.string("0.693147180559945309417232121458176568075500134360255254120");
+final longLN10 = new Longnum.string("2.302585092994045684017991454684364207601101488628772976033");
+final longLOG2E = new Longnum.string("1.442695040888963407359924681001892137426645954152985934135");
+final longLOG10E = new Longnum.string("0.434294481903251827651128918916605082294397005803666566114");
+final longSQRT1_2 = new Longnum.string("0.707106781186547524400844362104849039284835937688474036588");
+final longSQRT2 = new Longnum.string("1.414213562373095048801688724209698078569671875376948073176");
 
+class Longnum {
   List integer = new List();
   List decimal = new List();
   bool neg = false;
@@ -119,11 +120,25 @@ class Longnum {
    */
   List get val => [neg, integer, decimal];
 
-  int get hashCode { // hashcode for == operator
-    int hash = 45;
-    hash = 37 * hash + integer.length + integer[0];
-    hash = 2 * decimal.length * hash + decimal[0];
-    return hash;
+  int get hashCode => hash3(neg, hashObjects(integer), hashObjects(decimal));
+
+  num get doub {
+      var number = integer[0] + decimal[0] * pow(10, -15);
+      if (neg) number *= -1;
+      return number;
+  }
+
+  String get stri {
+    var number = '';
+    if (neg) number = '-';
+    for (int i = 0; i < integer.length; i++) {
+      number += integer[i].toString();
+    }
+    number += '.';
+    for (int i = 0; i < decimal.length; i++) {
+      number += decimal[i].toString();
+    }
+    return number;
   }
 
 

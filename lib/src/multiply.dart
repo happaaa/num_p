@@ -18,7 +18,13 @@ Longnum multimaster(Longnum a, Longnum b) {
   var b_list = new List.from(b.integer)..addAll(b.decimal);
   var dec_len = a.decimal.length + b.decimal.length;
 
-  if (max(a_list.length, b_list.length) < 1000) {
+  if (a == b) {
+    var product = squaring(a_list);
+    ans.integer = product.sublist(0, product.length - dec_len);
+    ans.decimal = product.sublist(product.length - dec_len, product.length);
+    trailingzeroslist(ans.decimal);
+  }
+  else if (max(a_list.length, b_list.length) < 1000) {
     var product = multifull(a_list, b_list);
     ans.integer = product.sublist(0, product.length - dec_len);
     ans.decimal = product.sublist(product.length - dec_len, product.length);

@@ -6,8 +6,11 @@
  */
 
 import 'longnum/longnumclass.dart';
+import 'format.dart';
 
 num compare_list(List a, List b) {
+  a = leadingzeroslist(a);
+  b = leadingzeroslist(b);
   if (a.length > b.length) return 1;
   else if (a.length < b.length) return 0;
   else {
