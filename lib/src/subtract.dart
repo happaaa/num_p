@@ -54,16 +54,16 @@ subtract_deci(List a, List b) {
   var ans = [0];
   var size = max(a.length, b.length);
   var carry = 0;
-  var a_length = a.length;
-  var b_length = b.length;
+  //var a_length = a.length;
+  //var b_length = b.length;
 
-  if (a_length == size) {
-    for (var i = b_length; i < size; i++) {
+  if (a.length == size) {
+    for (var i = b.length; i < size; i++) {
       b.add(0);
     }
   }
-  else if (b_length == size) {
-    for (var i = a_length; i < size; i++) {
+  else if (b.length == size) {
+    for (var i = a.length; i < size; i++) {
       a.add(0);
     }
   }

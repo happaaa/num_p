@@ -2,9 +2,9 @@
  * division function for longnum
  *
  * wip:
- * burnikel-ziegler division (dependent on +/- negative numbers)
+ * burnikel-ziegler division (dependent on +/- negative numbers) - FIXED
  * clean up
- * decimal division
+ * decimal division - FIXED
  *
  * division only works when divisor is half of 10^power
  */
@@ -26,24 +26,26 @@ divmaster(Longnum a, Longnum b) {
   var dec_len = a.decimal.length + b.decimal.length;
 
   var size = max(a.decimal.length, b.decimal.length);
-  var a_length = a.decimal.length;
-  var b_length = b.decimal.length;
-  if (a_length == size) {
-    for (var i = b_length; i < size; i++) {
+  //var a_length = a.decimal.length;
+  //var b_length = b.decimal.length;
+  if (a.decimal.length == size) {
+    for (var i = b.decimal.length; i < size; i++) {
       a.decimal.add(0);
     }
   }
-  else if (b_length == size) {
-    for (var i = a_length; i < size; i++) {
+  else if (b.decimal.length == size) {
+    for (var i = a.decimal.length; i < size; i++) {
       a.decimal.add(0);
     }
   }
 
-
+  if (b.integer == [0] && b.decimal == [0]) {
+    throw Exception;
+  }
   if (a == b) {
     ans.integer = [1];
   }
-  else if (max(a_list.length, b_list.length) < 1000) {
+  else if (max(a_list.length, b_list.length) < 100) {
     var quotient = long_div(a_list, b_list);
     ans.integer = quotient[0];
 
@@ -113,8 +115,9 @@ long_div(List a, List b, [int power = 15]) {
     prime[0].add(0);
   }
   var remainder = long_div(div[1], [constant], power);
+  var quotient = leadingzeroslist(add_int(prime[0], div[0], power: power));
   //print('div: $div');
-  return [add_int(prime[0], div[0], power: power), remainder[0]];
+  return [quotient, remainder[0]];
 }
 
 long_div_sub(List a, List b, [int power = 15]) {
@@ -304,7 +307,7 @@ div_sub_helper(List a, List b, [int power = 15]) {
   ans = leadingzeroslist(ans);
   b = leadingzeroslist(b);
   if (carry == -1) {
-    for (var i = 0; i < ans.length; i++) {
+    /*for (var i = 0; i < ans.length; i++) {
       ans[i] = BASE - ans[i] - 1;
       if (ans[i] == 0) {
         ans[i] = 0;
@@ -313,7 +316,7 @@ div_sub_helper(List a, List b, [int power = 15]) {
       else {
         ans[i] = BASE - ans[i] - 1;
       }
-    }
+    }*/
     //print(ans);
     //if (ans.last == BASE - 1) {
     //  ans[ans.length - 1] = 0;
@@ -322,6 +325,11 @@ div_sub_helper(List a, List b, [int power = 15]) {
     //else {
     //  ans[ans.length - 1] += 1;
     //}
+    var carrybase = [1];
+    for (var i = 0; i < ans.length; i++) {
+      carrybase.add(0);
+    }
+    ans = subtract_int(carrybase, ans);
     ans.insert(0, -1);
   }
   return ans;

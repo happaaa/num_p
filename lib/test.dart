@@ -67,9 +67,10 @@ void newtest() {
     var D = new Longnum.string('0.555555555963489284464');
     var E = new Longnum.string('123456789987654321123456789987654321.183492765672943888995656');
     var F = new Longnum.string('-123456789123456789987654321.1234569876543211234567899987654321');
+    var G = new Longnum.string('0');
     group("Addition:", () {
       test("A + B", () {
-        
+
       });
 
     });

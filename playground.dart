@@ -4,8 +4,8 @@ import 'lib/longnum.dart';
 
 void main() {
 
-  //var c = new Longnum.string('451011121834927612.987665432198765');
-  //var b = new Longnum.string('1234567891011121218646999999992.666665');
+  var c = new Longnum.string('451011121834927612.98766543219876544');
+  var b = new Longnum.string('1234567891011121218646999999992.666665');
   //var a = new Longnum.string('12.0000083648');
   //var z = new Longnum.number(12.005);
   //var t = new Longnum.number(1834927658456);
@@ -17,10 +17,16 @@ void main() {
   //var ans = barrett(a, z, (x * pow(10, 3)).floor());
   //print(ans);
 
-  babylon(12345678998765);
-  babylon(133334687);
-  babylon(0.5);
-  print(ln_list_approx([123456789, 0], 4));
+  //babylon(12345678998765);
+  //print(ln_list_approx([7, 999918649276448, 7779], 7));
+  //print(babylonlist([4568137, 0, 7779]));
+  //print(squaring([2137, 320050904870915]));
+  //print(c.val);
+  //print(b.val);
+  //print(multimaster(c, b).val);
+  //print(add_int([987, 456], [234, 111], power: 3));
+  print(subtract_master(b, c).val);
+
 }
 
 

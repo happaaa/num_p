@@ -1,7 +1,7 @@
 /*
  * wip:
- * work with decimals (not sure)
- * work with negative numbers
+ * work with decimals (not sure) - FIXED
+ * work with negative numbers - FIXED
  * clean up code
  */
 
@@ -17,26 +17,20 @@ Longnum multimaster(Longnum a, Longnum b) {
   var a_list = new List.from(a.integer)..addAll(a.decimal);
   var b_list = new List.from(b.integer)..addAll(b.decimal);
   var dec_len = a.decimal.length + b.decimal.length;
+  var product;
 
   if (a == b) {
-    var product = squaring(a_list);
-    ans.integer = product.sublist(0, product.length - dec_len);
-    ans.decimal = product.sublist(product.length - dec_len, product.length);
-    trailingzeroslist(ans.decimal);
+    product = squaring(a_list);
   }
-  else if (max(a_list.length, b_list.length) < 1000) {
-    var product = multifull(a_list, b_list);
-    ans.integer = product.sublist(0, product.length - dec_len);
-    ans.decimal = product.sublist(product.length - dec_len, product.length);
-    trailingzeroslist(ans.decimal);
+  else if (max(a_list.length, b_list.length) < 500) {
+    product = multifull(a_list, b_list);
   }
   else {
-    var product = karatsuba(a_list, b_list);
-    print('karatsubaa product: $product');
-    product = multifull(a_list, b_list);
-    print('long multi product: $product');
+    product = karatsuba(a_list, b_list);
   }
-
+  ans.integer = product.sublist(0, product.length - dec_len);
+  ans.decimal = product.sublist(product.length - dec_len, product.length);
+  trailingzeroslist(ans.decimal);
   return ans;
 }
 
@@ -52,6 +46,7 @@ List multifull(List a, List b, [int power = 15]) {
       //print('a[${bk - 1 - i}]: ${a[bk - i - 1]}');
       //print('b[${bm - 1 - j}]: ${b[bm - j - 1]}');
       var t = add_int(add_int([ans[i + j]], q), timesNum(a[bk - i - 1], b[bm - j - 1]));
+      //print('t: $t');
       ans[i + j] = t.last;
       q = t.sublist(0, t.length - 1);
       if (q.isEmpty) {
@@ -119,7 +114,7 @@ List timesNum(num a, num b) {
   }
 }
 
-squaring(List a) {
+List squaring(List a) {
   var ans = [0, 0];
   var q = [0];
   for (var i = 0; i < a.length - 1; i++) {
@@ -157,34 +152,10 @@ squaring(List a) {
   return ans;
 }
 
-
-
-
-
-multi_int(List a, List b, {int power = 15}) {
-  final BASE = pow(10, power);
-  var c = [0];
-  var bk = a.length;
-  var bm = b.length;
-  var q = 0;
-  for (int i  = 0; i < bk; i++) {
-    for (int j = 0; j < bm; j++) {
-      var t = c[i + j] + q + a[bk - i - 1] * b[bm - j - 1];
-      c[i + j] = t % BASE;
-      //print('cval: ${c[i + j]}');
-      q = (t / BASE).floor();
-      c.add(0);
-    }
-    c[i + bm] = q;
-    q = 0;
-  }
-  c = c.reversed.toList();
-  c = leadingzeroslist(c);
-  return c;
-}
-
 /*
  * to be fixed
+ * I SPENT AN ENTIRE BLOODY DAY TRYING TO FIX THIS ONLY TO REALIZE IT WAS BECAUSE I MESSED UP
+ * AN ADD FUNCTION I HATE CODING
  */
 List karatsuba(List a, List b, [int power = 15]) {
   var max_size = max(a.length, b.length);
@@ -202,11 +173,9 @@ List karatsuba(List a, List b, [int power = 15]) {
   }
   //print('c? $c');
   //print('d: $d');
-
   while (max_size > pow(2, i)) {
     i++;
   }
-  //print('IIIIIII: $i');
 
   int power_2 = pow(2, i - 1).toInt();
   var c0 = c.sublist(0, power_2);
@@ -224,7 +193,7 @@ List karatsuba(List a, List b, [int power = 15]) {
   var t4 = subtract_int(subtract_int(t3, t2, power: power), t1, power: power);
   //print("ans: $t2 $t4 $t1");
 
-  for (int i = 0; i < c1.length; i++) { // something weird happening here depending on the number of limbs
+  for (int i = 0; i < c1.length; i++) { // something weird happening here depending on the number of limbs - FIXED
     t4.add(0);
   }
   for (int i = 0; i < c1.length * 2; i++) {

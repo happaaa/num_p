@@ -3,6 +3,7 @@ import 'package:quiver_hashcode/hashcode.dart';
 import 'package:longnum/src/add.dart';
 import 'package:longnum/src/subtract.dart';
 import 'package:longnum/src/multiply.dart';
+import 'package:longnum/src/divide.dart';
 
 final longE = new Longnum.string("2.718281828459045235360287471352662497757247093699959574966");
 final longPI = new Longnum.string("3.141592653589793238462643383279502884197169399375105820974");
@@ -12,6 +13,11 @@ final longLOG2E = new Longnum.string("1.4426950408889634073599246810018921374266
 final longLOG10E = new Longnum.string("0.434294481903251827651128918916605082294397005803666566114");
 final longSQRT1_2 = new Longnum.string("0.707106781186547524400844362104849039284835937688474036588");
 final longSQRT2 = new Longnum.string("1.414213562373095048801688724209698078569671875376948073176");
+
+/*
+ * to do:
+ * make integer and decimal a single list with a radix point to signify decimal
+ */
 
 class Longnum {
   List integer = new List();
@@ -189,10 +195,17 @@ class Longnum {
     return ans;
   }
 
-  /*
-   * left to go: /, ~/
-   *
-   */
+  Longnum operator/(Longnum operand) {
+    Longnum ans = divmaster(this, operand);
+    ans.neg = (!neg && operand.neg) || (!neg && operand.neg);
+    return ans;
+  }
+
+  Longnum operator~/(Longnum operand) {
+    Longnum ans = this / operand;
+    ans.decimal = [0];
+    return ans;
+  }
 
   bool operator>(Longnum operand) => compare(this, operand) == 1;
   bool operator>=(Longnum operand) => compare(this, operand) != 0;
