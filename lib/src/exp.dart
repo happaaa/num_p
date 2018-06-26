@@ -125,6 +125,7 @@ ln(Longnum number, num precision) {
 }
 
 // decent approximation
+// the bigger the msb and more limbs it has, the better the approximation
 ln_list_approx(List number, num precision, [int power = 15]) {
   var len = number.length - 1;
   return log(number[0]) + len * log(pow(10, power));

@@ -21,12 +21,12 @@ void main() {
   //print(ln_list_approx([7, 999918649276448, 7779], 7));
   //print(babylonlist([4568137, 0, 7779]));
   //print(squaring([2137, 320050904870915]));
-  //print(c.val);
-  //print(b.val);
+  print(c.val);
+  print(b.val);
   //print(multimaster(c, b).val);
   //print(add_int([987, 456], [234, 111], power: 3));
-  print(subtract_master(b, c).val);
-
+  //print(subtract_master(b, c).val);
+  print(divmaster(b, c).val);
 }
 
 

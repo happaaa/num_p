@@ -30,12 +30,12 @@ divmaster(Longnum a, Longnum b) {
   //var b_length = b.decimal.length;
   if (a.decimal.length == size) {
     for (var i = b.decimal.length; i < size; i++) {
-      a.decimal.add(0);
+      b_list.add(0);
     }
   }
   else if (b.decimal.length == size) {
     for (var i = a.decimal.length; i < size; i++) {
-      a.decimal.add(0);
+      a_list.add(0);
     }
   }
 
@@ -46,7 +46,20 @@ divmaster(Longnum a, Longnum b) {
     ans.integer = [1];
   }
   else if (max(a_list.length, b_list.length) < 100) {
+    final BASE = pow(10, 15);
+    var constant = 1; // regulating divisor to be half of 10^power
+    //var c = a;
+    //var d = b;
+    if (b_list[0] < BASE / 2) {
+      constant = ((BASE / 2) / b_list[0]).ceil();
+      a_list = multifull(a_list, [constant]);
+      b_list = multifull(b_list, [constant]);
+    }
+
     var quotient = long_div(a_list, b_list);
+
+    //var remainder = long_div(quotient[1], [constant]);
+
     ans.integer = quotient[0];
 
     for (var i = 0; i < dec_len; i++) {
@@ -54,16 +67,34 @@ divmaster(Longnum a, Longnum b) {
       quotient = long_div(quotient[1], b_list);
       ans.decimal.add(quotient[0][0]);
     }
-    //ans.decimal = quotient.sublist(quotient.length - dec_len, quotient.length);
     trailingzeroslist(ans.decimal);
     ans.decimal.removeAt(0);
     leadingzeroslist(ans.integer);
   }
   else {
+    if (b_list.length.isOdd) {
+      a_list.add(0);
+      b_list.add(0);
+    }
     var quotient = two_by_one(a_list, b_list);
     print('zieglerr quotient: $quotient');
     quotient = long_div(a_list, b_list);
     print('long div quotient: $quotient');
+  }
+  return ans;
+}
+
+modulo(Longnum a, Longnum b) {
+  var ans = new Longnum();
+  if (b.integer == [0] && b.decimal == [0]) {
+    throw Exception;
+  }
+  if (a == b) {
+    return ans;
+  }
+  else {
+    var quotient = long_div(a.integer, b.integer);
+    ans.integer = quotient[1];
   }
 
   return ans;
@@ -78,26 +109,17 @@ divmaster(Longnum a, Longnum b) {
  * a little slow
  */
 long_div(List a, List b, [int power = 15]) {
-  final BASE = pow(10, power);
-  var constant = 1; // regulating divisor to be half of 10^power
-  var c = a;
-  var d = b;
-  if (b[0] < BASE / 2) {
-    constant = ((BASE / 2) / b[0]).ceil();
-    a = multifull(a, [constant]);
-    b = multifull(b, [constant]);
-  }
-  //print('div a: $a');
-  //print('div b: $b');
-  if (a.length < b.length) return [[0], c];
+  print('div a: $a');
+  print('div b: $b');
+  if (a.length < b.length) return [[0], a];
   if (a.length == b.length) {
-    if (a[0] < b[0]) return [[0], c];
-    else return [[1], subtract_int(c, d, power: power)];
+    if (a[0] < b[0]) return [[0], a];
+    else return [[1], subtract_int(a, b, power: power)];
   }
   if (a.length == b.length + 1) {
     var result = long_div_sub(a, b, power);
-    var remainder = long_div(result[1], [constant], power);
-    return [result[0], remainder[0]];
+    //var remainder = long_div(result[1], [constant], power);
+    return [result[0], result[1]];
   }
   var bm = a.length - b.length - 1;
   var a_prime = a.sublist(0, a.length - bm);
@@ -114,10 +136,10 @@ long_div(List a, List b, [int power = 15]) {
   for (var i = 0; i < bm; i++) {
     prime[0].add(0);
   }
-  var remainder = long_div(div[1], [constant], power);
+  //var remainder = long_div(div[1], [constant], power);
   var quotient = leadingzeroslist(add_int(prime[0], div[0], power: power));
   //print('div: $div');
-  return [quotient, remainder[0]];
+  return [quotient, div[1]];
 }
 
 long_div_sub(List a, List b, [int power = 15]) {
@@ -334,6 +356,9 @@ div_sub_helper(List a, List b, [int power = 15]) {
   }
   return ans;
 }
+
+
+
 
 
 
