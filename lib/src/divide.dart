@@ -48,18 +48,12 @@ divmaster(Longnum a, Longnum b) {
   else if (max(a_list.length, b_list.length) < 100) {
     final BASE = pow(10, 15);
     var constant = 1; // regulating divisor to be half of 10^power
-    //var c = a;
-    //var d = b;
     if (b_list[0] < BASE / 2) {
       constant = ((BASE / 2) / b_list[0]).ceil();
       a_list = multifull(a_list, [constant]);
       b_list = multifull(b_list, [constant]);
     }
-
     var quotient = long_div(a_list, b_list);
-
-    //var remainder = long_div(quotient[1], [constant]);
-
     ans.integer = quotient[0];
 
     for (var i = 0; i < dec_len; i++) {
@@ -76,10 +70,28 @@ divmaster(Longnum a, Longnum b) {
       a_list.add(0);
       b_list.add(0);
     }
+    final BASE = pow(10, 15);
+    var constant = 1; // regulating divisor to be half of 10^power
+    if (b_list[0] < BASE / 2) {
+      constant = ((BASE / 2) / b_list[0]).ceil();
+      a_list = multifull(a_list, [constant]);
+      b_list = multifull(b_list, [constant]);
+    }
+
     var quotient = two_by_one(a_list, b_list);
-    print('zieglerr quotient: $quotient');
-    quotient = long_div(a_list, b_list);
-    print('long div quotient: $quotient');
+    ans.integer = quotient[0];
+
+    for (var i = 0; i < dec_len; i++) {
+      quotient[1].add(0);
+      quotient = two_by_one(quotient[1], b_list);
+      ans.decimal.add(quotient[0][0]);
+    }
+    trailingzeroslist(ans.decimal);
+    ans.decimal.removeAt(0);
+    leadingzeroslist(ans.integer);
+    //print('zieglerr quotient: $quotient');
+    //quotient = long_div(a_list, b_list);
+    //print('long div quotient: $quotient');
   }
   return ans;
 }
@@ -109,8 +121,9 @@ modulo(Longnum a, Longnum b) {
  * a little slow
  */
 long_div(List a, List b, [int power = 15]) {
-  print('div a: $a');
-  print('div b: $b');
+  //a = leadingzeroslist(a);
+  //print('div a: $a');
+  //print('div b: $b');
   if (a.length < b.length) return [[0], a];
   if (a.length == b.length) {
     if (a[0] < b[0]) return [[0], a];
@@ -143,7 +156,7 @@ long_div(List a, List b, [int power = 15]) {
 }
 
 long_div_sub(List a, List b, [int power = 15]) {
-  const BASE = 5;
+  const BASE = 3;
   //print('a: $a');
   //print('new b: $b');
   if (a[0] > b[0]) {
@@ -196,16 +209,13 @@ long_div_sub(List a, List b, [int power = 15]) {
  * divisor must have an even number of limbs
  * integer only
  */
-two_by_one(List a, List b, [int power = 15]) {
-  //final BASE = pow(10, power);
-  print('2_1');
+two_by_one(List a, List b) {
+  //print('2_1');
   a = leadingzeroslist(a);
 
   if (b.length == 1) {
-    return long_div(a, b, power);
+    return long_div(a, b);
   }
-
-  //if (b.length.isOdd) b.insert(0, 0);
 
   var a_size = a.length;
   var size = b.length;
@@ -224,26 +234,26 @@ two_by_one(List a, List b, [int power = 15]) {
   num_a[1] = a.sublist(size, size ~/ 2 * 3);
   num_a[0] = a.sublist(size ~/ 2 * 3, a.length);
 
-  print('num_a: $num_a');
-  print('num_b: $num_b');
+  //print('num_a: $num_a');
+  //print('num_b: $num_b');
   var dividendq1 = new List.from(num_a[3])..addAll(num_a[2])..addAll(num_a[1]);
-  print('dividendq1: $dividendq1');
-  var q1 = three_by_two(dividendq1, b, power);
+  //print('dividendq1: $dividendq1');
+  var q1 = three_by_two(dividendq1, b);
   var dividendq2 = new List.from(q1[1])..addAll(num_a[0]);
-  print('dividendq2: $dividendq2');
-  var q2 = three_by_two(dividendq2, b, power);
-  print('q1: $q1');
-  print('q2: $q2');
+  //print('dividendq2: $dividendq2');
+  var q2 = three_by_two(dividendq2, b);
+  //print('q1: $q1');
+  //print('q2: $q2');
   var quotient = new List.from(q1[0])..addAll(q2[0]);
   var remainder = q2[1];
 
-  print('final 2_1: $quotient and remainder $remainder');
+  //print('final 2_1: $quotient and remainder $remainder');
+  quotient = leadingzeroslist(quotient);
   return [quotient, remainder];
 }
 
-three_by_two(List a, List b, [int power = 15]) {
-  //final BASE = pow(10, power);
-  print('3_2');
+three_by_two(List a, List b) {
+  //print('3_2');
   a = leadingzeroslist(a);
 
   var a_size = a.length;
@@ -261,15 +271,15 @@ three_by_two(List a, List b, [int power = 15]) {
 
   num_b[0] = b.sublist(size, size * 2);
   num_b[1] = b.sublist(0, size);
-  print('num_a: $num_a');
-  print('num_b: $num_b');
+  //print('num_a: $num_a');
+  //print('num_b: $num_b');
 
   var q_hat, r_one;
   if (compare_list(num_a[2], num_b[1]) == 0) {
     var dividend2_1 = new List.from(num_a[2])..addAll(num_a[1]);
-    print('2_1 input: $dividend2_1 and ${num_b[1]}');
-    var result = two_by_one(dividend2_1, num_b[1], power);
-    print('results: $result');
+    //print('2_1 input: $dividend2_1 and ${num_b[1]}');
+    var result = two_by_one(dividend2_1, num_b[1]);
+    //print('results: $result');
     q_hat = result[0];
     r_one = result[1];
   }
@@ -278,25 +288,26 @@ three_by_two(List a, List b, [int power = 15]) {
     for (var i = 0; i < size; i++) {
       q_hat.add(0);
     }
-    q_hat = subtract_int(q_hat, [1], power: power);
-    r_one = subtract_int(num_a[2], num_b[1], power: power);
-    r_one.addAll(add_int(num_a[1], num_b[1], power: power));
+    q_hat = subtract_int(q_hat, [1]);
+    r_one = subtract_int(num_a[2], num_b[1]);
+    r_one.addAll(add_int(num_a[1], num_b[1]));
   }
-  print('r_one: $r_one');
+  //print('r_one: $r_one');
   var r_hat = new List.from(r_one)..addAll(num_a[0]);
-  print('r_hat proto: $r_hat');
-  r_hat = div_sub_helper(r_hat, multifull(q_hat, num_b[0]), power);
-  print('r_hat final: $r_hat');
+  //print('r_hat proto: $r_hat');
+  r_hat = div_sub_helper(r_hat, multifull(q_hat, num_b[0]));
+  //print('r_hat final: $r_hat');
 
   if (r_hat[0] == -1) {
     r_hat.remove(-1);
     while (r_hat[0] != -1) {
-      r_hat = div_sub_helper(r_hat, b, power);
-      q_hat = subtract_int(q_hat, [1], power: power);
+      r_hat = div_sub_helper(r_hat, b);
+      q_hat = subtract_int(q_hat, [1]);
     }
     r_hat.remove(-1);
   }
-  print('final 3_2: $q_hat and remainder $r_hat');
+  //print('final 3_2: $q_hat and remainder $r_hat');
+  q_hat = leadingzeroslist(q_hat);
   return [q_hat, r_hat];
 }
 
