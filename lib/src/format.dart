@@ -34,8 +34,3 @@ List trailingzeroslist(List number) {
   }
   return number;
 }
-
-
-trailingzeros(Longnum number) {
-
-}

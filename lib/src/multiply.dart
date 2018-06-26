@@ -34,8 +34,7 @@ Longnum multimaster(Longnum a, Longnum b) {
   return ans;
 }
 
-List multifull(List a, List b, [int power = 15]) {
-  //final BASE = pow(10, power);
+List multifull(List a, List b) {
   var ans = [0];
   var bk = a.length;
   var bm = b.length;
@@ -120,8 +119,8 @@ List squaring(List a) {
   for (var i = 0; i < a.length - 1; i++) {
     for (var j = i + 1; j < a.length; j++) {
       //print('a: ${a[a.length - i - 1]} and other a: ${a[a.length - j - 1]}');
-      var product = timesNum(a[a.length - i - 1], a[a.length - j - 1]); //change to
-      product = multifull(product, [2]); //change to multifull
+      var product = timesNum(a[a.length - i - 1], a[a.length - j - 1]);
+      product = multifull(product, [2]);
       //print('product: $product');
       var t = add_int(add_int([ans[i + j]], q), product);
       ans[i + j] = t.last;
@@ -193,7 +192,7 @@ List karatsuba(List a, List b, [int power = 15]) {
   var t4 = subtract_int(subtract_int(t3, t2, power: power), t1, power: power);
   //print("ans: $t2 $t4 $t1");
 
-  for (int i = 0; i < c1.length; i++) { // something weird happening here depending on the number of limbs - FIXED
+  for (int i = 0; i < c1.length; i++) {
     t4.add(0);
   }
   for (int i = 0; i < c1.length * 2; i++) {

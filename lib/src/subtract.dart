@@ -76,9 +76,6 @@ subtract_deci(List a, List b) {
     //print('ans: $ans');
   }
   ans.removeAt(0);
-  //if (carry == -1) {
-  //  ans.insert(0, -1);
-  //}
   carry == -1 ? ans.insert(0, -1) : ans.insert(0, 0);
   return ans;
 }

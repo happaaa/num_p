@@ -206,8 +206,8 @@ long_div_sub(List a, List b, [int power = 15]) {
 /*
  * Burnikel-Ziegler division
  * Limitations:
- * divisor must have an even number of limbs
- * integer only
+ * divisor must have an even number of limbs - FIXED
+ * integer only - FIXED
  */
 two_by_one(List a, List b) {
   //print('2_1');
