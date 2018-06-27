@@ -11,10 +11,20 @@ void main() {
   //var t = new Longnum.number(1834927658456);
   //var u = new Longnum.number(49);
 
-  //var a = 18349276, z = 92997;
-  //var x = newton_better(z * pow(10, -5), 6);
-  //print((x * pow(10, 3)).floor());
-  //var ans = barrett(a, z, (x * pow(10, 3)).floor());
-  //print(ans);
+  var bob = new Longnum.string('-183492765672943811834927667381943');
+  var char = new Longnum.string('-18349276.34178895');
 
+  var C = new Longnum.string('18349276.34178895');
+  var D = new Longnum.string('0.555555555963489284464');
+
+  var E = new Longnum.string('123456789987654321123456789987654321.183492765672943888995656');
+  var F = new Longnum.string('-123456789123456789987654321.1234569876543211234567899987654321');
+  var G = new Longnum();
+
+  lol();
+  print((C / D).val);
+}
+
+lol() {
+  return Exception;
 }

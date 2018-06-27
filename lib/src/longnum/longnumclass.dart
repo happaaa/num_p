@@ -3,7 +3,7 @@ import 'package:quiver_hashcode/hashcode.dart';
 //import 'package:longnum/src/add.dart';
 //import 'package:longnum/src/subtract.dart';
 //import 'package:longnum/src/multiply.dart';
-import 'package:longnum/src/divide.dart';
+//import 'package:longnum/src/divide.dart';
 
 final longE = new Longnum.string("2.718281828459045235360287471352662497757247093699959574966");
 final longPI = new Longnum.string("3.141592653589793238462643383279502884197169399375105820974");
@@ -63,7 +63,8 @@ class Longnum {
     else {
       decimal.add(0);
     }
-    integer = integer.reversed.toList();
+    integer = lead0(integer.reversed.toList());
+    decimal = trail0(decimal);
   }
 
   // constructor from num
@@ -118,7 +119,16 @@ class Longnum {
     else {
       decimal.add(0);
     }
-    integer = integer.reversed.toList();
+    integer = lead0(integer.reversed.toList());
+    decimal = trail0(decimal);
+  }
+
+  Longnum abs() {
+    var number = new Longnum();
+    number.integer = integer;
+    number.decimal = decimal;
+    number.neg = false;
+    return number;
   }
 
   /*
@@ -155,18 +165,11 @@ class Longnum {
    */
   Longnum operator+(Longnum operand) {
     var ans = new Longnum();
-    if (!neg && !operand.neg) {
-      ans = this.add_master(operand);
-    }
-    else if (!neg && operand.neg) {
-      ans = this.subtract_master(operand);
-    }
-    else if (neg && !operand.neg) {
-      neg = false;
-      ans = operand.subtract_master(this);
-    }
+    if (!neg && !operand.neg) ans = this.addmaster(operand);
+    else if (!neg && operand.neg) ans = this.subtractmaster(operand);
+    else if (neg && !operand.neg) ans = operand.subtractmaster(this);
     else {
-      ans = this.add_master(operand);
+      ans = this.addmaster(operand);
       ans.neg = true;
     }
     return ans;
@@ -174,31 +177,27 @@ class Longnum {
 
   Longnum operator-(Longnum operand) {
     var ans = new Longnum();
-    if (!neg && !operand.neg) {
-      ans = this.subtract_master(operand);
-    }
-    else if (!neg && operand.neg) {
-      ans = this.add_master(operand);
-    }
+    if (!neg && !operand.neg) ans = this.subtractmaster(operand);
+    else if (!neg && operand.neg) ans = this.addmaster(operand);
     else if (neg && !operand.neg) {
-      ans = this.add_master(operand);
+      ans = this.addmaster(operand);
       ans.neg = true;
     }
-    else {
-      ans = operand.subtract_master(this);
-    }
+    else ans = operand.subtractmaster(this);
     return ans;
   }
 
   Longnum operator*(Longnum operand) {
     Longnum ans = this.multimaster(operand);
-    ans.neg = (!neg && operand.neg) || (!neg && operand.neg);
+    if (ans == new Longnum()) return ans;
+    ans.neg = (!neg && operand.neg) || (neg && !operand.neg);
     return ans;
   }
 
   Longnum operator/(Longnum operand) {
-    Longnum ans = divmaster(this, operand);
-    ans.neg = (!neg && operand.neg) || (!neg && operand.neg);
+    Longnum ans = this.divmaster(operand);
+    if (ans == new Longnum()) return ans;
+    ans.neg = (!neg && operand.neg) || (neg && !operand.neg);
     return ans;
   }
 
@@ -225,12 +224,12 @@ class Longnum {
     else if (x.neg && !other.neg) return 0;
     else if (x.neg && other.neg) {
       // reverse the values if both are negative
-      var c = x;
+      var temp = x;
       x = other;
-      other = c;
+      other = temp;
     }
     if (x.integer.length > other.integer.length) return 1;
-    else if (x.integer.length > other.integer.length) return 0;
+    else if (x.integer.length < other.integer.length) return 0;
     else {
       for (var i = 0; i < x.integer.length; i++) {
         if (x.integer[i] > other.integer[i]) return 1;
@@ -249,7 +248,7 @@ class Longnum {
     else return 2;
   }
 
-  List leadingzeroslist(List number) {
+  List lead0(List number) {
     var k = number.length;
     for (var u = 1; u < k && number.first == 0; u++) {
       number.removeAt(0);
@@ -257,14 +256,53 @@ class Longnum {
     return number;
   }
 
-  List trailingzeroslist(List number) {
+  List trail0(List number) {
     while (number.length != 1 && number.last == 0) {
       number.removeAt(number.length - 1);
     }
     return number;
   }
 
-  Longnum add_master(Longnum other) {
+  num compare_list(List a, List b) {
+    a = lead0(a);
+    b = lead0(b);
+    if (a.length > b.length) return 1;
+    else if (a.length < b.length) return 0;
+    else {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] > b[i]) return 1;
+        if (a[i] < b[i]) return 0;
+      }
+      return 2;
+    }
+  }
+
+  List maximum(List a, List b) {
+    if (a.length > b.length) return a;
+    else if (a.length < b.length) return b;
+    else {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] > b[i]) return a;
+        if (a[i] < b[i]) return b;
+      }
+      return a;
+    }
+  }
+
+  List minimum(List a, List b) {
+    if (a.length > b.length) return b;
+    else if (a.length < b.length) return a;
+    else {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] > b[i]) return b;
+        if (a[i] < b[i]) return a;
+      }
+      return a;
+    }
+  }
+
+
+  Longnum addmaster(Longnum other) {
     var ans = new Longnum();
     var deci = add_deci(this.decimal, other.decimal);
     var carry_deci = 0;
@@ -274,7 +312,6 @@ class Longnum {
     }
     ans.decimal = deci;
     ans.integer = add_int(this.integer, other.integer, carry: carry_deci);
-    //ans = leadingzeros_nump(ans);
     return ans;
   }
 
@@ -301,8 +338,8 @@ class Longnum {
     if (carry == 1) {
       ans[0] = 1;
     }
-    ans = leadingzeroslist(ans);
-    d = leadingzeroslist(d);
+    ans = lead0(ans);
+    d = lead0(d);
     return ans;
   }
 
@@ -333,13 +370,15 @@ class Longnum {
     if (carry == 1) {
       ans.insert(0, 1);
     }
+    d = trail0(d);
     return ans;
   }
 
-  Longnum subtract_master(Longnum other) {
+  Longnum subtractmaster(Longnum other) {
     var ans = new Longnum();
     if (this == other) return ans;
-    var q = this > other ? this.integer : other.integer;
+    //print('this: ${this.val} and other: ${other.val}');
+    var q = (this.abs() > other.abs()) ? this.integer : other.integer;
     var w = q == this.integer ? other.integer : this.integer;
     var e = q == this.integer ? this.decimal : other.decimal;
     var r = q == this.integer ? other.decimal : this.decimal;
@@ -370,8 +409,8 @@ class Longnum {
       ans.insert(0, 0);
       //print('int ans: $ans');
     }
-    ans = leadingzeroslist(ans);
-    b = leadingzeroslist(b);
+    ans = lead0(ans);
+    b = lead0(b);
     return ans;
   }
 
@@ -403,6 +442,8 @@ class Longnum {
     }
     ans.removeAt(0);
     carry == -1 ? ans.insert(0, -1) : ans.insert(0, 0);
+    a = trail0(a);
+    b = trail0(b);
     return ans;
   }
 
@@ -413,8 +454,10 @@ class Longnum {
     var b_list = new List.from(other.integer)..addAll(other.decimal);
     var dec_len = this.decimal.length + other.decimal.length;
     var product;
-
-    if (this == other) {
+    if (this == ans || other == ans) {
+      return ans;
+    }
+    else if (this == other) {
       product = squaring(a_list);
     }
     else if (max(a_list.length, b_list.length) < 500) {
@@ -425,7 +468,7 @@ class Longnum {
     }
     ans.integer = product.sublist(0, product.length - dec_len);
     ans.decimal = product.sublist(product.length - dec_len, product.length);
-    trailingzeroslist(ans.decimal);
+    trail0(ans.decimal);
     return ans;
   }
 
@@ -439,7 +482,7 @@ class Longnum {
         //print('Q: $q');
         //print('a[${bk - 1 - i}]: ${a[bk - i - 1]}');
         //print('b[${bm - 1 - j}]: ${b[bm - j - 1]}');
-        var t = add_int(add_int([ans[i + j]], q), timesNum(a[bk - i - 1], b[bm - j - 1]));
+        var t = add_int(add_int([ans[i + j]], q), multinum(a[bk - i - 1], b[bm - j - 1]));
         //print('t: $t');
         ans[i + j] = t.last;
         q = t.sublist(0, t.length - 1);
@@ -452,11 +495,11 @@ class Longnum {
       q = [0];
     }
     ans = ans.reversed.toList();
-    ans = leadingzeroslist(ans);
+    ans = lead0(ans);
     return ans;
   }
 
-  List timesNum(num a, num b) {
+  List multinum(num a, num b) {
     final BASE = pow(10, 7);
     final BASE_2 = pow(10, 14);
     if (a.toString().length + b.toString().length > 15) {
@@ -484,7 +527,7 @@ class Longnum {
         newlist[i + bm] = q;
         q = 0;
       }
-      newlist = trailingzeroslist(newlist);
+      newlist = trail0(newlist);
       var ans = [0, 0];
       //print('newlist: $newlist');
       switch (newlist.length) {
@@ -500,7 +543,7 @@ class Longnum {
         ans[0] += newlist[2] ~/ 10;
         ans[1] = newlist[0] + newlist[1] * BASE + (newlist[2] % 10) * BASE_2;
       }
-      ans = leadingzeroslist(ans);
+      ans = lead0(ans);
       return ans;
     }
     else {
@@ -514,7 +557,7 @@ class Longnum {
     for (var i = 0; i < number.length - 1; i++) {
       for (var j = i + 1; j < number.length; j++) {
         //print('number: ${number[number.length - i - 1]} and other number: ${number[number.length - j - 1]}');
-        var product = timesNum(number[number.length - i - 1], number[number.length - j - 1]);
+        var product = multinum(number[number.length - i - 1], number[number.length - j - 1]);
         product = multifull(product, [2]);
         //print('product: $product');
         var t = add_int(add_int([ans[i + j]], q), product);
@@ -531,10 +574,10 @@ class Longnum {
       q = [0];
     }
     ans = ans.reversed.toList();
-    leadingzeroslist(ans);
+    lead0(ans);
     //print('ans before squares: $ans');
     for (var i = 0; i < number.length; i++) {
-      var square = timesNum(number[number.length - i - 1], number[number.length - i -1]);
+      var square = multinum(number[number.length - i - 1], number[number.length - i -1]);
       for (var j = 0; j < i * 2; j++) {
         square.add(0);
       }
@@ -554,7 +597,7 @@ class Longnum {
     var max_size = max(a.length, b.length);
     int i = 0;
     if (max_size == 1) {
-      return timesNum(a.first, b.first);
+      return multinum(a.first, b.first);
     }
 
     var c = max_size == a.length ? a : b;
@@ -592,6 +635,360 @@ class Longnum {
       t2.add(0);
     }
     var ans = add_int(add_int(t1, t4, power: power), t2, power: power);
+    return ans;
+  }
+
+
+  Longnum divmaster(Longnum other, [int precision]) {
+    var ans = new Longnum();
+    var thislist = new List.from(this.integer)..addAll(this.decimal);
+    var otherlist = new List.from(other.integer)..addAll(other.decimal);
+    var dec_len = precision ?? this.decimal.length + other.decimal.length;
+
+    var size = max(this.decimal.length, other.decimal.length);
+
+    if (this.decimal.length == size) {
+      for (var i = other.decimal.length; i < size; i++) {
+        otherlist.add(0);
+      }
+    }
+    else if (other.decimal.length == size) {
+      for (var i = this.decimal.length; i < size; i++) {
+        thislist.add(0);
+      }
+    }
+
+    if (other == ans) {
+      throw Exception;
+    }
+    if (this == other) {
+      ans.integer = [1];
+      return ans;
+    }
+    if (other < new Longnum.number(1) && other > new Longnum.number(-1)) {
+      otherlist.removeAt(0);
+    }
+
+    if (max(thislist.length, otherlist.length) < 100) {
+      final BASE = pow(10, 15);
+      var constant = 1; // regulating divisor to be half of 10^power
+      if (otherlist[0] < BASE / 2) {
+        constant = ((BASE / 2) / otherlist[0]).ceil();
+        thislist = multifull(thislist, [constant]);
+        otherlist = multifull(otherlist, [constant]);
+      }
+      var quotient = long_div(thislist, otherlist);
+      ans.integer = quotient[0];
+
+      for (var i = 0; i < dec_len; i++) {
+        quotient[1].add(0);
+        quotient = long_div(quotient[1], otherlist);
+        ans.decimal.add(quotient[0][0]);
+      }
+      ans.decimal.removeAt(0);
+      trail0(ans.decimal);
+      lead0(ans.integer);
+    }
+    else {
+      if (otherlist.length.isOdd) {
+        thislist.add(0);
+        otherlist.add(0);
+      }
+      final BASE = pow(10, 15);
+      var constant = 1; // regulating divisor to be half of 10^power
+      if (otherlist[0] < BASE / 2) {
+        constant = ((BASE / 2) / otherlist[0]).ceil();
+        thislist = multifull(thislist, [constant]);
+        otherlist = multifull(otherlist, [constant]);
+      }
+
+      var quotient = two_by_one(thislist, otherlist);
+      ans.integer = quotient[0];
+
+      for (var i = 0; i < dec_len; i++) {
+        quotient[1].add(0);
+        quotient = two_by_one(quotient[1], otherlist);
+        ans.decimal.add(quotient[0][0]);
+      }
+      trail0(ans.decimal);
+      ans.decimal.removeAt(0);
+      lead0(ans.integer);
+      //print('zieglerr quotient: $quotient');
+      //quotient = long_div(thislist, otherlist);
+      //print('long div quotient: $quotient');
+    }
+    return ans;
+  }
+
+  Longnum modulo(Longnum a, Longnum b) {
+    var ans = new Longnum();
+    if (b.integer == [0] && b.decimal == [0]) {
+      throw Exception;
+    }
+    if (a == b) {
+      return ans;
+    }
+    else {
+      var quotient = long_div(a.integer, b.integer);
+      ans.integer = quotient[1];
+    }
+
+    return ans;
+  }
+
+
+  /*
+   * limitations:
+   * integer only
+   * denominator has to be at least half of 10^power - FIXED
+   * remainder is too large, is a remainder of the modified divisor - FIXED
+   * a little slow
+   */
+  List long_div(List a, List b, [int power = 15]) {
+    //a = lead0(a);
+    //print('div a: $a');
+    //print('div b: $b');
+    if (a.length < b.length) return [[0], a];
+    if (a.length == b.length) {
+      if (a[0] < b[0]) return [[0], a];
+      else return [[1], subtract_int(a, b, power: power)];
+    }
+    if (a.length == b.length + 1) {
+      var result = long_div_sub(a, b, power);
+      //var remainder = long_div(result[1], [constant], power);
+      return [result[0], result[1]];
+    }
+    var bm = a.length - b.length - 1;
+    var a_prime = a.sublist(0, a.length - bm);
+    var s = a.sublist(a.length - bm, a.length);
+    //print('a_prime: $a_prime');
+    var prime = long_div_sub(a_prime, b, power); // somehow adds a 0 in front of b - FIXED
+    for (var i = 0; i < bm; i++) {
+      prime[1].add(0);
+    }
+    //print('prime: $prime');
+    //print('s: $s');
+    var div = long_div(add_int(prime[1], s, power: power), b, power);
+
+    for (var i = 0; i < bm; i++) {
+      prime[0].add(0);
+    }
+    //var remainder = long_div(div[1], [constant], power);
+    var quotient = lead0(add_int(prime[0], div[0], power: power));
+    //print('div: $div');
+    return [quotient, div[1]];
+  }
+
+  List long_div_sub(List a, List b, [int power = 15]) {
+    const BASE = 3;
+    //print('a: $a');
+    //print('new b: $b');
+    if (a[0] > b[0]) {
+      a = subtract_int(a, multifull(b, [1, 0]), power: power);
+      var ans = long_div_sub(a, b, power);
+      ans[0].insert(0, 1);
+      return [ans[0], ans[1]];
+    }
+    var a_msb = [a[0], a[1]];
+    var b_msb = [b[0]];
+
+    var array = [];
+    var b_msb_master = b_msb;
+    while (compare_list(a_msb, b_msb_master) != 0) {
+      var multiple;
+      for (multiple = 0; compare_list(a_msb, multifull(b_msb_master, [BASE])) != 0; multiple++) {
+        b_msb_master = multifull(b_msb_master, [BASE]);
+        //print('b multiple ${multiple + 1}: $b_msb_master');
+      }
+      a_msb = subtract_int(a_msb, b_msb_master, power: power);
+      b_msb_master = b_msb;
+      array.add(multiple);
+    }
+    //print('array: $array');
+    //var iteration = 0;
+    var q = 0;
+    for (var i = 0; i < array.length; i++) {
+      q += pow(BASE, array[i]);
+      //iteration += array[i];
+    }
+    //print(iteration);
+    //print(q);
+    var t = multifull([q], b);
+    while (compare_list(t, a) == 1) {
+      q -= 1;
+      t = subtract_int(t, b, power: power);
+    }
+    t = subtract_int(a, t, power: power);
+    //print(q);
+    //print('t: $t');
+    return [[q], t];
+  }
+
+
+
+
+  /*
+   * Burnikel-Ziegler division
+   * Limitations:
+   * divisor must have an even number of limbs - FIXED
+   * integer only - FIXED
+   */
+  List two_by_one(List a, List b) {
+    //print('2_1');
+    a = lead0(a);
+
+    if (b.length == 1) {
+      return long_div(a, b);
+    }
+
+    var a_size = a.length;
+    var size = b.length;
+    var num_a = new List(4);
+    var num_b = new List(2);
+
+    for (var i = a_size; i < size * 2; i++) {
+      a.insert(0, 0);
+    }
+
+    num_b[0] = b.sublist(size ~/ 2, size);
+    num_b[1] = b.sublist(0, size ~/ 2);
+
+    num_a[3] = a.sublist(0, size ~/ 2);
+    num_a[2] = a.sublist(size ~/ 2, size);
+    num_a[1] = a.sublist(size, size ~/ 2 * 3);
+    num_a[0] = a.sublist(size ~/ 2 * 3, a.length);
+
+    //print('num_a: $num_a');
+    //print('num_b: $num_b');
+    var dividendq1 = new List.from(num_a[3])..addAll(num_a[2])..addAll(num_a[1]);
+    //print('dividendq1: $dividendq1');
+    var q1 = three_by_two(dividendq1, b);
+    var dividendq2 = new List.from(q1[1])..addAll(num_a[0]);
+    //print('dividendq2: $dividendq2');
+    var q2 = three_by_two(dividendq2, b);
+    //print('q1: $q1');
+    //print('q2: $q2');
+    var quotient = new List.from(q1[0])..addAll(q2[0]);
+    var remainder = q2[1];
+
+    //print('final 2_1: $quotient and remainder $remainder');
+    quotient = lead0(quotient);
+    return [quotient, remainder];
+  }
+
+  List three_by_two(List a, List b) {
+    //print('3_2');
+    a = lead0(a);
+
+    var a_size = a.length;
+    var size = b.length ~/ 2;
+    var num_a = new List(3);
+    var num_b = new List(2);
+
+    for (var i = a_size; i < size * 3; i++) {
+      a.insert(0, 0);
+    }
+
+    num_a[2] = a.sublist(0, size);
+    num_a[1] = a.sublist(size, size * 2);
+    num_a[0] = a.sublist(size * 2, size * 3);
+
+    num_b[0] = b.sublist(size, size * 2);
+    num_b[1] = b.sublist(0, size);
+    //print('num_a: $num_a');
+    //print('num_b: $num_b');
+
+    var q_hat, r_one;
+    if (compare_list(num_a[2], num_b[1]) == 0) {
+      var dividend2_1 = new List.from(num_a[2])..addAll(num_a[1]);
+      //print('2_1 input: $dividend2_1 and ${num_b[1]}');
+      var result = two_by_one(dividend2_1, num_b[1]);
+      //print('results: $result');
+      q_hat = result[0];
+      r_one = result[1];
+    }
+    else {
+      q_hat = [1];
+      for (var i = 0; i < size; i++) {
+        q_hat.add(0);
+      }
+      q_hat = subtract_int(q_hat, [1]);
+      r_one = subtract_int(num_a[2], num_b[1]);
+      r_one.addAll(add_int(num_a[1], num_b[1]));
+    }
+    //print('r_one: $r_one');
+    var r_hat = new List.from(r_one)..addAll(num_a[0]);
+    //print('r_hat proto: $r_hat');
+    r_hat = div_sub_helper(r_hat, multifull(q_hat, num_b[0]));
+    //print('r_hat final: $r_hat');
+
+    if (r_hat[0] == -1) {
+      r_hat.remove(-1);
+      while (r_hat[0] != -1) {
+        r_hat = div_sub_helper(r_hat, b);
+        q_hat = subtract_int(q_hat, [1]);
+      }
+      r_hat.remove(-1);
+    }
+    //print('final 3_2: $q_hat and remainder $r_hat');
+    q_hat = lead0(q_hat);
+    return [q_hat, r_hat];
+  }
+
+  List div_sub_helper(List a, List b, [int power = 15]) {
+    final BASE = pow(10, power);
+    var ans = [0];
+    var size = max(a.length, b.length);
+    var a_len = a.length;
+    var b_len = b.length;
+    var carry = 0;
+
+    if (a_len == size) {
+      for (var i = b_len; i < size; i++) {
+        b.insert(0, 0);
+      }
+    }
+    else if (b_len == size) {
+      for (var i = a_len; i < size; i++) {
+        a.insert(0, 0);
+      }
+    }
+    //print('int a: $a');
+    //print('int b: $b');
+    for (int i = size - 1; i >= 0; i--) {
+      ans[0] = (a[i] - b[i] + carry) % BASE;
+      carry = ((a[i] - b[i] + carry) / BASE).floor();
+      ans.insert(0, 0);
+      //print('int ans: $ans');
+    }
+    ans = lead0(ans);
+    b = lead0(b);
+    if (carry == -1) {
+      /*for (var i = 0; i < ans.length; i++) {
+        ans[i] = BASE - ans[i] - 1;
+        if (ans[i] == 0) {
+          ans[i] = 0;
+          ans[i - 1] += 1;
+        }
+        else {
+          ans[i] = BASE - ans[i] - 1;
+        }
+      }*/
+      //print(ans);
+      //if (ans.last == BASE - 1) {
+      //  ans[ans.length - 1] = 0;
+      //  ans[ans.length - 2] += 1;
+      //}
+      //else {
+      //  ans[ans.length - 1] += 1;
+      //}
+      var carrybase = [1];
+      for (var i = 0; i < ans.length; i++) {
+        carrybase.add(0);
+      }
+      ans = subtract_int(carrybase, ans);
+      ans.insert(0, -1);
+    }
     return ans;
   }
 
