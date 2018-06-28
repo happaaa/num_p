@@ -1,6 +1,6 @@
-# Cli launch configuration for playground.dart.
+# Cli launch configuration for test\test.dart.
 type: cli
-path: lib/test.dart
+path: test\test.dart
 
 cli:
   # Additional args for the application.

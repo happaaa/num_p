@@ -1,9 +1,8 @@
-import 'longnum.dart';
+import 'package:longnum/longnum.dart';
 
 void newtest() {
 
   group("Initialization:", () {
-
     test("default empty", () {
       var newlong = new Longnum();
       expect(newlong.val, equals([false, [0], [0]]));
@@ -61,14 +60,14 @@ void newtest() {
     });
   });
 
+  var A = new Longnum.string('12');
+  var B = new Longnum.string('183492765672943811834927667381943');
+  var C = new Longnum.string('18349276.34178895');
+  var D = new Longnum.string('0.555555555963489284464');
+  var E = new Longnum.string('123456789987654321123456789987654321.183492765672943888995656');
+  var F = new Longnum.string('-123456789123456789987654321.1234569876543211234567899987654321');
+  var G = new Longnum.string('0');
   group("Arithmetic:", () {
-    var A = new Longnum.string('12');
-    var B = new Longnum.string('183492765672943811834927667381943');
-    var C = new Longnum.string('18349276.34178895');
-    var D = new Longnum.string('0.555555555963489284464');
-    var E = new Longnum.string('123456789987654321123456789987654321.183492765672943888995656');
-    var F = new Longnum.string('-123456789123456789987654321.1234569876543211234567899987654321');
-    var G = new Longnum.string('0');
     group("Addition:", () {
       test("A + B", () {
         expect((A + B).val, equals([false, [183, 492765672943811, 834927667381955], [0]]));
@@ -126,9 +125,8 @@ void newtest() {
         expect((C - D).val, allOf([
           equals([false, [18349275], [786233394036510, 715536000000000]]),
           equals((D - C).abs().val)
-        ]));
-      });
-      test("D - C", () {
+        ]));      });
+    test("D - C", () {
         expect((D - C).val, equals([true, [18349275], [786233394036510, 715536000000000]]));
       });
       test("D - E", () {
@@ -233,10 +231,101 @@ void newtest() {
     });
   });
 
+  group("Exponential:", () {
+    group("Power:", () {
+      test("A^2", () {
+        expect(A.power(2).val, equals([false, [144], [0]]));
+      });
+      test("B^2", () {
+        expect(B.power(2).val, equals([false, [33669, 595054305866899, 314576412748598, 776584439769398, 444979842455249], [0]]));
+      });
+      test("C^2", () {
+        expect(C.power(2).val, equals([false, [336695942267335], [671420086342102, 500000000000000]]));
+      });
+      test("D^2", () {
+        expect(D.power(2).val, equals([false, [0], [308641975761901, 674262212396316, 950711767296000]]));
+      });
+      test("E^2", () {
+        expect(E.power(2).val, equals([false, [15241578994, 55784231214753, 778082609462011, 626245874865449, 437710393224037],
+          [496220853985681, 892475337462594, 277784492386870, 336000000000000]]));
+      });
+      test("F^2", () {
+        expect(F.power(2).val, equals([false, [15241578, 780673678759487, 883249809528782, 045058338362698],
+          [387593621124867, 618960577926474, 591952781554793, 476620059442157, 899710410000000]]));
+      });
+      test("G^2", () {
+        expect(G.power(2).val, equals([false, [0], [0]]));
+      });
+    });
+    /*group("EXP:", () {
+      test("e^2", () {
+        expect(exponential(2).val, equals([false, [7], [389056098930650, 227230427460575, 7813180315570, 551847324087127,
+           822522573796079, 057763384312485, 079121794773753, 161265478866123]]));
+      });
+    });*/
+    /*group("Square root:", () {
+      var precision = new Longnum.string('0.00000001');
+      test("sqrt(A)", () {
+        expect(A.squareroot(precision).val, equals([false, [3], [464101615137754, 587054892683011]]));
+      });
+      test("sqrt(B)", () {
+        expect(B.squareroot(precision).val, equals([false, [13, 545950157628065], [473012990695280, 614867858464199]]));
+      });
+      test("sqrt(C)", () {
+        expect(C.squareroot(precision).val, equals([false, [4283], [605530600238404, 730011852595489]]));
+      });
+    });*/
+  });
 
 
 }
 
+void timetest() {
+  var A = new Longnum.string('123456789456123456789456123456789456123456789456123456789456123456789123456789456123456789451234567843186845137');
+  var B = new Longnum.string('9423874815368484510004894514848.4048484648004864964531287979421201234897100048879878945642123123878945181897897978');
+  var C = new Longnum.string('18349276.34178895');
+  var D = new Longnum.string('0.555555555963489284464');
+  var E = new Longnum.string('123456789987654321123456789987654321.183492765672943888995656');
+  var F = new Longnum.string('-123456789123456789987654321.1234569876543211234567899987654321');
+  var watch = new Stopwatch();
+  print('Addition');
+  watch.start();
+  for (var i = 0; i < 1000; i++) {
+    A + B + A + B;
+    B + A;
+  }
+  watch.stop();
+  print(watch.elapsedMicroseconds / 1000);
+  print('Subtraction');
+  watch.reset();
+  watch.start();
+  for (var i = 0; i < 1000; i++) {
+    A - B - A - B;
+    B - A;
+  }
+  watch.stop();
+  print(watch.elapsedMicroseconds / 1000);
+  print('Multi');
+  watch.reset();
+  watch.start();
+  for (var i = 0; i < 1000; i++) {
+    A * B * A * B;
+    B * A;
+  }
+  watch.stop();
+  print(watch.elapsedMicroseconds / 1000);
+  print('Div');
+  watch.reset();
+  watch.start();
+  for (var i = 0; i < 1000; i++) {
+    A / B / A / B;
+    B / A;
+  }
+  watch.stop();
+  print(watch.elapsedMicroseconds / 1000);
+}
+
 void main() {
-  newtest();
+  //newtest();
+  timetest();
 }

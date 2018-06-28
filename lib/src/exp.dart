@@ -55,22 +55,24 @@ exponential(num exponent) => power(longE, exponent);
 /*
  * squareroot function
  */
-squareroot(Longnum number) {
+squareroot(Longnum number, [Longnum precision]) {
   var ans = new Longnum();
-  var two = new Longnum.number(2);
-  var len = (number.integer.length + 1) ~/ 2;
-  ans.integer = number.integer.length.isEven ? [7] : [2];
+  var len = (number.integer.length + 1) ~/ 2 - 1;
+  precision = precision ?? new Longnum.number(0.001);
+  ans.integer = number.integer.length.isEven ? [70000000] : [20000000];
   for (var i = 0; i < len; i++) {
     ans.integer.add(0);
   }
   var test;
   print('start: ${ans.val}');
   do {
-    ans = (ans + number / ans) / two;
+    ans = (ans + number.divmaster(ans, number.decimal.length + 1)).divmaster(new Longnum.number(2), number.decimal.length + 1);
     print('guess: ${ans.val}');
     test = power(ans, 2) - number;
     test.neg = false;
-  } while (test.decimal > [0, 1]);
+    //print(test.val);
+  } while (test > precision);
+  return ans;
 }
 
 
