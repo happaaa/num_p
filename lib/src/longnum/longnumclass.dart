@@ -65,6 +65,7 @@ class Longnum {
     else {
       decimal.add(0);
     }
+    if (integer.length == 0) integer.add(0);
     integer = lead0(integer.reversed.toList());
     decimal = trail0(decimal);
   }
@@ -399,7 +400,7 @@ class Longnum {
     else if (this == other) {
       product = squaring(a_list);
     }
-    else if (max(a_list.length, b_list.length) < 500) {
+    else if (max(a_list.length, b_list.length) < 20) {
       product = multifull(a_list, b_list);
     }
     else {
@@ -448,7 +449,7 @@ class Longnum {
       thislist = multifull(thislist, [constant]);
       otherlist = multifull(otherlist, [constant]);
     }
-    if (max(thislist.length, otherlist.length) < 100) {
+    if (max(thislist.length, otherlist.length) < 20) {
       var quotient = long_div(thislist, otherlist);
       ans.integer = quotient[0];
 
@@ -459,17 +460,32 @@ class Longnum {
       }
     }
     else {
+      //print('FORMER thislist: $thislist and other: $otherlist');
+      var buffer = 0;
+      if (thislist.length > 2 * otherlist.length) {
+        buffer = (thislist.length + 1) ~/ 2 - otherlist.length;
+        for (var i = 0; i < buffer; i++) {
+          otherlist.add(0);
+        }
+      }
       if (otherlist.length.isOdd) {
         thislist.add(0);
         otherlist.add(0);
       }
+      //print('thislist: $thislist and other: $otherlist');
       var quotient = two_by_one(thislist, otherlist);
       ans.integer = quotient[0];
-
-      for (var i = 0; i < dec_len; i++) {
+      final buff = dec_len + buffer;
+      for (var i = 0; i < buff; i++) { // fix here
         quotient[1].add(0);
         quotient = two_by_one(quotient[1], otherlist);
-        ans.decimal.add(quotient[0][0]);
+        if (buffer > 0) {
+          ans.integer.add(quotient[0][0]);
+          buffer--;
+        }
+        else {
+          ans.decimal.add(quotient[0][0]);
+        }
       }
     }
     if (ans.decimal.length >= 2) ans.decimal.removeAt(0);
