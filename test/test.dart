@@ -282,281 +282,92 @@ void newtest() {
 }
 
 void timetest() {
-  var one = new Longnum.string('186186454567284');
-  var onedeci = new Longnum.string('0.987654321011007');
-  var two = new Longnum.string('845123848420048468404894980456');
-  var twodeci = new Longnum.string('0.498748456489112318000048900487');
-  var three = new Longnum.string('180749879846500000000456787777778974564965426');
-  var threedeci = new Longnum.string('0.999999998789456484890484984314844444450007979');
-  var four = new Longnum.string('278948165489748153187984231348486423187987454123138786110000');
-  var fourdeci = new Longnum.string('0.165242943727489785247560980598817188932162690665753698040481');
-  var five = new Longnum.string('934587125532033722327126851685757922833066691625150939810959193288614769940');
-  var fivedeci = new Longnum.string('0.885483465086133632026645277697595671015149818064332612197055251244545826215');
-  var six = new Longnum.string('997529293056192159367418198227949510598412474102798935948378497564630753183492761834976580');
-  var sixdeci = new Longnum.string('0.143766662449031311316028729526594186676192173578902389322662138884028610986894039340799000');
-  var seven = new Longnum.string('182791620728190481886292740063843009776301723779039271273546356035990493463947515238829459427194550467690');
-  var sevendeci = new Longnum.string('0.500123169367035061609716091240810228021652905146859006894827832115387777486578612617754154423088811650353');
-  var eight = new Longnum.string('123456789456123456789456123456789456123456789456123456789456123456789123456789456123456789451234567843186845137183409276');
-  var eightdeci = new Longnum.string('0.942387481536848451000489451484840484846480048649645312879794212012348971000488798789456421231238789450018555551897897978');
-  var watch = new Stopwatch();
+  var pi = new Longnum.string(
+  '14159265358979323846264338327950288419716939937510'
+  '58209749445923078164062862089986280348253421170679'
+  '82148086513282306647093844609550582231725359408128'
+  '48111745028410270193852110555964462294895493038196'
+  '44288109756659334461284756482337867831652712019091'
+  '45648566923460348610454326648213393607260249141273'
+  '72458700660631558817488152092096282925409171536436'
+  '78925903600113305305488204665213841469519415116094'
+  '33057270365759591953092186117381932611793105118548'
+  '07446237996274956735188575272489122793818301194912'
+  '98336733624406566430860213949463952247371907021798'
+  '60943702770539217176293176752384674818467669405132'
+  '00056812714526356082778577134275778960917363717872'
+  '14684409012249534301465495853710507922796892589235'
+  '42019956112129021960864034418159813629774771309960'
+  '51870721134999999837297804995105973173281609631859'
+  '50244594553469083026425223082533446850352619311881'
+  '71010003137838752886587533208381420617177669147303'
+  '59825349042875546873115956286388235378759375195778'
+  '18577805321712268066130019278766111959092164201989');
+  var ee = new Longnum.string(
+  '0.718281828459045235360287471352662497757247093699959574966967627724076630353'
+  '547594571382178525166427427466391932003059921817413596629043572900334295260'
+  '595630738132328627943490763233829880753195251019011573834187930702154089149'
+  '934884167509244761460668082264800168477411853742345442437107539077744992069'
+  '551702761838606261331384583000752044933826560297606737113200709328709127443'
+  '747047230696977209310141692836819025515108657463772111252389784425056953696'
+  '770785449969967946864454905987931636889230098793127736178215424999229576351'
+  '482208269895193668033182528869398496465105820939239829488793320362509443117'
+  '301238197068416140397019837679320683282376464804295311802328782509819455815'
+  '301756717361332069811250996181881593041690351598888519345807273866738589422'
+  '879228499892086805825749279610484198444363463244968487560233624827041978623'
+  '209002160990235304369941849146314093431738143640546253152096183690888707016'
+  '768396424378140592714563549061303107208510383750510115747704171898610687396'
+  '965521267154688957035035402123407849819334321068170121005627880235193033224');
   var count = 1000;
-
-  print('Add');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    one + onedeci;
-  }
-  watch.stop();
-  print('1: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    two + twodeci;
-  }
-  watch.stop();
-  print('2: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    three + threedeci;
-  }
-  watch.stop();
-  print('3: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    four + fourdeci;
-  }
-  watch.stop();
-  print('4: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    five + fivedeci;
-  }
-  watch.stop();
-  print('5: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    six + sixdeci;
-  }
-  watch.stop();
-  print('6: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    seven + sevendeci;
-  }
-  watch.stop();
-  print('7: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    eight + eightdeci;
-  }
-  watch.stop();
-  print('8: ${watch.elapsedMicroseconds / count}');
-  print('Subtract');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    one - onedeci;
-  }
-  watch.stop();
-  print('1: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    two - twodeci;
-  }
-  watch.stop();
-  print('2: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    three - threedeci;
-  }
-  watch.stop();
-  print('3: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    four - fourdeci;
-  }
-  watch.stop();
-  print('4: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    five - fivedeci;
-  }
-  watch.stop();
-  print('5: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    six - sixdeci;
-  }
-  watch.stop();
-  print('6: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    seven - sevendeci;
-  }
-  watch.stop();
-  print('7: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    eight - eightdeci;
-  }
-  watch.stop();
-  print('8: ${watch.elapsedMicroseconds / count}');
-  print('Multiply');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    one * onedeci;
-  }
-  watch.stop();
-  print('1: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    two * twodeci;
-  }
-  watch.stop();
-  print('2: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    three * threedeci;
-  }
-  watch.stop();
-  print('3: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    four * fourdeci;
-  }
-  watch.stop();
-  print('4: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    five * fivedeci;
-  }
-  watch.stop();
-  print('5: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    six * sixdeci;
-  }
-  watch.stop();
-  print('6: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    seven * sevendeci;
-  }
-  watch.stop();
-  print('7: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    eight * eightdeci;
-  }
-  watch.stop();
-  print('8: ${watch.elapsedMicroseconds / count}');
-  /*print('Div');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    one / onedeci;
-  }
-  watch.stop();
-  print('1: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    two / twodeci;
-  }
-  watch.stop();
-  print('2: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    three / threedeci;
-  }
-  watch.stop();
-  print('3: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    four / fourdeci;
-  }
-  watch.stop();
-  print('4: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    five / fivedeci;
-  }
-  watch.stop();
-  print('5: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    six / sixdeci;
-  }
-  watch.stop();
-  print('6: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    seven / sevendeci;
-  }
-  watch.stop();
-  print('7: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    eight / eightdeci;
-  }
-  watch.stop();
-  print('8: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    eight * eight;
-  }
-  watch.stop();
-  print('8^2: ${watch.elapsedMicroseconds / count}');
-  watch.reset();
-  watch.start();
-  for (var i = 0; i < count; i++) {
-    eight * seven;
-  }
-  watch.stop();
-  print('7*8: ${watch.elapsedMicroseconds / count}');*/
-
-
   var tester = new Longnum();
   var testerdeci = new Longnum();
   var time = new Stopwatch();
-  for (var i = 1; i <= 8; i++) {
-    tester.integer = eight.integer.sublist(0, i);
-    testerdeci.decimal = eightdeci.decimal.sublist(0, i);
+  print('ADD');
+  for (var i = 1; i <= 0; i++) {
+    tester.integer = pi.integer.sublist(0, i);
+    testerdeci.integer = ee.integer.sublist(0, i);
     time.start();
     for (var i = 0; i < count; i++) {
+      tester - testerdeci;
+    }
+    time.stop();
+    print('${time.elapsedMicroseconds / count}');
+    time.reset();
+  }
+  print('SUBTRACT');
+  for (var i = 1; i <= 0; i++) {
+    tester.integer = pi.integer.sublist(0, i);
+    testerdeci.integer = ee.integer.sublist(0, i);
+    time.start();
+    for (var i = 0; i < count; i++) {
+      tester + testerdeci;
+    }
+    time.stop();
+    print('${time.elapsedMicroseconds / count}');
+    time.reset();
+  }
+  print('MULTIPLY');
+  for (var i = 1; i <= 0; i++) {
+    tester.integer = pi.integer.sublist(0, i);
+    testerdeci.integer = ee.integer.sublist(0, i);
+    time.start();
+    for (var i = 0; i < count; i++) {
+      tester * testerdeci;
+    }
+    time.stop();
+    print('${time.elapsedMicroseconds / count}');
+    time.reset();
+  }
+  print('DIVIDE');
+  for (var i = 1; i <= 60; i++) {
+    tester.integer = pi.integer.sublist(0, i);
+    testerdeci.decimal = ee.decimal.sublist(0, i);
+    time.start();
+    for (var i = 0; i < 10; i++) {
       tester / testerdeci;
     }
     time.stop();
-    print('$i: ${time.elapsedMicroseconds / count}');
+    print('${time.elapsedMicroseconds / 10}');
     time.reset();
   }
 }

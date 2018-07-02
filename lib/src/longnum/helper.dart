@@ -387,9 +387,7 @@ List long_div_sub(List a, List b, [int power = 15]) {
     q -= 1;
     t = subtract_int(t, b, power: power);
   }
-  //if (q == pow(10, 15)) q = [1, 0];
   t = subtract_int(a, t, power: power);
-  //print(q);
   //print('t: $t');
   return [[q], t];
 }
@@ -398,8 +396,20 @@ List long_div_sub(List a, List b, [int power = 15]) {
  * Burnikel-Ziegler division
  */
 List two_by_one(List a, List b) {
-  print('2_1');
+  //print('2_1');
   a = lead0(a);
+
+  if (a.length < b.length) return [[0], a];
+  if (a.length == b.length) {
+    if (a[0] < b[0]) return [[0], a];
+    else return [[1], subtract_int(a, b)];
+  }
+  if (a.length == b.length + 1) {
+    var result = long_div_sub(a, b);
+    //var remainder = long_div(result[1], [constant], power);
+    if (result[0] == pow(10, 15)) return [[1, 0], 0];
+    return [result[0], result[1]];
+  }
 
   if (b.length == 1) {
     return long_div(a, b);
@@ -416,7 +426,7 @@ List two_by_one(List a, List b) {
   for (var i = a_size; i < size * 2; i++) {
     a.insert(0, 0);
   }
-  print('a: $a');
+  //print('a: $a');
   num_b[0] = b.sublist(size ~/ 2, size);
   num_b[1] = b.sublist(0, size ~/ 2);
 
@@ -425,34 +435,37 @@ List two_by_one(List a, List b) {
   num_a[1] = a.sublist(size, size ~/ 2 * 3);
   num_a[0] = a.sublist(size ~/ 2 * 3, a.length);
 
-  print('num_a: $num_a');
-  print('num_b: $num_b');
+  //print('num_a: $num_a');
+  //print('num_b: $num_b');
   var dividendq1 = new List.from(num_a[3])..addAll(num_a[2])..addAll(num_a[1]);
-  print('dividendq1: $dividendq1');
+  //print('dividendq1: $dividendq1 and b: $b');
   var q1 = three_by_two(dividendq1, b);
   var dividendq2 = new List.from(q1[1])..addAll(num_a[0]);
-  print('dividendq2: $dividendq2');
+  //print('dividendq2: $dividendq2 and b: $b');
   var q2 = three_by_two(dividendq2, b);
   //print('q1: $q1');
   //print('q2: $q2');
   var quotient = new List.from(q1[0])..addAll(q2[0]);
   var remainder = q2[1];
 
-  print('final 2_1: $quotient and remainder $remainder');
+  //print('final 2_1: $quotient and remainder $remainder');
   quotient = lead0(quotient);
   return [quotient, remainder];
 }
 
 List three_by_two(List a, List b) { // bug with numbers that are too small and add extra 0s
-  print('3_2');
+  //print('3_2');
   a = lead0(a);
-  //var flag = false;
-  //if (b.length.isOdd) {
-  //  b.add(0);
-  //  flag = true;
-  //}
-  
 
+  var flag = false;
+  if (b[0] == 0) {
+    //print('-------------');
+    b.removeAt(0);
+    b.add(0);
+    //a.removeAt(0);
+    a.add(0);
+    flag = true;
+  }
 
   var a_size = a.length;
   var size = b.length ~/ 2;
@@ -469,15 +482,15 @@ List three_by_two(List a, List b) { // bug with numbers that are too small and a
 
   num_b[0] = b.sublist(size, size * 2);
   num_b[1] = b.sublist(0, size);
-  print('num_a: $num_a');
-  print('num_b: $num_b');
+  //print('num_a: $num_a');
+  //print('num_b: $num_b');
 
   var q_hat, r_one;
   if (compare_list(num_a[2], num_b[1]) == 0) {
     var dividend2_1 = new List.from(num_a[2])..addAll(num_a[1]);
-    print('2_1 input: $dividend2_1 and ${num_b[1]}');
+    //print('2_1 input: $dividend2_1 and ${num_b[1]}');
     var result = two_by_one(dividend2_1, num_b[1]);
-    print('results: $result');
+    //print('results: $result');
     q_hat = result[0];
     r_one = result[1];
   }
@@ -490,11 +503,11 @@ List three_by_two(List a, List b) { // bug with numbers that are too small and a
     r_one = subtract_int(num_a[2], num_b[1]);
     r_one.addAll(add_int(num_a[1], num_b[1]));
   }
-  print('r_one: $r_one');
+  //print('r_one: $r_one');
   var r_hat = new List.from(r_one)..addAll(num_a[0]);
-  print('r_hat proto: $r_hat');
+  //print('r_hat proto: $r_hat');
   r_hat = div_sub_helper(r_hat, multifull(q_hat, num_b[0]));
-  print('r_hat final: $r_hat');
+  //print('r_hat final: $r_hat');
 
   if (r_hat[0] == -1) {
     r_hat.remove(-1);
@@ -504,14 +517,20 @@ List three_by_two(List a, List b) { // bug with numbers that are too small and a
     }
     r_hat.remove(-1);
   }
-  print('final 3_2: $q_hat and remainder $r_hat');
   q_hat = lead0(q_hat);
-  //if (flag && r_hat.length > 1) {
-  //  print('-------------------');
-  //  r_hat.removeAt(r_hat.length - 1);
-  //}
+  if (flag) {
+    r_hat.removeAt(r_hat.length - 1);
+    b.removeAt(b.length - 1);
+    b.insert(0, 0);
+    //a.removeAt(0);
+    //a.add(0);
+  }
+  //print('final 3_2: $q_hat and remainder $r_hat');
+  //print([q_hat, r_hat]);
   return [q_hat, r_hat];
 }
+
+/// [34255401296200, 62760763880812] and remainder [220577343385773, 973323609883393, 945484259021256, 0]
 
 List div_sub_helper(List a, List b, [int power = 15]) {
   final BASE = pow(10, power);

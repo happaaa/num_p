@@ -449,7 +449,7 @@ class Longnum {
       thislist = multifull(thislist, [constant]);
       otherlist = multifull(otherlist, [constant]);
     }
-    if (max(thislist.length, otherlist.length) < 20) {
+    if (max(thislist.length, otherlist.length) < 130) {
       var quotient = long_div(thislist, otherlist);
       ans.integer = quotient[0];
 
