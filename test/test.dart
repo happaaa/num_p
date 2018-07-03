@@ -236,26 +236,54 @@ void newtest() {
     group("Power:", () {
       test("A^2", () {
         expect(A.power(2).val, equals([false, [144], [0]]));
+        expect(A.power(2), equals(A * A));
       });
       test("B^2", () {
         expect(B.power(2).val, equals([false, [33669, 595054305866899, 314576412748598, 776584439769398, 444979842455249], [0]]));
+        expect(B.power(2), equals(B * B));
       });
       test("C^2", () {
         expect(C.power(2).val, equals([false, [336695942267335], [671420086342102, 500000000000000]]));
+        expect(C.power(2), equals(C * C));
       });
       test("D^2", () {
         expect(D.power(2).val, equals([false, [0], [308641975761901, 674262212396316, 950711767296000]]));
+        expect(D.power(2), equals(D * D));
       });
       test("E^2", () {
         expect(E.power(2).val, equals([false, [15241578994, 55784231214753, 778082609462011, 626245874865449, 437710393224037],
           [496220853985681, 892475337462594, 277784492386870, 336000000000000]]));
+        expect(E.power(2), equals(E * E));
       });
       test("F^2", () {
         expect(F.power(2).val, equals([false, [15241578, 780673678759487, 883249809528782, 045058338362698],
           [387593621124867, 618960577926474, 591952781554793, 476620059442157, 899710410000000]]));
+        expect(F.power(2), equals(F * F));
       });
       test("G^2", () {
         expect(G.power(2).val, equals([false, [0], [0]]));
+        expect(G.power(2), equals(G * G));
+      });
+      test("A^3", () {
+        expect(A.power(3), equals(A * A * A));
+      });
+      test("B^3", () {
+        expect(B.power(3), equals(B * B * B));
+      });
+      test("C^3", () {
+        expect(C.power(3), equals(C * C * C));
+      });
+      test("D^3", () {
+        expect(D.power(3), equals(D * D * D));
+      });
+      test("E^3", () {
+        expect(E.power(3), equals(E * E * E));
+      });
+      test("F^3", () {
+        expect(F.power(3), equals(F * F * F));
+      });
+      test("G^3", () {
+        expect(G.power(3), equals(G * G * G));
       });
     });
     /*group("EXP:", () {
@@ -283,7 +311,7 @@ void newtest() {
 
 void timetest() {
   var pi = new Longnum.string(
-  '14159265358979323846264338327950288419716939937510'
+  '54159265358979323846264338327950288419716939937510'
   '58209749445923078164062862089986280348253421170679'
   '82148086513282306647093844609550582231725359408128'
   '48111745028410270193852110555964462294895493038196'
@@ -318,26 +346,14 @@ void timetest() {
   '209002160990235304369941849146314093431738143640546253152096183690888707016'
   '768396424378140592714563549061303107208510383750510115747704171898610687396'
   '965521267154688957035035402123407849819334321068170121005627880235193033224');
-  var count = 1000;
+  var count = 200;
   var tester = new Longnum();
   var testerdeci = new Longnum();
   var time = new Stopwatch();
   print('ADD');
   for (var i = 1; i <= 0; i++) {
     tester.integer = pi.integer.sublist(0, i);
-    testerdeci.integer = ee.integer.sublist(0, i);
-    time.start();
-    for (var i = 0; i < count; i++) {
-      tester - testerdeci;
-    }
-    time.stop();
-    print('${time.elapsedMicroseconds / count}');
-    time.reset();
-  }
-  print('SUBTRACT');
-  for (var i = 1; i <= 0; i++) {
-    tester.integer = pi.integer.sublist(0, i);
-    testerdeci.integer = ee.integer.sublist(0, i);
+    testerdeci.decimal = ee.decimal.sublist(0, i);
     time.start();
     for (var i = 0; i < count; i++) {
       tester + testerdeci;
@@ -346,10 +362,22 @@ void timetest() {
     print('${time.elapsedMicroseconds / count}');
     time.reset();
   }
+  print('SUBTRACT');
+  for (var i = 1; i <= 0; i++) {
+    tester.integer = pi.integer.sublist(0, i);
+    testerdeci.decimal = ee.decimal.sublist(0, i);
+    time.start();
+    for (var i = 0; i < count; i++) {
+      tester - testerdeci;
+    }
+    time.stop();
+    print('${time.elapsedMicroseconds / count}');
+    time.reset();
+  }
   print('MULTIPLY');
   for (var i = 1; i <= 0; i++) {
     tester.integer = pi.integer.sublist(0, i);
-    testerdeci.integer = ee.integer.sublist(0, i);
+    testerdeci.decimal = ee.decimal.sublist(0, i);
     time.start();
     for (var i = 0; i < count; i++) {
       tester * testerdeci;
@@ -359,15 +387,27 @@ void timetest() {
     time.reset();
   }
   print('DIVIDE');
-  for (var i = 1; i <= 60; i++) {
+  for (var i = 1; i <= 0; i++) {
     tester.integer = pi.integer.sublist(0, i);
     testerdeci.decimal = ee.decimal.sublist(0, i);
     time.start();
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < count; i++) {
       tester / testerdeci;
     }
     time.stop();
-    print('${time.elapsedMicroseconds / 10}');
+    print('${time.elapsedMicroseconds / count}');
+    time.reset();
+  }
+  print('SQUAREROOT');
+  for (var i = 1; i <= 10; i++) {
+    tester.integer = pi.integer.sublist(0, i);
+    //testerdeci.decimal = ee.decimal.sublist(0, i);
+    time.start();
+    for (var i = 0; i < 1; i++) {
+      tester.squareroot();
+    }
+    time.stop();
+    print('${time.elapsedMicroseconds / 1}');
     time.reset();
   }
 }

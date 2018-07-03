@@ -40,12 +40,10 @@ class Longnum {
   Longnum.string(String string) {
     int j = 0;
     var string_list = string.split('.');
-
     if (string.startsWith('-')) {
       neg = true;
       j = 1;
     }
-
     for (int i = string_list.first.length; i > j; i -= 15) {
       integer.add(int.parse((i - 15 < j) ? string_list.first.substring(j, i)
                                          : string_list.first.substring(i - 15, i)));
@@ -57,14 +55,10 @@ class Longnum {
           var dec_len = string_list[1].substring(i, string_list[1].length).length;
           decimal[decimal.length - 1] *= pow(10, 15 - dec_len);
         }
-        else {
-          decimal.add(int.parse(string_list[1].substring(i, i + 15)));
-        }
+        else decimal.add(int.parse(string_list[1].substring(i, i + 15)));
       }
     }
-    else {
-      decimal.add(0);
-    }
+    else decimal.add(0);
     if (integer.length == 0) integer.add(0);
     integer = lead0(integer.reversed.toList());
     decimal = trail0(decimal);
@@ -80,9 +74,7 @@ class Longnum {
       var dec_len = string_list[1].length;
       decimal.add(int.parse(string_list[1]) * pow(10, 15 - dec_len));
     }
-    else {
-      decimal.add(0);
-    }
+    else decimal.add(0);
     integer.add(number.floor());
   }
 
@@ -93,15 +85,12 @@ class Longnum {
     integer.clear();
     decimal.clear();
     neg = false;
-
     int j = 0;
     var string_list = string.split('.');
-
     if (string.startsWith('-')) {
       neg = true;
       j = 1;
     }
-
     for (int i = string_list.first.length; i > j; i -= 15) {
       integer.add(int.parse((i - 15 < j) ? string_list.first.substring(j, i)
                                          : string_list.first.substring(i - 15, i)));
@@ -113,14 +102,10 @@ class Longnum {
           var dec_len = string_list[1].substring(i, string_list[1].length).length;
           decimal[decimal.length - 1] *= pow(10, 15 - dec_len);
         }
-        else {
-          decimal.add(int.parse(string_list[1].substring(i, i + 15)));
-        }
+        else decimal.add(int.parse(string_list[1].substring(i, i + 15)));
       }
     }
-    else {
-      decimal.add(0);
-    }
+    else decimal.add(0);
     integer = lead0(integer.reversed.toList());
     decimal = trail0(decimal);
   }
@@ -141,13 +126,9 @@ class Longnum {
   String get stri {
     var number = '';
     if (neg) number = '-';
-    for (int i = 0; i < integer.length; i++) {
-      number += integer[i].toString();
-    }
+    for (int i = 0; i < integer.length; i++) number += integer[i].toString();
     number += '.';
-    for (int i = 0; i < decimal.length; i++) {
-      number += decimal[i].toString();
-    }
+    for (int i = 0; i < decimal.length; i++) number += decimal[i].toString();
     return number;
   }
 
@@ -201,24 +182,14 @@ class Longnum {
     var ans = new Longnum();
     var thislist = new List.from(this.integer)..addAll(this.decimal);
     var otherlist = new List.from(operand.integer)..addAll(operand.decimal);
-    var size = max(this.decimal.length, operand.decimal.length);
+    final size = max(this.decimal.length, operand.decimal.length);
     if (operand == ans) throw IntegerDivisionByZeroException;
     if (this == operand) return ans;
     if (this < operand) return this;
 
-    if (this.decimal.length == size) {
-      for (var i = operand.decimal.length; i < size; i++) {
-        otherlist.add(0);
-      }
-    }
-    else if (operand.decimal.length == size) {
-      for (var i = this.decimal.length; i < size; i++) {
-        thislist.add(0);
-      }
-    }
-    if (operand < new Longnum.number(1) && operand > new Longnum.number(-1)) {
-      otherlist.removeAt(0);
-    }
+    if (this.decimal.length == size) for (var i = operand.decimal.length; i < size; i++) otherlist.add(0);
+    else if (operand.decimal.length == size) for (var i = this.decimal.length; i < size; i++) thislist.add(0);
+    if (operand < new Longnum.number(1) && operand > new Longnum.number(-1)) otherlist.removeAt(0);
     final BASE = pow(10, 15);
     var constant = 1;
     if (otherlist[0] < BASE / 2) {
@@ -259,42 +230,41 @@ class Longnum {
   /*
    * exponential functions
    */
-  Longnum power(num exponent) {
+  Longnum power(int exponent) {
     if (exponent == 0) return new Longnum();
     var number = this;
     var i = 2;
     var number_image = number;
-    for (i; i <= exponent; i *= 2) {
-      number = number.multimaster(number);
-    }
+    for (i; i <= exponent; i *= 2) number = number.multimaster(number);
     i ~/= 2;
-    for (i; i < exponent; i++) {
-      number = number.multimaster(number_image);
-    }
+    for (i; i < exponent; i++) number = number.multimaster(number_image);
+    if (exponent.isOdd) number.neg = this.neg;
     return number;
   }
 
   Longnum squareroot([Longnum precision]) {
     var ans = new Longnum();
-    var len = (this.integer.length + 1) ~/ 2 - 1;
-    precision = precision ?? new Longnum.number(0.001);
-    if (neg == true) throw IntegerDivisionByZeroException;
+    var len = (this.integer.length) ~/ 2;
+    precision = precision ?? new Longnum.number(1);
+    if (neg == true) throw new Exception('Taking square root of a negative number');
     ans.integer = this.integer.length.isEven ? [2000] : [7000];
-    for (var i = 0; i < len; i++) {
-      ans.integer.add(0);
-    }
-    var test;
-    //print('start: ${ans.val}');
+    for (var i = 0; i < len; i++) ans.integer.add(0);
+    var test, except, buffer = 1;
+    print('start: ${ans.val}');
     do {
-      ans = (ans + this.divmaster(ans, this.decimal.length + 1)).divmaster(new Longnum.number(2), this.decimal.length + 1);
+
+      ans = (ans + this.divmaster(ans, this.decimal.length + buffer)).divmaster(new Longnum.number(2), this.decimal.length + buffer);
       print('guess: ${ans.val}');
       test = ans.power(2) - this;
       test.neg = false;
+      if (test == except) buffer++;
+      except = test;
     } while (test > precision);
     return ans;
   }
 
   num ln() {
+    if (this <= new Longnum()) throw new Exception('Taking log of value <= 0');
     var len = this.integer.length - 1;
     return log(this.integer[0]) + len * log(pow(10, 15));
   }
@@ -315,7 +285,7 @@ class Longnum {
   num tangent() {
     Longnum ans = this % (new Longnum.number(2) * longPI);
     if (ans == longPI / new Longnum.number(2) ||
-        ans == new Longnum.number(3) * longPI / new Longnum.number(2)) throw new Exception('Infinity');
+        ans == new Longnum.number(3) * longPI / new Longnum.number(2)) throw new Exception('Undefined');
     else if (ans == longPI || ans == new Longnum()) return 0;
     return tan(ans.doub);
   }
@@ -373,7 +343,8 @@ class Longnum {
   Longnum subtractmaster(Longnum other) {
     var ans = new Longnum();
     if (this == other) return ans;
-    //print('this: ${this.val} and other: ${other.val}');
+    if (this == ans) return other;
+    if (other == ans) return this;
     var q = (this.abs() > other.abs()) ? this.integer : other.integer;
     var w = q == this.integer ? other.integer : this.integer;
     var e = q == this.integer ? this.decimal : other.decimal;
@@ -394,17 +365,14 @@ class Longnum {
     var b_list = new List.from(other.integer)..addAll(other.decimal);
     var dec_len = this.decimal.length + other.decimal.length;
     var product;
-    if (this == ans || other == ans) {
-      return ans;
-    }
-    else if (this == other) {
-      product = squaring(a_list);
-    }
+    if (this == ans || other == ans) return ans;
     else if (max(a_list.length, b_list.length) < 20) {
-      product = multifull(a_list, b_list);
+      if (this == other) product = squaring(a_list);
+      else product = multifull(a_list, b_list);
     }
     else {
-      product = karatsuba(a_list, b_list);
+      if (this == other) product = karatsubasquare(a_list);
+      else product = karatsuba(a_list, b_list);
     }
     ans.integer = product.sublist(0, product.length - dec_len);
     ans.decimal = product.sublist(product.length - dec_len, product.length);
@@ -418,30 +386,20 @@ class Longnum {
     var thislist = new List.from(this.integer)..addAll(this.decimal);
     var otherlist = new List.from(other.integer)..addAll(other.decimal);
     var dec_len = precision ?? this.decimal.length + other.decimal.length;
-
     var size = max(this.decimal.length, other.decimal.length);
 
-    if (this.decimal.length == size) {
-      for (var i = other.decimal.length; i < size; i++) {
-        otherlist.add(0);
-      }
-    }
-    else if (other.decimal.length == size) {
-      for (var i = this.decimal.length; i < size; i++) {
-        thislist.add(0);
-      }
-    }
+    if (this.decimal.length == size)
+      for (var i = other.decimal.length; i < size; i++) otherlist.add(0);
+    else if (other.decimal.length == size)
+      for (var i = this.decimal.length; i < size; i++) thislist.add(0);
 
-    if (other == ans) {
-      throw IntegerDivisionByZeroException;
-    }
+    if (other == ans) throw IntegerDivisionByZeroException;
     if (this == other) {
       ans.integer = [1];
       return ans;
     }
-    if (other < new Longnum.number(1) && other > new Longnum.number(-1)) {
+    if (other < new Longnum.number(1) && other > new Longnum.number(-1))
       otherlist.removeAt(0);
-    }
     final BASE = pow(10, 15);
     var constant = 1; // regulating divisor to be half of 10^power
     if (otherlist[0] < BASE / 2) {
@@ -449,10 +407,9 @@ class Longnum {
       thislist = multifull(thislist, [constant]);
       otherlist = multifull(otherlist, [constant]);
     }
-    if (max(thislist.length, otherlist.length) < 130) {
+    if (max(thislist.length, otherlist.length) < 20) {
       var quotient = long_div(thislist, otherlist);
       ans.integer = quotient[0];
-
       for (var i = 0; i < dec_len; i++) {
         quotient[1].add(0);
         quotient = long_div(quotient[1], otherlist);
@@ -460,19 +417,15 @@ class Longnum {
       }
     }
     else {
-      //print('FORMER thislist: $thislist and other: $otherlist');
       var buffer = 0;
       if (thislist.length > 2 * otherlist.length) {
         buffer = (thislist.length + 1) ~/ 2 - otherlist.length;
-        for (var i = 0; i < buffer; i++) {
-          otherlist.add(0);
-        }
+        for (var i = 0; i < buffer; i++) otherlist.add(0);
       }
       if (otherlist.length.isOdd) {
         thislist.add(0);
         otherlist.add(0);
       }
-      //print('thislist: $thislist and other: $otherlist');
       var quotient = two_by_one(thislist, otherlist);
       ans.integer = quotient[0];
       final buff = dec_len + buffer;
@@ -483,9 +436,7 @@ class Longnum {
           ans.integer.add(quotient[0][0]);
           buffer--;
         }
-        else {
-          ans.decimal.add(quotient[0][0]);
-        }
+        else ans.decimal.add(quotient[0][0]);
       }
     }
     if (ans.decimal.length >= 2) ans.decimal.removeAt(0);
