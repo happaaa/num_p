@@ -267,36 +267,22 @@ List long_div(List a, List b) {
 }
 
 List long_div_sub(List a, List b) {
-  const BASE = 3;
   if (a[0] > b[0]) {
     a = subtract_int(a, multifull(b, [1, 0]));
     var ans = long_div_sub(a, b);
     ans[0].insert(0, 1);
     return [ans[0], ans[1]];
   }
-  var a_msb = [a[0], a[1]];
-  var b_msb = [b[0]];
-  var array = [];
-  var b_msb_master = b_msb;
-
-  while (compare_list(a_msb, b_msb_master) != 0) {
-    var multiple;
-    for (multiple = 0; compare_list(a_msb, multifull(b_msb_master, [BASE])) != 0; multiple++)
-      b_msb_master = multifull(b_msb_master, [BASE]);
-    a_msb = subtract_int(a_msb, b_msb_master);
-    b_msb_master = b_msb;
-    array.add(multiple);
-  }
-  //print('array: $array');
-  var q = 0;
-  for (var i = 0; i < array.length; i++) q += pow(BASE, array[i]);
-  var t = multifull([q], b);
+  var quotient = [((a[0] / b[0]) * pow(10, 15)).ceil()];
+  quotient = add_int(quotient, [5]);
+  var t = multifull(quotient, b);
   while (compare_list(t, a) == 1) {
-    q -= 1;
+    quotient = subtract_int(quotient, [1]);
     t = subtract_int(t, b);
   }
   t = subtract_int(a, t);
-  return [[q], t];
+  //print('ANSWER: ${[quotient, t]}');
+  return [quotient, t];
 }
 
 /*
@@ -305,7 +291,6 @@ List long_div_sub(List a, List b) {
 List two_by_one(List a, List b) {
   //print('2_1');
   a = lead0(a);
-
   if (a.length < b.length) return [[0], a];
   if (a.length == b.length) {
     if (a[0] < b[0]) return [[0], a];
@@ -313,11 +298,9 @@ List two_by_one(List a, List b) {
   }
   if (a.length == b.length + 1) {
     var result = long_div_sub(a, b);
-    //var remainder = long_div(result[1], [constant], power);
     if (result[0] == pow(10, 15)) return [[1, 0], 0];
     return [result[0], result[1]];
   }
-
   if (b.length == 1) return long_div(a, b);
   if (b.length.isOdd) b.insert(0, 0);
   var a_size = a.length;
@@ -336,10 +319,8 @@ List two_by_one(List a, List b) {
   //print('num_a: $num_a');
   //print('num_b: $num_b');
   var dividendq1 = new List.from(num_a[3])..addAll(num_a[2])..addAll(num_a[1]);
-  //print('dividendq1: $dividendq1 and b: $b');
   var q1 = three_by_two(dividendq1, b);
   var dividendq2 = new List.from(q1[1])..addAll(num_a[0]);
-  //print('dividendq2: $dividendq2 and b: $b');
   var q2 = three_by_two(dividendq2, b);
   var quotient = new List.from(q1[0])..addAll(q2[0]);
   var remainder = q2[1];
@@ -359,12 +340,10 @@ List three_by_two(List a, List b) { // bug with numbers that are too small and a
     a.add(0);
     flag = true;
   }
-
   var a_size = a.length;
   var size = b.length ~/ 2;
   var num_a = new List(3);
   var num_b = new List(2);
-
   for (var i = a_size; i < size * 3; i++) a.insert(0, 0);
   num_a[2] = a.sublist(0, size);
   num_a[1] = a.sublist(size, size * 2);
@@ -372,8 +351,6 @@ List three_by_two(List a, List b) { // bug with numbers that are too small and a
 
   num_b[0] = b.sublist(size, size * 2);
   num_b[1] = b.sublist(0, size);
-  //print('num_a: $num_a');
-  //print('num_b: $num_b');
   var q_hat, r_one;
   if (compare_list(num_a[2], num_b[1]) == 0) {
     var dividend2_1 = new List.from(num_a[2])..addAll(num_a[1]);
@@ -390,12 +367,8 @@ List three_by_two(List a, List b) { // bug with numbers that are too small and a
     r_one = subtract_int(num_a[2], num_b[1]);
     r_one.addAll(add_int(num_a[1], num_b[1]));
   }
-  //print('r_one: $r_one');
   var r_hat = new List.from(r_one)..addAll(num_a[0]);
-  //print('r_hat proto: $r_hat');
   r_hat = div_sub_helper(r_hat, multifull(q_hat, num_b[0]));
-  //print('r_hat final: $r_hat');
-
   if (r_hat[0] == -1) {
     r_hat.remove(-1);
     while (r_hat[0] != -1) {

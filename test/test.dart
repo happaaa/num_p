@@ -311,7 +311,7 @@ void newtest() {
 
 void timetest() {
   var pi = new Longnum.string(
-  '54159265358979323846264338327950288419716939937510'
+  '14159265358979323846264338327950288419716939937510'
   '58209749445923078164062862089986280348253421170679'
   '82148086513282306647093844609550582231725359408128'
   '48111745028410270193852110555964462294895493038196'
@@ -387,7 +387,7 @@ void timetest() {
     time.reset();
   }
   print('DIVIDE');
-  for (var i = 1; i <= 0; i++) {
+  for (var i = 1; i <= 60; i++) {
     tester.integer = pi.integer.sublist(0, i);
     testerdeci.decimal = ee.decimal.sublist(0, i);
     time.start();
@@ -399,15 +399,15 @@ void timetest() {
     time.reset();
   }
   print('SQUAREROOT');
-  for (var i = 1; i <= 10; i++) {
+  for (var i = 1; i <= 0; i++) {
     tester.integer = pi.integer.sublist(0, i);
     //testerdeci.decimal = ee.decimal.sublist(0, i);
     time.start();
-    for (var i = 0; i < 1; i++) {
+    for (var i = 0; i < 100; i++) {
       tester.squareroot();
     }
     time.stop();
-    print('${time.elapsedMicroseconds / 1}');
+    print('${time.elapsedMicroseconds / 100}');
     time.reset();
   }
 }
@@ -415,6 +415,6 @@ void timetest() {
 
 
 void main() {
-  //newtest();
-  timetest();
+  newtest();
+  //timetest();
 }

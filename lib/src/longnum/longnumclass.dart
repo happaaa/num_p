@@ -244,17 +244,16 @@ class Longnum {
 
   Longnum squareroot([Longnum precision]) {
     var ans = new Longnum();
-    var len = (this.integer.length) ~/ 2;
+    var len = (this.integer.length - 1) ~/ 2;
     precision = precision ?? new Longnum.number(1);
     if (neg == true) throw new Exception('Taking square root of a negative number');
-    ans.integer = this.integer.length.isEven ? [2000] : [7000];
+    ans.integer = this.integer.length.isEven ? [200000000000] : [7000];
     for (var i = 0; i < len; i++) ans.integer.add(0);
     var test, except, buffer = 1;
-    print('start: ${ans.val}');
+    //print('start: ${ans.val}');
     do {
-
       ans = (ans + this.divmaster(ans, this.decimal.length + buffer)).divmaster(new Longnum.number(2), this.decimal.length + buffer);
-      print('guess: ${ans.val}');
+      //print('guess: ${ans.val}');
       test = ans.power(2) - this;
       test.neg = false;
       if (test == except) buffer++;

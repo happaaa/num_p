@@ -17,9 +17,7 @@ void main() {
   //var F = new Longnum.string('-123456789123456789987654321.1234569876543211234567899987654321');
   //var G = new Longnum();
 
-  print((new Longnum.number(-4) % new Longnum.number(10)).val);
-  print(4 % 11);
-
+  print(new Longnum.string('4'));
 
 
 }
