@@ -10,7 +10,7 @@
  */
 
 import 'dart:math';
-import 'longnum/longnumclass.dart';
+import 'package:longnum/src/longnum/longnumclass.dart';
 import 'add.dart';
 import 'subtract.dart';
 import 'multiply.dart';

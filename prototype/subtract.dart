@@ -6,7 +6,7 @@
  */
 
 import 'dart:math';
-import 'longnum/longnumclass.dart';
+import 'package:longnum/src/longnum/longnumclass.dart';
 import 'format.dart';
 
 subtract_master(Longnum a, Longnum b) {

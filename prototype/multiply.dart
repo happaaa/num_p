@@ -6,7 +6,7 @@
  */
 
 import 'dart:math';
-import 'longnum/longnumclass.dart';
+import 'package:longnum/src/longnum/longnumclass.dart';
 import 'format.dart';
 import 'add.dart';
 import 'subtract.dart';

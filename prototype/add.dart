@@ -7,7 +7,7 @@
  */
 
 import 'dart:math';
-import 'longnum/longnumclass.dart';
+import 'package:longnum/src/longnum/longnumclass.dart';
 import 'format.dart';
 
 add_master(Longnum a, Longnum b) {

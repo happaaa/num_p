@@ -2,7 +2,7 @@
  * formatting functions for other routines
  */
 
-import 'longnum/longnumclass.dart';
+import 'package:longnum/src/longnum/longnumclass.dart';
 
 // formatting
 Longnum leadingzeros_nump(Longnum number) {

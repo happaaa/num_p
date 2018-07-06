@@ -275,7 +275,7 @@ List long_div_sub(List a, List b) {
   }
   var quotient = [((a[0] / b[0]) * pow(10, 15)).ceil()];
   quotient = add_int(quotient, [5]);
-  var t = multifull(quotient, b);
+  var t = karatsuba(quotient, b);
   while (compare_list(t, a) == 1) {
     quotient = subtract_int(quotient, [1]);
     t = subtract_int(t, b);
