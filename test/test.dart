@@ -351,7 +351,7 @@ void timetest() {
   var testerdeci = new Longnum();
   var time = new Stopwatch();
   print('ADD');
-  for (var i = 1; i <= 0; i++) {
+  for (var i = 1; i <= 60; i++) {
     tester.integer = pi.integer.sublist(0, i);
     testerdeci.decimal = ee.decimal.sublist(0, i);
     time.start();
@@ -363,7 +363,7 @@ void timetest() {
     time.reset();
   }
   print('SUBTRACT');
-  for (var i = 1; i <= 0; i++) {
+  for (var i = 1; i <= 60; i++) {
     tester.integer = pi.integer.sublist(0, i);
     testerdeci.decimal = ee.decimal.sublist(0, i);
     time.start();
@@ -375,7 +375,7 @@ void timetest() {
     time.reset();
   }
   print('MULTIPLY');
-  for (var i = 1; i <= 0; i++) {
+  for (var i = 1; i <= 60; i++) {
     tester.integer = pi.integer.sublist(0, i);
     testerdeci.decimal = ee.decimal.sublist(0, i);
     time.start();
@@ -399,7 +399,7 @@ void timetest() {
     time.reset();
   }
   print('SQUAREROOT');
-  for (var i = 1; i <= 0; i++) {
+  for (var i = 1; i <= 60; i++) {
     tester.integer = pi.integer.sublist(0, i);
     //testerdeci.decimal = ee.decimal.sublist(0, i);
     time.start();

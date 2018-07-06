@@ -1,5 +1,8 @@
 import 'dart:math';
 
+/*
+ * removes leading and trailing zeros from a list
+ */
 List lead0(List number) {
   while (number.length != 1 && number.first == 0) number.removeAt(0);
   return number;
@@ -102,6 +105,9 @@ List subtract_deci(List a, List b) {
   return ans;
 }
 
+/*
+ * long multiplication
+ */
 List multifull(List a, List b) {
   var ans = [0];
   var bk = a.length;
@@ -123,6 +129,10 @@ List multifull(List a, List b) {
   return ans;
 }
 
+/*
+ * multiplies two numbers and returns a list of the product.
+ * if the product is too large to contain in a num class, divide and mutliply
+ */
 List multinum(num a, num b) {
   final BASE = pow(10, 7);
   final BASE_2 = pow(10, 14);
@@ -170,6 +180,9 @@ List multinum(num a, num b) {
   }
 }
 
+/*
+ * squaring two numbers yields slightly faster outputs than using the normal function
+ */
 List squaring(List number) {
   var ans = [0, 0];
   var q = [0];
@@ -197,7 +210,7 @@ List squaring(List number) {
 }
 
 /*
- * Karatsuba algorithm
+ * Karatsuba algorithm for multiplying large numbers
  */
 List karatsuba(List a, List b) {
   var max_size = max(a.length, b.length);
@@ -217,13 +230,14 @@ List karatsuba(List a, List b) {
   var t2 = karatsuba(c0, d0);
   var t3 = karatsuba(add_int(c0, c1), add_int(d0, d1));
   var t4 = subtract_int(subtract_int(t3, t2), t1);
-  //print("ans: $t2 $t4 $t1");
   for (int i = 0; i < c1.length; i++) t4.add(0);
   for (int i = 0; i < c1.length * 2; i++) t2.add(0);
-  //var ans = add_int(add_int(t1, t4), t2);
   return add_int(add_int(t1, t4), t2);
 }
 
+/*
+ * Karatsuba algorithm for squaring (slightly faster than normal)
+ */
 List karatsubasquare(List number) {
   final size = number.length;
   int i = 0;
@@ -236,13 +250,14 @@ List karatsubasquare(List number) {
   var t2 = karatsubasquare(upper);
   var t3 = karatsubasquare(add_int(upper, lower));
   var t4 = subtract_int(subtract_int(t3, t2), t1);
-  //print("ans: $t2 $t4 $t1");
   for (int i = 0; i < lower.length; i++) t4.add(0);
   for (int i = 0; i < lower.length * 2; i++) t2.add(0);
-  //var ans = add_int(add_int(t1, t4), t2);
   return add_int(add_int(t1, t4), t2);
 }
 
+/*
+ * long division
+ */
 List long_div(List a, List b) {
   if (a.length < b.length) return [[0], a];
   if (a.length == b.length) {
@@ -266,6 +281,9 @@ List long_div(List a, List b) {
   return [quotient, div[1]];
 }
 
+/*
+ * long division subroutine
+ */
 List long_div_sub(List a, List b) {
   if (a[0] > b[0]) {
     a = subtract_int(a, multifull(b, [1, 0]));
@@ -281,15 +299,13 @@ List long_div_sub(List a, List b) {
     t = subtract_int(t, b);
   }
   t = subtract_int(a, t);
-  //print('ANSWER: ${[quotient, t]}');
   return [quotient, t];
 }
 
 /*
- * Burnikel-Ziegler division
+ * Burnikel-Ziegler division for large numbers
  */
 List two_by_one(List a, List b) {
-  //print('2_1');
   a = lead0(a);
   if (a.length < b.length) return [[0], a];
   if (a.length == b.length) {
@@ -316,8 +332,6 @@ List two_by_one(List a, List b) {
   num_a[2] = a.sublist(size ~/ 2, size);
   num_a[1] = a.sublist(size, size ~/ 2 * 3);
   num_a[0] = a.sublist(size ~/ 2 * 3, a.length);
-  //print('num_a: $num_a');
-  //print('num_b: $num_b');
   var dividendq1 = new List.from(num_a[3])..addAll(num_a[2])..addAll(num_a[1]);
   var q1 = three_by_two(dividendq1, b);
   var dividendq2 = new List.from(q1[1])..addAll(num_a[0]);
@@ -325,14 +339,11 @@ List two_by_one(List a, List b) {
   var quotient = new List.from(q1[0])..addAll(q2[0]);
   var remainder = q2[1];
   quotient = lead0(quotient);
-  //print('final 2_1: $quotient and remainder $remainder');
   return [quotient, remainder];
 }
 
 List three_by_two(List a, List b) { // bug with numbers that are too small and add extra 0s
-  //print('3_2');
   a = lead0(a);
-
   var flag = false;
   if (b[0] == 0) {
     b.removeAt(0);
@@ -354,9 +365,7 @@ List three_by_two(List a, List b) { // bug with numbers that are too small and a
   var q_hat, r_one;
   if (compare_list(num_a[2], num_b[1]) == 0) {
     var dividend2_1 = new List.from(num_a[2])..addAll(num_a[1]);
-    //print('2_1 input: $dividend2_1 and ${num_b[1]}');
     var result = two_by_one(dividend2_1, num_b[1]);
-    //print('results: $result');
     q_hat = result[0];
     r_one = result[1];
   }
@@ -383,12 +392,14 @@ List three_by_two(List a, List b) { // bug with numbers that are too small and a
     b.removeAt(b.length - 1);
     b.insert(0, 0);
   }
-  //print('final 3_2: $q_hat and remainder $r_hat');
   return [q_hat, r_hat];
 }
 
-List div_sub_helper(List a, List b, [int power = 15]) {
-  final BASE = pow(10, power);
+/*
+ * division helper function to do subtraction with negative numbers
+ */
+List div_sub_helper(List a, List b) {
+  final BASE = pow(10, 15);
   final size = max(a.length, b.length);
   final a_len = a.length;
   final b_len = b.length;

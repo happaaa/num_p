@@ -17,7 +17,21 @@ void main() {
   //var F = new Longnum.string('-123456789123456789987654321.1234569876543211234567899987654321');
   //var G = new Longnum();
 
-  print(new Longnum.string('4'));
+  print((new Longnum.number(-3) % new Longnum.number(10)).val);
+  print(-111%10);
 
+  print((new Longnum.string('4').squareroot()).val);
+}
+
+/*
+ * fail if:
+ * ends in 2, 3, 7, 8
+ * terminates in odd number of 0s
+ * end in 6 and 10s digit is even
+ * doesn't end in 6 and 10s digit is odd
+ * ends in 5 and 10s digit isn't 2
+ * last 2 digits not divisible if is even
+ */
+exacttest(Longnum number) {
 
 }

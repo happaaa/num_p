@@ -135,8 +135,6 @@ class Longnum {
 
   /*
    * overloaded operators
-   *  - eventually have to integrate functions into here
-   *    because recursion importing doesn't work
    */
   Longnum operator+(Longnum operand) {
     var ans = new Longnum();
@@ -197,7 +195,6 @@ class Longnum {
       thislist = multifull(thislist, [constant]);
       otherlist = multifull(otherlist, [constant]);
     }
-    //print('thislist: $thislist and otherlist $otherlist and const $constant');
     var quotient = long_div(thislist, otherlist);
     var constant2 = 1;
     if (constant < BASE / 2) {
@@ -205,9 +202,7 @@ class Longnum {
       quotient[1] = multifull(quotient[1], [constant2]);
       quotient[0] = multifull([constant], [constant2]);
     }
-    //print('${quotient[1]} and ${quotient[0]}');
     var remainder = long_div(quotient[1], quotient[0]);
-    //print('remainder: $remainder');
     ans.integer = remainder[0].sublist(0, remainder[0].length - size);
     ans.decimal = remainder[0].sublist(remainder[0].length - size, remainder[0].length);
     return ans;
@@ -250,10 +245,8 @@ class Longnum {
     ans.integer = this.integer.length.isEven ? [200000000000] : [7000];
     for (var i = 0; i < len; i++) ans.integer.add(0);
     var test, except, buffer = 1;
-    //print('start: ${ans.val}');
     do {
       ans = (ans + this.divmaster(ans, this.decimal.length + buffer)).divmaster(new Longnum.number(2), this.decimal.length + buffer);
-      //print('guess: ${ans.val}');
       test = ans.power(2) - this;
       test.neg = false;
       if (test == except) buffer++;
@@ -393,6 +386,7 @@ class Longnum {
       for (var i = this.decimal.length; i < size; i++) thislist.add(0);
 
     if (other == ans) throw IntegerDivisionByZeroException;
+    if (this == ans) return ans;
     if (this == other) {
       ans.integer = [1];
       return ans;
@@ -428,7 +422,7 @@ class Longnum {
       var quotient = two_by_one(thislist, otherlist);
       ans.integer = quotient[0];
       final buff = dec_len + buffer;
-      for (var i = 0; i < buff; i++) { // fix here
+      for (var i = 0; i < buff; i++) {
         quotient[1].add(0);
         quotient = two_by_one(quotient[1], otherlist);
         if (buffer > 0) {
@@ -438,7 +432,7 @@ class Longnum {
         else ans.decimal.add(quotient[0][0]);
       }
     }
-    if (ans.decimal.length >= 2) ans.decimal.removeAt(0);
+    if (ans.decimal.length > 1) ans.decimal.removeAt(0);
     trail0(ans.decimal);
     lead0(ans.integer);
     return ans;
